@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+
+<!-- All values are in physical units (not in lattice units). -->
+<!-- The streamwize direction is by default the x-direction. -->
+
+<!-- The parameters in this xml file correspond to a Reynolds number
+     of 10, with respect to the extent of the obstacle in the
+     y-axis direction. -->
+
+<geometry>
+    <!-- The name of the STL file that contains the representation of the obstacle. -->
+    <filename> obstacle.stl </filename>
+    <!-- Position of the center of the obstacle in the simulation domain. -->
+    <center> <x> 0.45 </x> <y> 0.455 </y> <z> 0.455 </z> </center>
+    <!-- If False, the surface of the obstacle is no-slip, otherwise it is free-slip. -->
+    <freeSlipWall> False </freeSlipWall>
+    <!-- If False the lateral boundaries are periodic, otherwise they are free-slip. -->
+    <lateralFreeSlip> False </lateralFreeSlip>
+    <!-- Size of the full simulation domain. -->
+    <domain> <x> 2.95 </x> <y> 0.9 </y> <z> 0.9 </z> </domain>
+</geometry>
+
+<numerics>
+    <!-- Kinematic viscosity. -->
+    <nu> 0.001 </nu>
+    <!-- Inlet velocity (in the x-axis direction). -->
+    <inletVelocity> 0.1 </inletVelocity>
+    <!-- Grid resolution along the y-axis direction. -->
+    <resolution> 80 </resolution>
+    <!-- Velocity in lattice units (lowering this value lowers the time step proportionally). -->
+    <uLB> 0.02 </uLB>
+    <!-- Use a Smagorinsky LES model or not. -->
+    <useSmago> False </useSmago>
+    <!-- Parameter for the Smagorinsky LES model. -->
+    <cSmago> 0.14 </cSmago>
+    <!-- Simulate particles or not.
+         In this example particles are simulated for visualization purposes only.
+         They are used as a means of calculating streamlines. -->
+    <useParticles> True </useParticles>
+    <!-- If the particle time factor is 2, then the integration time step for the particles is twice that of the fluid. -->
+    <particleTimeFactor> 2 </particleTimeFactor>
+    <!-- Probability of injection of a particle at an injection cell at each time step.
+         As this number increases, more and more particles are inserted in the simulation. -->
+    <particleProbabilityPerCell> 1.0e-3 </particleProbabilityPerCell>
+    <!-- Criterion to eliminate particles with very small velocity.
+         When the square of the velocity of a particle drops below this value, the particle is removed
+         from the simulation. -->
+    <cutOffSpeedSqr> 1.e-8 </cutOffSpeedSqr>
+    <!-- Maximum number of particles in the output VTK files. -->
+    <maxNumParticlesToWrite> 200000 </maxNumParticlesToWrite>
+    <!-- Outlet sponge zone width (0.0 for no outlet sponge zone). -->
+    <outletSpongeZoneWidth> 0.4 </outletSpongeZoneWidth>
+    <!-- Outlet sponge zone type ("Viscosity" or "Smagorinsky"). -->
+    <outletSpongeZoneType> Viscosity </outletSpongeZoneType>
+    <!-- Target local Smagorinsky parameter at the end of the outlet sponge zone.
+         This parameter is relevant only if the chosen sponge zone is of "Smagorinsky" type. -->
+    <targetSpongeCSmago> 0.6 </targetSpongeCSmago>
+    <!-- Initial number of iterations while the inlet boundary velocity progressively increases
+         from zero to its final value. -->
+    <initialIter> 20000 </initialIter>
+</numerics>
+
+<output>
+    <!-- Maximum simulation time. -->
+    <maxT> 5000.0 </maxT>
+    <!-- Frequency at which statistics is printed to the terminal. -->
+    <statT> 0.02 </statT>
+    <!-- Frequency at which PPM images are produced. -->
+    <imageT> 0.20 </imageT>
+    <!-- Frequency at which VTK data files are produced. -->
+    <vtkT> 2.00 </vtkT>
+</output>
