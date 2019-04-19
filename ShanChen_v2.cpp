@@ -230,6 +230,8 @@ int main(int argc, char* argv[])
 	T kr2[runnum];
 	T k1_high;
 	T k2_high;
+	
+
 	/*
     pcout<<"rho_fluid1"<<endl;
 	for (plint readnum = 1; readnum <= runnum; ++readnum) {
@@ -526,6 +528,11 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
         }
     }
 	// calculating relative permeability & outputting variables
+	//std::string output = fNameIn + "_rho_min_ " + rho_fluid1_min + "_rho_max_ " + rho_fluid1_max + "_max_iter_" + maxIter + "_output.dat";
+	std::string output = fNameIn + "_output.dat";
+	plb_ofstream ofile(output.c_str());
+	ofile << "Outputs" << "\n\n";
+	
 	for (plint runs = 1; runs <= runnum; ++runs) {
 	Kr1[runs] =	Mom1[runs] / Mom1_high;
 	Kr2[runs] =	Mom2[runs] / Mom2_high;
@@ -539,5 +546,17 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 	pcout << "Kr2 from momentum   = " << Kr2[runs]            << std::endl;
     pcout << "Kr1 from Darcy law   = " << kr1[runs]            << std::endl;	
 	pcout << "Kr2 from Darcy law   = " << kr2[runs]            << std::endl;
+	
+	ofile << "Run = " << runs << "\n" << endl;
+	ofile << "Pressure difference = " << deltaP[runs] <<"\n" << endl;
+	ofile << "Viscosity ratio =  " << M[runs] <<"\n" << endl;
+	ofile << "Capillary number =  " << Ca[runs] <<"\n" << endl;
+	ofile << "Kr1 from momentum   = " << Kr1[runs]   <<"\n"         << endl;	
+	ofile << "Kr2 from momentum   = " << Kr2[runs]   <<"\n"         << endl;
+    ofile << "Kr1 from Darcy law   = " << kr1[runs]  <<"\n"         << endl;	
+	ofile << "Kr2 from Darcy law   = " << kr2[runs]  <<"\n"         << endl;
+	
+	
+	//ofile.close();
 	}
 }
