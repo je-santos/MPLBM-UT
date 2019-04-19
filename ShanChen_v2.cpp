@@ -215,6 +215,8 @@ int main(int argc, char* argv[])
 	const plint runnum = ((rho_fluid1_max - rho_fluid1_min) / rho_fluid1_step)+1;	
     T rho_fluid1[runnum] ;
     T rho_fluid2[runnum];
+	//T mu1[runnum];
+	//T mu2[runnum];
 	T M[runnum];
 	T Ca[runnum];
 	T Mom1[runnum];
@@ -247,6 +249,8 @@ int main(int argc, char* argv[])
 	
 	for (plint readnum = 1; readnum <= runnum; ++readnum) {
         rho_fluid1[readnum] = rho_fluid1_min + (readnum-1)* rho_fluid1_step;
+		M[readnum]=101;
+		//Ca[readnum]=101;
     }
 	for (plint readnum = 1; readnum <= runnum; ++readnum) {
         rho_fluid2[readnum] = rho_fluid2_val;
@@ -335,10 +339,11 @@ int main(int argc, char* argv[])
         T convergemeanJ2;
         T convergedmeanJ1;
         T convergedmeanJ2;
+		
 		// Calculate dynamic viscosity ratio here and pcout 
-		const T mu1 = rho_fluid1[runs]*nu1;
-		const T mu2 = rho_fluid2[runs]*nu2;
-		M[runs] = mu1 / mu2;
+		T mu1 = rho_fluid1[runs]*nu1;
+		T mu2 = rho_fluid2[runs]*nu2;
+		M[runs] = (mu1 / mu2);
 		
         pcout << endl
               << "Starting simulation with rho 1:  " << rho_fluid1[runs] << endl;
@@ -426,7 +431,7 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 				
 				// calculate capillary number
 				const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(rho_fluid1[runs]-rhoNoFluid)*0.5));
-				Ca[runs] = abs((mu1*meanU1)/(0.15*cosTheta));
+				Ca[runs] = (abs(mu1*meanU1)/(0.15*cosTheta));
 				
 				// calculate rel perm from momentum for for both fluids (measure 1st and last step to divide and calculate rel perm)
 				Mom1[runs]=rho_fluid1[runs]*meanU1;
@@ -461,7 +466,7 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 				
 				// calculate capillary number
 				const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(rho_fluid1[runs]-rhoNoFluid)*0.5));
-				Ca[runs] = abs((mu1*meanU1)/(0.15*cosTheta));
+				Ca[runs] = (abs(mu1*meanU1)/(0.15*cosTheta));
 				
 				// calculate rel perm from momentum for for both fluids (measure 1st and last step to divide and calculate rel perm)
 				Mom1[runs]=rho_fluid1[runs]*meanU1;
@@ -497,7 +502,7 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 				
 				// calculate capillary number
 				const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(rho_fluid1[runs]-rhoNoFluid)*0.5));
-				Ca[runs] = abs((mu1*meanU1)/(0.15*cosTheta));
+				Ca[runs] = (abs(mu1*meanU1)/(0.15*cosTheta));
 				
 				// calculate rel perm from momentum for for both fluids (measure 1st and last step to divide and calculate rel perm)
 				Mom1[runs]=rho_fluid1[runs]*meanU1;
