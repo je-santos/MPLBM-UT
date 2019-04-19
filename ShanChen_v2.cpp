@@ -338,7 +338,7 @@ int main(int argc, char* argv[])
 		// Calculate dynamic viscosity ratio here and pcout 
 		const T mu1 = rho_fluid1[runs]*nu1;
 		const T mu2 = rho_fluid2[runs]*nu2;
-		T M = mu1 / mu2;
+		M[runs] = mu1 / mu2;
 		
         pcout << endl
               << "Starting simulation with rho 1:  " << rho_fluid1[runs] << endl;
@@ -426,7 +426,7 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 				
 				// calculate capillary number
 				const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(rho_fluid1[runs]-rhoNoFluid)*0.5));
-				Ca[runs] = ((mu1*meanU1)/(0.15*cosTheta));
+				Ca[runs] = abs((mu1*meanU1)/(0.15*cosTheta));
 				
 				// calculate rel perm from momentum for for both fluids (measure 1st and last step to divide and calculate rel perm)
 				Mom1[runs]=rho_fluid1[runs]*meanU1;
@@ -461,7 +461,7 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 				
 				// calculate capillary number
 				const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(rho_fluid1[runs]-rhoNoFluid)*0.5));
-				Ca[runs] = ((mu1*meanU1)/(0.15*cosTheta));
+				Ca[runs] = abs((mu1*meanU1)/(0.15*cosTheta));
 				
 				// calculate rel perm from momentum for for both fluids (measure 1st and last step to divide and calculate rel perm)
 				Mom1[runs]=rho_fluid1[runs]*meanU1;
@@ -497,7 +497,7 @@ converge2.takeValue(getStoredAverageEnergy(lattice_fluid2), true); //check for c
 				
 				// calculate capillary number
 				const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(rho_fluid1[runs]-rhoNoFluid)*0.5));
-				Ca[runs] = ((mu1*meanU1)/(0.15*cosTheta));
+				Ca[runs] = abs((mu1*meanU1)/(0.15*cosTheta));
 				
 				// calculate rel perm from momentum for for both fluids (measure 1st and last step to divide and calculate rel perm)
 				Mom1[runs]=rho_fluid1[runs]*meanU1;
