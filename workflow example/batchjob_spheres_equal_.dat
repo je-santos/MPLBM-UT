@@ -1,0 +1,13 @@
+#!/bin/bash 
+#SBATCH -J myjob          # job name 
+#SBATCH -o spheres_equal_/myMPI.o%j        # output and error file name (%j expands to jobID)
+#SBATCH -N 5                # number of nodes requested 
+#SBATCH -n 340               # total number of mpi tasks requested 
+#SBATCH -p normal      # queue (partition) -- normal, development, etc. 
+#SBATCH -t 12:00:00         # run time (hh:mm:ss) - 1.5 hours 
+
+#Slurm email notifications are now working on Lonestar 5 
+#SBATCH --mail-user=jesantos@utexas.edu 
+#SBATCH --mail-type=end     # email me when the job finishes 
+# run the executable named a.out 
+ibrun ./ShanChen_v4_2 spheres_equal_/ 1.0 1.0 125 120 120 0.9 0.0 0.0 -0.4 0.4 spheres_equal_.dat 2000 2000 2000 100 0.00001 0 2 1 2 1 120 1 120 3 125 1 120 1 120 0.06 1.0 1.5 2.0 0.05 2.0 
