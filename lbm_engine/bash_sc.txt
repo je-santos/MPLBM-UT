@@ -1,0 +1,1 @@
+./Shan_Chen_v4_new /tmp 2 3 4 5 6 7 8 9 10 1 254x92x106.dat 3 4 5 6 7 8 9 20 1 2 3 4 5 6 7 8 9 30 1 2 3 4 5 6 7 ../input_data/input_sc.xml
