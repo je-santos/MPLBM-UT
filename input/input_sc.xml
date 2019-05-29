@@ -2,9 +2,9 @@
 
 <geometry>
     <!-- The name of the .dat file that contains the representation of the geometry. -->
-    <file_geom> tmp/finney_DRP_500_x.dat </file_geom>
+    <file_geom> ../domains/100cubed.dat </file_geom>
     <!-- Size (in voxels) of the simulation domain. -->
-    <size> <x> 100 </x> <y> 200 </y> <z> 300 </z> </size>
+    <size> <x> 100 </x> <y> 100 </y> <z> 100 </z> </size>
     <!-- Periodicity -->
     <per>
           <fluid1> <x> true </x> <y> true </y> <z> true </z> </fluid1>
@@ -27,12 +27,13 @@
 
 
 <fluids>
+    <Gc> 0.9 </Gc>
     <omega1> 1 </omega1>
     <omega2> 1 </omega2>
     <force1> 0 </force1>
     <force2> 0 </force2>
-    <G_ads_f1_s1> 0.5 </G_ads_f1_s1>
-    <G_ads_f1_s2> -0.5 </G_ads_f1_s2>
+    <G_ads_f1_s1>   0.4 </G_ads_f1_s1>
+    <G_ads_f1_s2>  -0.4 </G_ads_f1_s2>
     <!-- Number of capillary pressure steps -->
     <num_pc> 10 </num_pc>
     <!-- Initial density of fluid 1 at the inlet -->
@@ -58,11 +59,17 @@
     <!-- Max iterations per Pc -->
     <it_max> 10000 </it_max>
     <!-- Check for convergence -->
-    <it_con> 100 </it_con>
+    <it_con> 1000 </it_con>
     <!-- Print info to the terminal -->
     <it_info> 500 </it_info>
     <!-- Print gifs -->
     <it_gif> 500 </it_gif>
     <!-- print vtks -->
     <it_vtk> 1000 </it_vtk>
+    <!-- print geometry (yes=1) -->
+    <op_geom> 0 </op_geom>
+    <!-- print stl (yes=1) -->
+    <op_stl> 0 </op_stl>
+
+
 </output>
