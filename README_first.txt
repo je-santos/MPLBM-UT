@@ -14,17 +14,17 @@ Both codes add 2 blank slices at beginning and end of geometry in YZ plane, (opt
 B) 2-Phase LBM Simulation (PALABOS):
 
 - Update geometry and simulation details in xml file.
-- Make/Run 2-phase LBM simulation file ShanChen_new.cpp in bash using input string generated to simulate capillary drainage. 
+- Make/Run 2-phase LBM simulation file ShanChen.cpp in bash to simulate capillary drainage. 
 
 C) Post-processing (MATLAB):
 
 - Read the generated vtk files using read_save_fluids.m.
-(It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate precolation path at breakthrough.)
+(It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate percolation path at breakthrough.)
 
 D) 1-Phase LBM Simulation (PALABOS):
 
 - Update geometry and simulation details in xml file.
-- Make/Run 1-phase LBM simulation file permeability_rel.cpp in bash to calculate absolute and relative permeabilities of the flow from fluid geometries.
+- Make/Run 1-phase LBM simulation file permeability.cpp in bash to calculate absolute and relative permeabilities of the flow from fluid geometries.
 
 Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation.
 
