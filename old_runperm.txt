@@ -1,6 +1,0 @@
-#mpirun -np 6 ./permeability ../../domains/finney_DRP_500_x0.dat ../output/finney_x0 500 500 500 0.00005
-#mpirun -np 6 ./permeability ../../domains/finney_DRP_500_x1.dat ../output/finney_x1 500 500 500 0.00005
-#mpirun -np 6 ./permeability ../../domains/finney_DRP_500_y0.dat ../output/finney_y0 500 500 500 0.00005
-#mpirun -np 6 ./permeability ../../domains/finney_DRP_500_y1.dat ../output/finney_y1 500 500 500 0.00005
-#mpirun -np 6 ./permeability ../../domains/finney_DRP_500_z0.dat ../output/finney_z0 500 500 500 0.00005
-#mpirun -np 6 ./permeability ../../domains/finney_DRP_500_z1.dat ../output/finney_z1 500 500 500 0.00005

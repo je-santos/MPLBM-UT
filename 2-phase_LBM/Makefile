@@ -15,7 +15,7 @@
 #                optimFlags   = -O -finline-functions
 
 # Leading directory of the Palabos source code
-palabosRoot   = ../../../Software/lbm/Palabos/palabos-v2.0r0
+palabosRoot   = ../../..
 # Name of source files in current directory to compile and link with Palabos
 projectFiles = ShanChen.cpp
 
