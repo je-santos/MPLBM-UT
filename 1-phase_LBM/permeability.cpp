@@ -204,32 +204,53 @@ int main(int argc, char **argv)
 {
     plbInit(&argc, &argv);
 
-    if (argc!=9) {
-        pcout << "Error missing some input parameter\n";
-        pcout << "The structure is :\n";
-        pcout << "1. Input directory name.\n";
-        pcout << "2. Output directory name.\n";
-        pcout << "3. number of cells in X direction.\n";
-        pcout << "4. number of cells in Y direction.\n";
-        pcout << "5. number of cells in Z direction.\n";
-        pcout << "6. Delta P .\n";
-		pcout << "7. Number of total geometries for simulation.\n";
-		pcout << "8. Name of original geometry \n";
-        pcout << "Example: " << argv[0] << " tester/ tester/ 125 120 120 0.00005 37 sphere";
-        exit (EXIT_FAILURE);
-    }
 	
-    std::string fNameIn  = argv[1];
-    std::string fNameOut = argv[2];
+	std::string fNameIn ; 
+    std::string fNameOut; 
 
-    const plint nx = atoi(argv[3]);
-    const plint ny = atoi(argv[4]);
-    const plint nz = atoi(argv[5]);
-    const T deltaP = atof(argv[6]);
-	const T Run = atof(argv[7]);
-	std::string GeometryName = argv[8];
+    plint nx; 
+    plint ny; 
+    plint nz;
+    T deltaP ;
+	T Run; 
+	std::string GeometryName ;
+	plint maxT;
+	
+     std::string xmlFname;
+  try {
+      global::argv(1).read(xmlFname);
+    }
+    catch (PlbIOException& exception) {
+        pcout << "Wrong parameters; the syntax is: "
+              << (std::string)global::argv(0) << " input-file.xml" << std::endl;
+        return -1;
+    }
+
+    // 2. Read input parameters from the XML file.
+      pcout << "Reading inputs from xml file \n";
+      try {
+          XMLreader document(xmlFname);
+    document["geometry"]["file_geom"].read(GeometryName);
+	
+    document["geometry"]["size"]["x"].read(nx);
+    document["geometry"]["size"]["y"].read(ny);
+    document["geometry"]["size"]["z"].read(nz);
 	
 	
+	document["folder"]["out_f"].read(fNameOut);	
+	document["folder"]["in_f"].read(fNameIn);
+	
+	document["simulations"]["press"].read(deltaP);
+	document["simulations"]["num"].read(Run);
+	document["simulations"]["iter"].read(maxT);
+	    }
+      catch (PlbIOException& exception) {
+          pcout << exception.what() << std::endl;
+          pcout << exception.what() << std::endl;
+          return -1;
+      }
+	
+		
 	std::string inputF= fNameIn;
     global::directories().setOutputDir(fNameOut+"/");
 	global::directories().setInputDir(inputF+"/");
@@ -279,7 +300,8 @@ int main(int argc, char **argv)
     pcout << "Simulation begins" << std::endl;
     plint iT=0;
 
-    const plint maxT = 1000;
+ //   const plint maxT = 1000;
+	
     for (;iT<maxT; ++iT) {
         if (iT % 200 == 0) {
             pcout << "Iteration " << iT << std::endl;
