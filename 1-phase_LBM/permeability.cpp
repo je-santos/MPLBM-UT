@@ -53,13 +53,13 @@ private:
     plint nx;
 };
 
-void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<int>& geometry, plint run, plint runnum)
+void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<int>& geometry, plint run, plint runnum, std::string GeometryName)
 {
     const plint nx = geometry.getNx();
     const plint ny = geometry.getNy();
     const plint nz = geometry.getNz();
 	plint run_diff = ((runnum - 1)/2)+1;
-	std::string fNameIn_temp1 = fNameIn +"/spheres_equal_";
+	std::string fNameIn_temp1 = fNameIn + GeometryName;
 	std::string fNameIn_temp = "0";
 	
 	pcout  <<"\n"   << " Run"<< run << std::endl;
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 {
     plbInit(&argc, &argv);
 
-    if (argc!=8) {
+    if (argc!=9) {
         pcout << "Error missing some input parameter\n";
         pcout << "The structure is :\n";
         pcout << "1. Input directory name.\n";
@@ -213,10 +213,12 @@ int main(int argc, char **argv)
         pcout << "4. number of cells in Y direction.\n";
         pcout << "5. number of cells in Z direction.\n";
         pcout << "6. Delta P .\n";
-		pcout << "7. Number of geometries of fluid 1 or 2.\n";
-        pcout << "Example: " << argv[0] << " tester/ tester/ 125 120 120 0.00005 18";
+		pcout << "7. Number of total geometries for simulation.\n";
+		pcout << "8. Name of original geometry \n";
+        pcout << "Example: " << argv[0] << " tester/ tester/ 125 120 120 0.00005 37 sphere";
         exit (EXIT_FAILURE);
     }
+	
     std::string fNameIn  = argv[1];
     std::string fNameOut = argv[2];
 
@@ -225,16 +227,18 @@ int main(int argc, char **argv)
     const plint nz = atoi(argv[5]);
     const T deltaP = atof(argv[6]);
 	const T Run = atof(argv[7]);
+	std::string GeometryName = argv[8];
+	
 	
 	std::string inputF= fNameIn;
-	
-	
     global::directories().setOutputDir(fNameOut+"/");
 	global::directories().setInputDir(inputF+"/");
 
     const T omega = 1.0;
     const T nu    = ((T)1/omega- (T)0.5)/DESCRIPTOR<T>::invCs2;
-	const plint runnum = (Run*2)+1;
+	const plint runnum = Run;
+	plint run_diff = ((runnum - 1)/2)+1;
+	
 	T perm[runnum];
 	T meanU[runnum];
 	T rel_perm[runnum];
@@ -252,7 +256,7 @@ int main(int argc, char **argv)
 
  //   pcout << "Reading the geometry file." << std::endl;
     MultiScalarField3D<int> geometry(nx,ny,nz);
-    readGeometry(fNameIn, fNameOut, geometry, run, runnum);
+    readGeometry(fNameIn, fNameOut, geometry, run, runnum, GeometryName);
 
     // pcout << "nu = " << nu << std::endl;
     // pcout << "deltaP = " << deltaP << std::endl;
@@ -275,9 +279,9 @@ int main(int argc, char **argv)
     pcout << "Simulation begins" << std::endl;
     plint iT=0;
 
-    const plint maxT = 500;
+    const plint maxT = 1000;
     for (;iT<maxT; ++iT) {
-        if (iT % 100 == 0) {
+        if (iT % 200 == 0) {
             pcout << "Iteration " << iT << std::endl;
         }
         if (iT % 250 == 0 && iT > 0) {
@@ -313,10 +317,10 @@ int main(int argc, char **argv)
 	
 	pcout << "Printing outputs" << std::endl;
 	std::string outDir = fNameOut + "/";
-	std::string output = outDir + "spheres_equal_output.dat";
+	std::string output = outDir + GeometryName + ".dat";
 	plb_ofstream ofile(output.c_str());
 	ofile << "Outputs" << "\n\n";
-	ofile << "Krw from run: 2" << "\n" << "Krnw from run: " << (Run+2) << std::endl;
+	ofile << "Krw from run: 2" << "\n" << "Krnw from run: " << (run_diff+1) << std::endl;
 	for (plint runs = 1; runs <= runnum; ++runs) {
 		
 	
