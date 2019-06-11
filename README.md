@@ -7,3 +7,10 @@
 
 3) Run the main file in the preprocesing folder to create the simulation domain
 
+## Running a simulation
+1) Modify the input file with the desired parameters
+
+2) Run simulation: mpirun ./SC inputfile1.xml
+
+
+
