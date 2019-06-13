@@ -6,6 +6,8 @@ Workflow created by Abhishek Bihani and Javier Santos
 
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
+<img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.JPG" align="middle" width="450" height="390" alt="percolation non-wetting fluid" >
+
 ## Requirements
 
 1) Download the latest Palabos version from: http://www.palabos.org/software/download
