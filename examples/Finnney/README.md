@@ -7,4 +7,4 @@ or, in the terminal type:
 - wget "https://www.digitalrocksportal.org/media/projects/47/archive.zip"
 - unzip -j archive.zip origin/311/images/spheres_a10_dx0.04_n500_segmented_unsigned_char.raw -d input/.
 
-2) Run the main.m script
+2) Run the main.m script to create the simulation geometry
