@@ -1,4 +1,4 @@
-function [status]=mat2dat_4lbm(data,name,mesh)
+function [vol_3d]=mat2dat_4lbm(data,name,mesh)
 
 % TODO: return the 3D gemetry 
 
@@ -126,9 +126,11 @@ end
 
 'printing first slice'
 fprintf(fid,'%i\n',B*0);
+vol_3d(1,:,:)=B*0;
 fprintf(fid,'%i\n',B*0);
+vol_3d(end+1,:,:)=B*0;
 fprintf(fid, '%i\n', B);
-
+vol_3d(end+1,:,:)=B;
 
 %%%%%%%%%%%%%%%%%%%%% INTERNAL SLICES %%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -278,6 +280,7 @@ for ii=2:numFiles-1
     % drawnow
     
     fprintf(fid, '%i\n', B);
+    vol_3d(end+1,:,:)=B;
 end
 
 
@@ -385,12 +388,15 @@ for i=1:nx
     end
 end
 
-image(30*B)
+figure()
+imagesc(B)
 axis equal
 drawnow
+title('Cross section for Palabos:in dark blue inner solid regions (comp efficency)')
 
 'printing last slice'
 fprintf(fid, '%i\n', B);
+vol_3d(end+1,:,:)=B;
 
 [r,c]=size(B);
 
@@ -399,13 +405,15 @@ if (mesh ==1)
         tmp1=toeplitz(mod(1:c,2),mod(1:r,2));
         tmp1(tmp1==1)=4;
         fprintf(fid,'%i\n',tmp1);
+        vol_3d(end+1,:,:) = tmp1;
         
     end
 end
 
 fprintf(fid,'%i\n',B*0);
+vol_3d(end+1,:,:) = B*0;
 fprintf(fid,'%i\n',B*0);
+vol_3d(end+1,:,:) = B*0;
 
 fclose(fid);
-status=1;
 toc

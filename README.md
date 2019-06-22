@@ -18,9 +18,9 @@ Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 A) Pre-processing (MATLAB):
 
-- To create the .dat file geometry for Palabos, 
+- To create the .dat file geometry for Palabos,
 a) If the geometry is a matrix in MATLAB, use createLBM_MAT2DAT.m
-b) If the geometry is an image sequence, use createDAT.m 
+b) If the geometry is an image sequence, use createDAT.m
 
 Both codes add 2 blank slices at beginning and end of geometry in YZ plane, (optional) adds a unit mesh slice 3rd from outlet
 
@@ -45,9 +45,10 @@ Optional: Run porethroat_dist.m to calculate pore and throat size distribution o
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
-Credits/References: 
-1. Geometry creation and permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html 
+Credits/References:
+1. Geometry creation and permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
 2. Skeletonization code modified from Kollmannsberger Philip- https://www.mathworks.com/matlabcentral/profile/authors/4556277-philip-kollmannsberger
-3. Dijkstra's algorithm code modified from Kirk Joseph- https://www.mathworks.com/matlabcentral/fileexchange/12850-dijkstra-s-shortest-path-algorithm 
+3. Dijkstra's algorithm code modified from Kirk Joseph- https://www.mathworks.com/matlabcentral/fileexchange/12850-dijkstra-s-shortest-path-algorithm
 
 
+We welcome contributions
