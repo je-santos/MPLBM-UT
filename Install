@@ -1,7 +1,9 @@
 # Bash file to install the Multiphase LBM for Porous Media dependencies
 
-# TODO:
+unzip src/palabos-v2.zip -d src
+cd 2-phase_LBM
+make
 
-#1) Unzip the Palabos folder
-#3) Erase everything that is not needed (ie examples)
-#2) Make the single and multiphase .cpp files
+# TODO:
+#1) Erase everything that is not needed (ie examples)
+#2) Make the singlephase .cpp files
