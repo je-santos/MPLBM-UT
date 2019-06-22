@@ -392,7 +392,7 @@ figure()
 imagesc(B)
 axis equal
 drawnow
-title('Cross section for Palabos:in dark blue inner solid regions (comp efficency)')
+title('Cross section for Palabos:in yellow inner solid regions (comp efficency)')
 
 'printing last slice'
 fprintf(fid, '%i\n', B);
