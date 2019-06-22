@@ -1,5 +1,7 @@
 function [status]=mat2dat_4lbm(data,name,mesh)
 
+% TODO: return the 3D gemetry 
+
 
 tic
 % Change mesh to 1 if you want a mesh 2 slices before outlet. It prevents weird flow of Fluid 1 during 2-phase simulation.
