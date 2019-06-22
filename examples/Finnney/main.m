@@ -10,8 +10,12 @@ connect = 6; % pixel connectivity 6, 18, 26
 fp = eliminate_isolatedRegions(fp, connect); %for better convergence
 
 %% print for palabos
-name='spheres4Palabos';
-[status] = mat2dat_4lbm(fp,name,1); %although this function is slow, it 
+
+print_size = 150; %size of the Finneypack subset
+fp_printing = fp(1:print_size, 1:print_size, 1:print_size);
+name = ['spheres4Palabos_', num2str(print_size)];
+
+[status] = mat2dat_4lbm(fp_printing,name,1); %although this function is slow, it 
                                     %provides a very computationally efficient 
                                     %geometry for Palabos
                                     
