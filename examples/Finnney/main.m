@@ -11,4 +11,8 @@ fp = eliminate_isolatedRegions(fp, connect); %for better convergence
 
 %% print for palabos
 name='spheres4Palabos';
-[status] = mat2dat_4lbm(fp,name,1);
+[status] = mat2dat_4lbm(fp,name,1); %although this function is slow, it 
+                                    %provides a very computationally efficient 
+                                    %geometry for Palabos
+                                    
+% TODO: update faster but less efficient printing function
