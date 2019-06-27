@@ -2,9 +2,9 @@ tic
 
 % Load geometry data in MATLAB
 
-list=dir('Ellipse*.mat');
-data = load(list.name);
-data=data.reconVol;
+
+data = load('../examples/Homogeneous_spherePack/spheres_equal.mat');
+data=data.I;
 
 
 % Change mesh to 1 if you want a mesh 2 slices before outlet. It prevents weird flow of Fluid 1 during 2-phase simulation.
@@ -14,7 +14,7 @@ mesh=0;
 numFiles=size(data,3);
 
 
-baseOutput=list.name;
+baseOutput='spheres';
 baseOutput = [baseOutput '.dat'];
 
 fid = fopen(baseOutput, 'w');    % open the output file to write in
