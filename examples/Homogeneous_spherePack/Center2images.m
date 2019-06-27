@@ -102,5 +102,5 @@ filename1=[filename '.mat'];
 save(filename1,'simSpace');
 
 addpath ('../../pre-processing') %pre-processing libraries
-[status]=create_LBM_MAT2DAT(simSpace,filename); % Creating Palabos input file
+palabos_3Dmat=mat2dat_4lbm(simSpace,filename,1); % Creating Palabos input geometry file
 
