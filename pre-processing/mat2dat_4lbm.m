@@ -416,4 +416,9 @@ fprintf(fid,'%i\n',B*0);
 vol_3d(end+1,:,:) = B*0;
 
 fclose(fid);
+%rename the file to display the size of the 3D array
+movefile(['input/' name '.dat'],['input/' name '_' num2str( size(vol_3d,1) ) '_' ...
+     num2str( size(vol_3d,2) ) '_' num2str( size(vol_3d,3) ) '.dat'] )
+
+
 toc
