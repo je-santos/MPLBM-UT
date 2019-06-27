@@ -15,7 +15,7 @@
 #                optimFlags   = -O -finline-functions
 
 # Leading directory of the Palabos source code
-palabosRoot   = ../src/palabos-v2.0r0
+palabosRoot   = ../palabos-v2.0r0
 # Name of source files in current directory to compile and link with Palabos
 projectFiles =  ShanChen.cpp
 
@@ -94,4 +94,3 @@ compile:
 clean:
 	python $(SCons) -c $(SConsArgs)
 	/bin/rm -vf `find $(palabosRoot) -name '*~'`
-	

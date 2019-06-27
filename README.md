@@ -8,11 +8,13 @@ Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 <img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.jpg" align="middle" width="450" height="390" alt="percolation non-wetting fluid" >
 
+## Installation
+
+- run: ./Install_2phase_lib.sh 
+
 ## Requirements
 
-1) Download the latest Palabos version from: http://www.palabos.org/software/download
-
-2) MATLAB is required to run pre-processing and post-processing codes
+1) MATLAB is required to run pre-processing and post-processing codes
 
 ## Running a simulation
 
