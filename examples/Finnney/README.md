@@ -1,6 +1,7 @@
 # Two-phase simulation on a Finney-pack
 ## Instructions
 1) Fetch the raw image from the digitalrockportal:
+
   a) In the terminal by:
   - wget "https://www.digitalrocksportal.org/media/projects/47/archive.zip"
   - unzip -j archive.zip origin/311/images/spheres_a10_dx0.04_n500_segmented_unsigned_char.raw -d input/.
