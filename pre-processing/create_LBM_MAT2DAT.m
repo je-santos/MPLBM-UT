@@ -1,10 +1,11 @@
+function [status]=create_LBM_MAT2DAT(data,name)
 tic
 
 % Load geometry data in MATLAB
 
-
-data = load('../examples/Homogeneous_spherePack/spheres_equal.mat');
-data=data.I;
+% list=dir('Ellipse*.mat');
+% data = load(list.name);
+% data=data.reconVol;
 
 
 % Change mesh to 1 if you want a mesh 2 slices before outlet. It prevents weird flow of Fluid 1 during 2-phase simulation.
@@ -14,7 +15,7 @@ mesh=0;
 numFiles=size(data,3);
 
 
-baseOutput='spheres';
+baseOutput=name;
 baseOutput = [baseOutput '.dat'];
 
 fid = fopen(baseOutput, 'w');    % open the output file to write in
@@ -419,5 +420,5 @@ fprintf(fid,'%i\n',B*0);
 fprintf(fid,'%i\n',B*0);
 
 fclose(fid);
-
+status=1;
 toc
