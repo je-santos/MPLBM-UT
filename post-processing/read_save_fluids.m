@@ -1,41 +1,35 @@
-clear
-%% Read Data
-% rho_fluid1_min = 2.0 ;
-% rho_fluid1_max = 2.5;
-% rho_fluid1_step = 0.04 ;
-% steps = 1+2*((rho_fluid1_max - rho_fluid1_min)/rho_fluid1_step);
-% steps = round(steps);
-% denss=linspace(rho_fluid1_min,rho_fluid1_max,steps);
-% pcs=denss./3-2/3;
+%This code will calculate the wetting saturation for all vtk files, will convert
+%the fluid configurations (1 and 2) to .dat files for 1-phase LBM
+%simulation and will find the vtk file where breakthrough occurs and the
+%percolation path/tortuosity. You can choose if you want to generate fluid
+%geometries or calculate percolation path at breakthrough
 
-for R=1:1
-    %  cd ([num2str(rough(r))', '/d'])
-    list=dir('rho1*.vti');
+clear
+
+%Options:
+
+medial_axis=0; %To find fluid medial axes and first percolation path
+print=1;      %Create geometries for fluids 1 and 2 for relative permeability calculations 
+
+%Update path to folder where output vti files from 2-phase simulation are stored
+directory='C:\Users\Abhishek\Desktop\MultiphasePorousMediaPalabos-master\src\2-phase_LBM\spheres_test\'; 
+
+    
+    
+    list=dir([directory 'rho1*.vti']);
     listcell=struct2cell(list);
     [a,b]=size(listcell);
     listcell=listcell(1,:);
     first=0;
     
-    %     for i=1:b
-    %         image_date(i) = listcell{6,i};
-    %         image_name{i} = listcell{1,i};
-    %         image_name_tmp=image_name{i};
-    %         %image_name_tmp1=image_name{i};
-    %         image_name_tmp(1:5)=[];
-    %         %image_name_tmp1(1:5)=[];
-    %        image_name_tmp(end:-1:end-3)=[];
-    %         image_ts(r,i)=int16(str2double(image_name_tmp)/1e8);
-    %         image_pressure(r,i)=pcs(image_ts(r,i));
-    %     end
-    
-    
+  
     for I=1:b
         
         %Reading density vtk files generated from Palabos
         
         image_name = listcell{I};
-        image_ts(I)=int16(str2double(image_name));
-        f.f1_vti_struct=xml2struct(image_name); %read output file
+        image_ts(I)=int16(str2double([directory image_name]));
+        f.f1_vti_struct=xml2struct([directory image_name]); %read output file
         %cd ../..
         f.f1_vti_str=base64decode(f.f1_vti_struct.VTKFile.ImageData.Piece.PointData.DataArray.Text);
         % f.f2_vti_str=base64decode(f.f2_vti_struct.VTKFile.ImageData.Piece.PointData.DataArray.Text);
@@ -47,24 +41,14 @@ for R=1:1
         vti_z=vti_size(5)+vti_size(6)+1;
         rhof1=reshape(f.f1_vti_no(2:end),[vti_x vti_y vti_z]);
         clear f
-        k1=rhof1(:,:,60);
         
+         rhof1(1:2,:,:)=[];
         
-        rhof1(1:2,:,:)=[];
-        
-   %     rhof1(end-12:end,:,:)=[];    
-    %    rhof1(:,:,1:2)=[];
-    
+  
         rhof1(end-2:end,:,:)=[];
         
         rhof1(rhof1==0.4 | rhof1==-0.4)=0;
-        k2=rhof1(:,:,60);
-    
-        
-%         figure()
-%         imagesc(k1);
-%         figure()
-%         imagesc(k2);
+
 
 % Identifying only Fluid 1 and Fluid 2 in entire geometry
 
@@ -74,15 +58,7 @@ for R=1:1
         rho2_temp=rhof1;
         rho2_temp(rho2_temp>1)=0;
         rho2_temp(rho2_temp<1 & rho2_temp>0)=1;
-        
-         k3=rho1_temp(:,:,60);
-%         k4=rho2_temp(:,:,60);
-         figure()
-         imagesc(k3);
-%         figure()
-%         imagesc(k4);
-    %    pause=1;
-        %         end
+
         
 %         sizef=size(rhof1);
         
@@ -106,7 +82,7 @@ for R=1:1
         Front_f1(I)=max(idx);
        
      %Find percolation length and tortuosity   
-     medial_axis=1;
+     
      
      if medial_axis==1   
          if Front_f1(I) == X && first == 0 % Non-wetting fluid has percolated
@@ -121,7 +97,7 @@ for R=1:1
      end
      
     %Create geometries for fluids 1 and 2 for relative permeability calculations 
-     print=0;
+
         
         if print==1
             
@@ -517,24 +493,14 @@ for R=1:1
                         
                     end
                 end
-               % figure()
-               % image(30*B)
-               % axis equal
-               % drawnow
+         
                 
                 'printing last slice'
                 fprintf(fid, '%i\n', B);
                 
                 [r,c]=size(B);
                 
-                % if (mesh ==1)
-                %     for j=1:1
-                %         tmp1=toeplitz(mod(1:c,2),mod(1:r,2));
-                %         tmp1(tmp1==1)=4;
-                %         fprintf(fid,'%i\n',tmp1);
-                %
-                %     end
-                % end
+
                 
                 fprintf(fid,'%i\n',B*0);
                 fprintf(fid,'%i\n',B*0);
@@ -547,45 +513,10 @@ for R=1:1
         sat_nw(R,I)=sum(sum(sum(rhof1>1)))/sum(sum(sum(rhof1~=0)));
         sat_w(R,I)= 1 - sat_nw(R,I);
         clear rhof1
-       clear rho1_temp
+        clear rho1_temp
      %  save('rho1_temp.mat','rho1_temp')
         clear rho2_temp
     end
-    %     figure (1)
-    % semilogy(sat_w, pcs)
-    % grid on
-    % xlabel('S_w','FontSize',16);
-    % ylabel('P_c','FontSize',16);
-    
-    %     for j=1:46
-    %            if sat_nw_front(r,j,end)>0.1
-    %               bt(r)=image_ts(r,j);
-    %               bt_pressure(r)=image_pressure(r,j);
-    %               break
-    %            end
-    %     end
-    
-    %for j=8:46
-    %   e_ss(j)=sum(abs(squeeze(sat_nw_front(1,j,:))-squeeze(sat_nw_front(1,j-1,:))));
-    %end
-    
-    %     [mx,ind_m(r)]=max(sat_nw(r,:));
-    %     sat_nw_max(r)=mx;
-    %     fullsat_pressure(r)=image_pressure(r,ind_m(r));
-    %
-    %     cd ../..
-end
 
 
 
-% figure(13)
-% for i=1:4:46
-%     hold on
-%     plot((1:246)/246,squeeze(sat_nw_front(3,i,:)));
-%     title('Average Saturation Along the Fracture')
-%     xlabel('x')
-%     xlabel('Saturation')
-% end
-%
-%
-% st_dens=[41 35 36 40 37];
