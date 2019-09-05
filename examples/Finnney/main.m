@@ -22,5 +22,12 @@ name = ['spheres4Palabos'];
 palabos_3Dmat = mat2dat_4lbm(fp_printing,name,1); %although this function is slow, it 
                                     %provides a very computationally efficient 
                                     %geometry for Palabos
-                                    
-% TODO: update faster but less efficient printing function
+
+
+%% Mixed Wettability                                 
+rng(123)                                    
+rnd_array = rand( size(palabos_3Dmat) );
+
+palabos_3Dmat_mixedWet = palabos_3Dmat;
+palabos_3Dmat_mixedWet(palabos_3Dmat==1 & rnd_array>0.5)=3;
+
