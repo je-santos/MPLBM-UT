@@ -15,7 +15,7 @@
 #                optimFlags   = -O -finline-functions
 
 # Leading directory of the Palabos source code
-palabosRoot   = ../palabos
+palabosRoot   = ../palabos-v2.0r0
 # Name of source files in current directory to compile and link with Palabos
 projectFiles =  permeability.cpp
 #2-phase_LBM/ShanChen.cpp
