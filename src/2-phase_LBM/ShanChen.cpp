@@ -183,7 +183,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
 
  void PorousMediaSetup(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
   MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, MultiScalarField3D<int>& geometry,
-T rhoNoFluid, T rho1, T rho2, T Gads_f1_s1, T Gads_f1_s2, T force_fluid1, T force_fluid2, T nx1f1, T nx2f1, T ny1f1, T ny2f1, T nz1f1, T nz2f1, T nx1f2, T nx2f2, T ny1f2, T ny2f2, T nz1f2, T nz2f2, T runs)
+T rhoNoFluid, T rho1, T rho2, T Gads_f1_s1, T Gads_f1_s2, T force_fluid1, T force_fluid2, T nx1f1, T nx2f1, T ny1f1, T ny2f1, T nz1f1, T nz2f1, T nx1f2, T nx2f2, T ny1f2, T ny2f2, T nz1f2, T nz2f2, T runs, T new_file)
 {
     plint nx = lattice_fluid2.getNx();
     plint ny = lattice_fluid2.getNy();
@@ -192,8 +192,13 @@ T rhoNoFluid, T rho1, T rho2, T Gads_f1_s1, T Gads_f1_s2, T force_fluid1, T forc
 	const T deltaP = 0.05;
 
     pcout << "Definition of the geometry." << endl;
+	if (new_file == 0) {	
 	
-	if (runs == 1) {
+			loadBinaryBlock(lattice_fluid1, "lattice_fluid1.dat");
+			loadBinaryBlock(lattice_fluid2, "lattice_fluid2.dat");
+	}
+	
+	if (new_file == 1) {
 	
                 defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>(Gads_f1_s1), 1);
                 defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s1), 1);
@@ -216,18 +221,15 @@ T rhoNoFluid, T rho1, T rho2, T Gads_f1_s1, T Gads_f1_s2, T force_fluid1, T forc
 
 
     // Output geometry dynamics
-	if (runs == 1) {
+	if (new_file == 1) {
     VtkImageOutput3D<int> vtkOut(createFileName("vtkgeometry", 1, 1), 1.);
     vtkOut.writeData<int>(geometry, "Dynamics", 1.);
 	pcout << "Creating geometry vtk file" << endl;
 	}
 
     Array<T, 3> zeroVelocity(0., 0., 0.);
-	
-	
-	
 			
-	if (runs == 1) {
+	if (new_file == 1) {
 
     // Initialize  uniform density for target saturation
     pcout << "Initializing Fluids" << endl;
@@ -253,7 +255,8 @@ int main(int argc, char* argv[])
 	t = clock();
     plbInit(&argc, &argv);
     // std::string fNameOut = argv[1];	
-	  std::string fNameOut; 
+	  std::string fNameOut;
+	  T new_file ;
       T omega1 ;
       T omega2 ;
       plint nx ;
@@ -312,6 +315,7 @@ int main(int argc, char* argv[])
       cout << "Reading inputs from xml file \n";
       try {
           XMLreader document(xmlFname);
+	document["load"]["new_file"].read(new_file);
     document["geometry"]["file_geom"].read(fNameIn);
     document["geometry"]["size"]["x"].read(nx);
     document["geometry"]["size"]["y"].read(ny);
@@ -370,7 +374,7 @@ int main(int argc, char* argv[])
           return -1;
       }
 		  
-	plint runnum = ((rho_fluid2_max - rho_fluid2_min) / rho_fluid2_step)+2;
+	plint runnum = ((rho_fluid2_max - rho_fluid2_min) / rho_fluid2_step)+1;
     global::directories().setOutputDir(fNameOut);	
     T rho_fluid1[runnum] ;
     T rho_fluid2[runnum];
@@ -414,7 +418,7 @@ int main(int argc, char* argv[])
 
 		
 	for (plint readnum = 1; readnum <= runnum; ++readnum) {
-        rho_fluid2[readnum] = rho_fluid2_max - (readnum-2)* rho_fluid2_step;
+        rho_fluid2[readnum] = rho_fluid2_max - (readnum-1)* rho_fluid2_step;
 		}
 	for (plint readnum = 1; readnum <= runnum; ++readnum) {
         rho_fluid1[readnum] = rho_fluid1_val;
@@ -469,6 +473,7 @@ int main(int argc, char* argv[])
 
 	    for (plint readnum = 1; readnum <= runnum; ++readnum) {
 		deltaP[readnum]=(rho_fluid1[readnum]-rho_fluid2[readnum])/3;
+		pcout << "Run number = " << readnum << endl;
         pcout << "Rho_no_1 = " << rho_fluid1[readnum] << endl;
         pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
     }
@@ -487,12 +492,14 @@ int main(int argc, char* argv[])
 	
 	 pcout << "Run number = " << runs << endl;
 
+		
         if (runs > 1) {
             pcout << "Using previous Geometry  " << endl;
         }
         else {
-            PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry, rhoNoFluid, rho1, rho2, Gads_f1_s1, Gads_f1_s2, force_fluid1, force_fluid2, nx1f1, nx2f1, ny1f1, ny2f1, nz1f1, nz2f1, nx1f2, nx2f2, ny1f2, ny2f2, nz1f2, nz2f2, runs);
-      
+			
+            PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry, rhoNoFluid, rho1, rho2, Gads_f1_s1, Gads_f1_s2, force_fluid1, force_fluid2, nx1f1, nx2f1, ny1f1, ny2f1, nz1f1, nz2f1, nx1f2, nx2f2, ny1f2, ny2f2, nz1f2, nz2f2, runs, new_file);
+			
 	   }
 		
 
@@ -650,9 +657,12 @@ int main(int argc, char* argv[])
     }
 	//  outputting variables
 	
+	saveBinaryBlock(lattice_fluid1, "lattice_fluid1.dat");
+	saveBinaryBlock(lattice_fluid2, "lattice_fluid2.dat");
 	
 	
-	 std::string outDir = fNameOut + "/";
+	
+	std::string outDir = fNameOut + "/";
 	std::string output = outDir + fNameIn + "_output.dat";
 	t = clock() - t;
 	pcout << "Simulation took seconds:" << ((float)t)/CLOCKS_PER_SEC << std::endl;
