@@ -30,6 +30,20 @@
 #include <vector>
 #include <cmath>
 #include <cstdlib>
+#include <string>
+#include <sstream>
+#include <iostream>
+
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
+
 
 using namespace plb;
 
@@ -76,13 +90,13 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
 	
 	if (run > run_diff) { // Fluid 1 - Krnw
 	const plint runner = run - run_diff;
-	fNameIn_temp =  fNameIn +"/lattice_f1_forK_" + std::to_string(runner) + "_.dat";	
+	fNameIn_temp =  fNameIn +"/lattice_f1_forK_" + patch::to_string(runner) + "_.dat";	
 	pcout  << "Run Krnw "<< std::endl; 
 	}
 	
 	if (run > 1 && run < (run_diff+1)) { // Fluid 2 - Krw
 	
-	fNameIn_temp =  fNameIn +"/lattice_f2_forK_"+ std::to_string(run-1) + "_.dat";		
+	fNameIn_temp =  fNameIn +"/lattice_f2_forK_"+ patch::to_string(run-1) + "_.dat";		
 	pcout  << "Run Krw "<< std::endl; 
 	}
 	pcout  << "Geometry name is  "<< fNameIn_temp << std::endl; 
