@@ -1,10 +1,14 @@
 <?xml version="1.0" ?>
+<load>
+<!-- Start fresh simulation: 1 or Load previously saved lattices: 0 (Update rho values from previous simulation's end) -->
+ <new_file> 1 </new_file>
+</load>
 
 <geometry>
     <!-- The name of the .dat file that contains the representation of the geometry. -->
-    <file_geom> tubes_284_54_106_new.dat </file_geom>
+    <file_geom> spheres4Palabos_155_150_150.dat </file_geom>
     <!-- Size (in voxels) of the simulation domain. -->
-    <size> <x> 106 </x> <y> 54 </y> <z> 284 </z> </size>
+    <size> <x> 155 </x> <y> 150 </y> <z> 150 </z> </size>
     <!-- Periodicity -->
     <per>
           <fluid1> <x> false </x> <y> false </y> <z> false </z> </fluid1>
@@ -15,13 +19,13 @@
 <init>
   <!-- Configuration of the initial fluid 1. -->
     <fluid1>
-          <x1> 1 </x1> <y1> 1 </y1> <z1> 1 </z1>
-          <x2> 2 </x2> <y2> 54 </y2> <z2> 284 </z2>
+          <x1> 1 </x1> <y1> 150 </y1> <z1> 150 </z1>
+          <x2> 2 </x2> <y2> 150 </y2> <z2> 150 </z2>
     </fluid1>
   <!-- Configuration of the initial fluid 2. -->
     <fluid2>
-          <x1> 3 </x1> <y1> 1 </y1> <z1> 1 </z1>
-          <x2> 106 </x2> <y2> 54 </y2> <z2> 284 </z2>
+          <x1> 3 </x1> <y1> 150 </y1> <z1> 150 </z1>
+          <x2> 155 </x2> <y2> 150 </y2> <z2> 150 </z2>
     </fluid2>
 </init>
 
@@ -53,11 +57,11 @@
 
 <output>
     <!-- Output folder -->
-    <out_f> tube_test/ </out_f>
+    <out_f> spheres4Palabos_155_150_150/ </out_f>
 	<!-- Convergence -->
     <conv> 0.00001 </conv>
     <!-- Max iterations per Pc -->
-    <it_max> 50 </it_max>
+    <it_max> 30000 </it_max>
     <!-- Check for convergence -->
     <it_con> 500 </it_con>
     <!-- Print info to the terminal -->
