@@ -509,7 +509,7 @@ directory='C:\Users\Abhishek\Desktop\MultiphasePorousMediaPalabos-master\src\2-p
                 
             end
         end
-        
+        R=1;
         sat_nw(R,I)=sum(sum(sum(rhof1>1)))/sum(sum(sum(rhof1~=0)));
         sat_w(R,I)= 1 - sat_nw(R,I);
         clear rhof1
