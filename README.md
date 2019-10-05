@@ -1,5 +1,12 @@
 # Multiphase LBM for Porous Media using the Palabos library
 
+
+.. contents::
+
+################################################################################
+Overview
+################################################################################
+
 This workflow can be used for calculation of capillary pressure curves, relative permeability and the percolation pathway of grain packs/image slices
 
 Workflow created by Abhishek Bihani and Javier Santos
@@ -8,15 +15,19 @@ Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 <img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.jpg" align="middle" width="450" height="390" alt="percolation non-wetting fluid" >
 
-## Installation
+################################################################################
+Installation
+################################################################################
 
-- run: ./Install_2phase_lib.sh 
+- run: ./Install_2phase_lib.sh
 
 ## Requirements
 
 1) MATLAB is required to run pre-processing and post-processing codes
 
-## Running a simulation
+################################################################################
+Running a simulation
+################################################################################
 
 A) Pre-processing (MATLAB):
 
@@ -44,6 +55,18 @@ D) 1-Phase LBM Simulation (PALABOS):
 - Make/Run 1-phase LBM simulation file permeability.cpp in bash to calculate absolute and relative permeabilities of the flow from fluid geometries
 
 Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation
+
+################################################################################
+Example description
+################################################################################
+
+1
+
+################################################################################
+FAQ
+################################################################################
+
+1
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 

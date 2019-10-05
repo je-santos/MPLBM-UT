@@ -1,0 +1,3 @@
+[submodule "domain_construction/fractures"]
+	path = domain_construction/fractures
+	url = https://github.com/je-santos/syntheticFractures.git
