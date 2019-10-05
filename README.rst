@@ -22,7 +22,7 @@ alt="Percolating path of a non-wetting fluid (rock and wetting fluid not shown)"
 Overview
 ################################################################################
 
-
+The Palabos library makes the engine flexible enought to be run on a single core of a personal laptop or in hundreds of nodes in a supercomputer.
 
 
 ################################################################################
