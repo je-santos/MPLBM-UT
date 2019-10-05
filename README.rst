@@ -83,6 +83,14 @@ FAQ
 
 - Segmentation errors
 - Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates
+- SCons compilation: create a conda enviroment with python2:
+
+.. code-block:: bash
+  conda create --name py2 python=2.7
+  ./Install.sh
+
+
+and install from there
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
