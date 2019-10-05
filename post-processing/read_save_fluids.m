@@ -93,6 +93,8 @@ directory='C:\Users\Abhishek\Desktop\MultiphasePorousMediaPalabos-master\src\2-p
              disp('Breakthrough occurs at: ');
              disp(image_name);
              Breakthrough=image_name;
+             breakthrough=[tortuosity,perc_length];
+             csvwrite([directory '\' 'breakthrough' '.csv'],breakthrough);
          end
      end
      
@@ -512,6 +514,7 @@ directory='C:\Users\Abhishek\Desktop\MultiphasePorousMediaPalabos-master\src\2-p
         R=1;
         sat_nw(R,I)=sum(sum(sum(rhof1>1)))/sum(sum(sum(rhof1~=0)));
         sat_w(R,I)= 1 - sat_nw(R,I);
+        csvwrite([directory '\' 'Sw' '.csv'],sat_w);
         clear rhof1
         clear rho1_temp
      %  save('rho1_temp.mat','rho1_temp')

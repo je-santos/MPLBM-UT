@@ -297,6 +297,8 @@ int main(int argc, char* argv[])
 	  T rho_fluid2_step ;
 	  T rho_fluid1_val ;
 	  bool px_f1, py_f1, pz_f1, px_f2, py_f2, pz_f2; //periodicity
+	  
+
 
 
 
@@ -413,7 +415,11 @@ int main(int argc, char* argv[])
 	// T diff_rho2[runnum];
 	
 	const T delta_rho = 0.00005;
-	T rho_low = 2 - delta_rho;	  
+	T rho_low = 2 - delta_rho;
+
+	  std::string outDir = fNameOut + "/";
+	  std::string Lattice1 = outDir + fNameIn + "_lattice1.dat";
+	  std::string Lattice2 = outDir + fNameIn + "_lattice2.dat";	
         	
 
 		
@@ -512,6 +518,7 @@ int main(int argc, char* argv[])
         T convergemeanJ2;
         T convergedmeanJ1;
         T convergedmeanJ2;
+
 		
 
 		
@@ -575,6 +582,8 @@ int main(int argc, char* argv[])
                     writeGifs(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
                     writeGifs2(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
 					writeVTK(lattice_fluid1, runs + startNum, iT, nx, ny, nz);
+					saveBinaryBlock(lattice_fluid1, Lattice1);
+					saveBinaryBlock(lattice_fluid2, Lattice2);
 					
 				// Calculate velocity here for both fluids in x-direction and pcout
 					
@@ -626,6 +635,8 @@ int main(int argc, char* argv[])
                 writeVTK2(lattice_fluid2, runs + startNum, iT, nx, ny, nz);
                 writeGifs(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
                 writeGifs2(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
+				saveBinaryBlock(lattice_fluid1, Lattice1);
+				saveBinaryBlock(lattice_fluid2, Lattice2);
 				
 				// Calculate velocity here for both fluids in x-direction and pcout
 				
@@ -657,12 +668,12 @@ int main(int argc, char* argv[])
     }
 	//  outputting variables
 	
-	saveBinaryBlock(lattice_fluid1, "lattice_fluid1.dat");
-	saveBinaryBlock(lattice_fluid2, "lattice_fluid2.dat");
+//	saveBinaryBlock(lattice_fluid1, Lattice1);
+//	saveBinaryBlock(lattice_fluid2, Lattice2);
 	
 	
 	
-	std::string outDir = fNameOut + "/";
+	
 	std::string output = outDir + fNameIn + "_output.dat";
 	t = clock() - t;
 	pcout << "Simulation took seconds:" << ((float)t)/CLOCKS_PER_SEC << std::endl;
