@@ -1,7 +1,7 @@
-# Multiphase LBM for Porous Media using the Palabos library
+================================================================================
+Multiphase LBM for Porous Media using the Palabos library
+================================================================================
 
-
-.. contents::
 
 ################################################################################
 Overview
@@ -15,11 +15,15 @@ Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 <img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.jpg" align="middle" width="450" height="390" alt="percolation non-wetting fluid" >
 
+.. contents::
+
 ################################################################################
 Installation
 ################################################################################
 
-- run: ./Install_2phase_lib.sh
+.. code-block:: bash
+
+  ./Install_2phase_lib.sh
 
 ## Requirements
 
