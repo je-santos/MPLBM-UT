@@ -31,11 +31,9 @@ Installation
 
 .. code-block:: bash
 
-  ./Install_2phase_lib.sh
+  ./Install.sh
 
-## Requirements
-
-1) MATLAB is required to run pre-processing and post-processing codes
+MATLAB or Octave are used to run the domain construction and post-processing tools.
 
 ################################################################################
 Running a simulation
@@ -69,7 +67,12 @@ D) 1-Phase LBM Simulation (PALABOS):
 Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation
 
 ################################################################################
-Example description
+Numerical validations
+################################################################################
+1
+
+################################################################################
+Examples
 ################################################################################
 
 1
@@ -78,11 +81,24 @@ Example description
 FAQ
 ################################################################################
 
-1
+- Segmentation errors
+- Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
-Credits/References:
+################################################################################
+Publications
+################################################################################
+
+1 Urtec
+2 AWR
+3 NeuralNets
+4 a couple under review
+
+################################################################################
+Credits/References
+################################################################################
+
 1. Geometry creation and permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
 2. Skeletonization code modified from Kollmannsberger Philip- https://www.mathworks.com/matlabcentral/profile/authors/4556277-philip-kollmannsberger
 3. Dijkstra's algorithm code modified from Kirk Joseph- https://www.mathworks.com/matlabcentral/fileexchange/12850-dijkstra-s-shortest-path-algorithm
