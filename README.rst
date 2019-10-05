@@ -2,20 +2,26 @@
 Multiphase LBM for Porous Media using the Palabos library
 ================================================================================
 
-
-################################################################################
-Overview
-################################################################################
-
 This workflow can be used for calculation of capillary pressure curves, relative permeability and the percolation pathway of grain packs/image slices
 
 Workflow created by Abhishek Bihani and Javier Santos
 
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
-<img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.jpg" align="middle" width="450" height="390" alt="percolation non-wetting fluid" >
+.. image:: illustration.jpg
+  :align=middle
+  :width=450
+  :height=390
+  :alt="Percolating path of a non-wetting fluid (rock and wetting fluid not shown)" 
 
 .. contents::
+
+################################################################################
+Overview
+################################################################################
+
+
+
 
 ################################################################################
 Installation
