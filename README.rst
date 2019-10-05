@@ -9,9 +9,11 @@ Workflow created by Abhishek Bihani and Javier Santos
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 .. image:: https://raw.githubusercontent.com/je-santos/MultiphasePorousMediaPalabos/master/illustration.jpg
-    :width=450
-    :height=390
-    :alt="Percolating path of a non-wetting fluid (rock and wetting fluid not shown)"
+
+align=middle
+width=450
+height=390
+alt="Percolating path of a non-wetting fluid (rock and wetting fluid not shown)"
 
 .. contents::
 
