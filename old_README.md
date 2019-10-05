@@ -1,11 +1,7 @@
 # Multiphase LBM for Porous Media using the Palabos library
 
+## Overview
 
-.. contents::
-
-################################################################################
-Overview
-################################################################################
 
 This workflow can be used for calculation of capillary pressure curves, relative permeability and the percolation pathway of grain packs/image slices
 
@@ -15,9 +11,8 @@ Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 <img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.jpg" align="middle" width="450" height="390" alt="percolation non-wetting fluid" >
 
-################################################################################
-Installation
-################################################################################
+## Installation
+
 
 - run: ./Install_2phase_lib.sh
 
@@ -25,9 +20,9 @@ Installation
 
 1) MATLAB is required to run pre-processing and post-processing codes
 
-################################################################################
-Running a simulation
-################################################################################
+
+## Running a simulation
+
 
 A) Pre-processing (MATLAB):
 
@@ -56,17 +51,6 @@ D) 1-Phase LBM Simulation (PALABOS):
 
 Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation
 
-################################################################################
-Example description
-################################################################################
-
-1
-
-################################################################################
-FAQ
-################################################################################
-
-1
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 

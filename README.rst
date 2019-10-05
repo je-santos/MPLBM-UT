@@ -8,7 +8,7 @@ Workflow created by Abhishek Bihani and Javier Santos
 
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
-.. image:: https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustration.jpg
+.. image:: https://raw.githubusercontent.com/je-santos/MultiphasePorousMediaPalabos/master/illustration.jpg
 
   :align=middle
   :width=450
