@@ -11,7 +11,7 @@ fp = eliminate_isolatedRegions(fp, connect); %for better convergence
 
 %% print for palabos
 
-print_size = 150; %size of the Finneypack subset (in voxels per side)
+print_size = 100; %size of the Finneypack subset (in voxels per side)
 fp_printing = fp(1:print_size, 1:print_size, 1:print_size);
 
 figure();imagesc(fp_printing(:,:,uint8(print_size/2)));
