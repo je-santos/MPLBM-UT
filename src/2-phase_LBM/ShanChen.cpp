@@ -37,11 +37,22 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
     ImageWriter<T> imageWriter("leeloo.map");
     imageWriter.writeScaledGif(createFileName("rho_f1_", 100000000 * runs + iT, 8),
     *computeDensity(lattice_fluid1, slice), imSize, imSize);
-
-    //ImageWriter<T> imageWriter("leeloo.map");
-    imageWriter.writeScaledGif(createFileName("rho_f2_", 100000000 * runs + iT, 8),
-    *computeDensity(lattice_fluid2, slice), imSize, imSize);
   }
+
+  void writeGifs_f2(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates the pictures
+    MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iT)
+    {
+      const plint imSize = 600;
+      const plint zcomponent = 0;
+      const plint nx = lattice_fluid2.getNx();
+      const plint ny = lattice_fluid2.getNy();
+      const plint nz = lattice_fluid2.getNz();
+      Box3D slice(0, nx, 0, ny, nz / 2, nz / 2);
+
+      ImageWriter<T> imageWriter("leeloo.map");
+      imageWriter.writeScaledGif(createFileName("rho_f2_", 100000000 * runs + iT, 8),
+      *computeDensity(lattice_fluid2, slice), imSize, imSize);
+    }
 
   void writeVTK_vel(MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1, plint runs)
   {
@@ -216,7 +227,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s2), 3);
 
               // Third contact angle (labeled with 4)
-              defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>(Gads_f1_s3), 4);
+              defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s3), 4);
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s3), 4);
 
               // Fourth contact angle (labeled with 5)
@@ -441,10 +452,8 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             std::string Lattice2 = outDir + fNameIn + "_lattice2.dat";
 
             for (plint readnum = 1; readnum <= runnum; ++readnum) {
-              rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum-1)* rho_f2_step;
-            }
-
-            for (plint readnum = 1; readnum <= runnum; ++readnum) {
+              rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum-1)*drho_f2;
+              pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
               rho_fluid1[readnum] = rho_f1_inlet;
             }
 
@@ -453,9 +462,9 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
             // Use regularized BGK dynamics to improve numerical stability (but note that BGK dynamics works well too).
             MultiBlockLattice3D<T, DESCRIPTOR> lattice_fluid2( nx, ny, nz,
-              new ExternalMomentRegularizedBGKdynamics<T, DESCRIPTOR>(omega_f2) );
-              MultiBlockLattice3D<T, DESCRIPTOR> lattice_fluid1( nx, ny, nz,
-                new ExternalMomentRegularizedBGKdynamics<T, DESCRIPTOR>(omega_f1) );
+              new ExternalMomentRegularizedBGKdynamics<T, DESCRIPTOR>(omega_f2));
+            MultiBlockLattice3D<T, DESCRIPTOR> lattice_fluid1( nx, ny, nz,
+              new ExternalMomentRegularizedBGKdynamics<T, DESCRIPTOR>(omega_f1));
 
                 lattice_fluid2.periodicity().toggle(0, px_f2);
                 lattice_fluid1.periodicity().toggle(0, px_f1);
@@ -537,6 +546,9 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
                         if (iT % it_gif == 0) {
                           writeGifs(  lattice_fluid1, lattice_fluid2, runs + startNum, iT);
+
+                          writeGifs_f2(  lattice_fluid1, lattice_fluid2, runs + startNum, iT);
+
                           writeGifs2( lattice_fluid1, lattice_fluid2, runs + startNum, iT);
                         }
 
