@@ -231,8 +231,8 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s3), 4);
 
               // Fourth contact angle (labeled with 5)
-              defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s4), 5);
-              defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s4), 5);
+              defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s4), 5);
+              defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s4), 5);
             }
 
 
@@ -444,8 +444,8 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             T mean_rho1[runnum];
             T mean_rho2[runnum];
 
-            const T delta_rho = 0.00005;
-            T rho_low = 2 - delta_rho;
+            //const T delta_rho = 0.00005;
+            //T rho_low = 2 - delta_rho;
 
             std::string outDir = fNameOut + "/";
             std::string Lattice1 = outDir + fNameIn + "_lattice1.dat";
@@ -499,7 +499,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                   MultiScalarField3D<int> geometry(nx, ny, nz);
                   readGeometry(fNameIn, fNameOut, geometry);
 
-                  util::ValueTracer<T> converge1(1.0, lattice_fluid2.getNx(),
+                  util::ValueTracer<T> converge1(1.0, lattice_fluid1.getNx(),
                   convergence); // convergence parameters velocity/size/threshold
                   util::ValueTracer<T> converge2(1.0, lattice_fluid2.getNx(),
                   convergence);
