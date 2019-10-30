@@ -15,7 +15,7 @@ using namespace std;
 // To do:
 //      1) Check if const plint zcomponent = 0 is necessary
 //      2) File naming
-//      3) Correct array indexing ( line 421 )
+
 
 
 
@@ -37,6 +37,10 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
     ImageWriter<T> imageWriter("leeloo.map");
     imageWriter.writeScaledGif(createFileName("rho_f1_", 100000000 * runs + iT, 8),
     *computeDensity(lattice_fluid1, slice), imSize, imSize);
+
+    //ImageWriter<T> imageWriter("leeloo.map");
+    imageWriter.writeScaledGif(createFileName("rho_f2_", 100000000 * runs + iT, 8),
+    *computeDensity(lattice_fluid2, slice), imSize, imSize);
   }
 
   void writeVTK_vel(MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1, plint runs)
