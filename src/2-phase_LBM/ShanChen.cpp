@@ -204,8 +204,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             plint nx = lattice_fluid2.getNx();
             plint ny = lattice_fluid2.getNy();
             plint nz = lattice_fluid2.getNz();
-            //const T rhoZero = 0.00001;
-            //const T deltaP = 0.05;
+
 
             pcout << "Definition of the geometry." << endl;
             if (load_state == true) {
@@ -290,9 +289,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             bool load_state ;
             std::string fNameOut ;
             std::string fNameIn  ;
-            plint nx ;
-            plint ny ;
-            plint nz ;
+            plint nx, ny, nz;
 
             bool px_f1, py_f1, pz_f1, px_f2, py_f2, pz_f2; //periodicity
             bool pressure_bc;
@@ -317,7 +314,6 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             T rhoNoFluid;
             T rho_f2_step;
             T drho_f2;
-
 
             plint it_max ;
             plint it_conv ;
@@ -444,9 +440,6 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             T mean_rho1[runnum];
             T mean_rho2[runnum];
 
-            //const T delta_rho = 0.00005;
-            //T rho_low = 2 - delta_rho;
-
             std::string outDir = fNameOut + "/";
             std::string Lattice1 = outDir + fNameIn + "_lattice1.dat";
             std::string Lattice2 = outDir + fNameIn + "_lattice2.dat";
@@ -519,11 +512,6 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                         nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, runs,
                         load_state, print_geom);
                       }
-
-                      //T meanJ_2 = 10000.0;
-                      //T meanJ_old2;
-                      //T meanJ_1 = 10000.0;
-                      //T meanJ_old1;
 
 
                       T convergemeanJ1;

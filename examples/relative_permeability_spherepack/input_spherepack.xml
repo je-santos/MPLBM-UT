@@ -18,12 +18,12 @@
 <init>
   <!-- Initial position of fluid 1 -->
     <fluid1>
-          <x1> 1 </x1> <y1> 100 </y1> <z1> 100 </z1>
-          <x2> 2 </x2> <y2> 100 </y2> <z2> 100 </z2>
+          <x1> 001 </x1> <y1> 001 </y1> <z1> 001 </z1>
+          <x2> 002 </x2> <y2> 100 </y2> <z2> 100 </z2>
     </fluid1>
   <!-- Initial position of fluid 2  -->
     <fluid2>
-          <x1> 3 </x1> <y1> 100 </y1> <z1> 100 </z1>
+          <x1> 003 </x1> <y1> 001 </y1> <z1> 001 </z1>
           <x2> 105 </x2> <y2> 100 </y2> <z2> 100 </z2>
     </fluid2>
 </init>
