@@ -235,24 +235,24 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
               // Initialize  uniform density for target saturation
               pcout << "Initializing Fluids" << endl;
 
-              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2, nx2_f2-1,
-                                                            ny1_f2, ny2_f2-1,
-                                                            nz1_f2, nz2_f2-1),
+              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2-1, nx2_f2-1,
+                                                            ny1_f2-1, ny2_f2-1,
+                                                            nz1_f2-1, nz2_f2-1),
                                                             rho_f2, zeroVelocity);
 
-              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f2, nx2_f2-1,
-                                                            ny1_f2, ny2_f2-1,
-                                                            nz1_f2, nz2_f2-1),
+              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f2-1, nx2_f2-1,
+                                                            ny1_f2-1, ny2_f2-1,
+                                                            nz1_f2-1, nz2_f2-1),
                                                             rhoNoFluid, zeroVelocity);
 
-              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f1, nx2_f1-1,
-                                                            ny1_f1, ny2_f1-1,
-                                                            nz1_f1, nz2_f1-1),
+              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f1-1, nx2_f1-1,
+                                                            ny1_f1-1, ny2_f1-1,
+                                                            nz1_f1-1, nz2_f1-1),
                                                             rho_f1, zeroVelocity);
 
-              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f1, nx2_f1-1,
-                                                            ny1_f1, ny2_f1-1,
-                                                            nz1_f1, nz2_f1-1),
+              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f1-1, nx2_f1-1,
+                                                            ny1_f1-1, ny2_f1-1,
+                                                            nz1_f1-1, nz2_f1-1),
                                                             rhoNoFluid, zeroVelocity);
             }
 
