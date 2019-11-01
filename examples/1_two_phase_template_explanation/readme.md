@@ -7,57 +7,83 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 **The inputs are explained in the same sequence as the xml file**
 
-**load_savedstated** This input gives the user the option of loading a previous incomplete simulation (True), or starting a new simulation (False). 
+**load_savedstated:** This input gives the user the option of loading a previous incomplete simulation (True), or starting a new simulation (False). 
 
-**geometry** There are multiple inputs required under this heading.
+**geometry:** There are multiple inputs required under this heading.
 
-**file_geom** The name of the geometry for simulation. PALABOS requires the input geometry be in .DAT file format which can be created using the [pre-processing steps](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/pre-processing) The geometry file should be placed in the same folder as the [2-phase simulation code](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/src/2-phase_LBM) or if placed elsewhere, the path should be modified to point to the geometry.
+**file_geom:** This input asks for the name of the geometry for simulation. PALABOS requires the input geometry be in .DAT file format which can be created using the [pre-processing steps](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/pre-processing) The geometry file should be placed in the same folder as the [2-phase simulation code](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/src/2-phase_LBM) or if placed elsewhere, the path should be modified to point to the geometry.
 
-**size** This input requires the size (in voxels) in the X, Y, and Z directions of the geometry (Figure 1).
+**size:** This input requires the size (in voxels) in the X, Y, and Z directions of the geometry (Figure 1).
  
 *Note:* 
 
 1) PALABOS conducts simulations in X-direction, so please double-check X and Z directions of the geometry.
 2) If the blank slices and mesh are added in the pre-proccesing step, 5 voxels will be added to the original geometry in the X-direction.
 	   
-**init** There are multiple inputs required under this heading.
+**init:** There are multiple inputs required under this heading.
 
-**fluid1** This input requires the initial positions of fluid 1 (usually invading fluid). As shown in Figure 1, these inputs are x1 to x2, y1 to y2, and z1 to z2 given in orange color. Fluid 1 has one edge as the YZ plane at x=x1 at inlet side of the geometry and the second edge at x=x2 (which is also the left edge of fluid interface at t=0). As the entire fluid in the Y-Z space is filled with fluid 1 between x=x1 and x=x2, the Y and Z direction limits are the geometry limits.
+**fluid1:** This input requires the initial positions of fluid 1 (usually invading fluid). As shown in Figure 1, these inputs are x1 to x2, y1 to y2, and z1 to z2 given in orange color. Fluid 1 has one edge as the YZ plane at x=x1 at inlet side of the geometry and the second edge at x=x2 (which is also the left edge of fluid interface at t=0). As the entire fluid in the Y-Z space is filled with fluid 1 between x=x1 and x=x2, the Y and Z direction limits are the geometry limits.
 
-**fluid2** This input requires the initial positions of fluid 2 (usually defending fluid). As shown in Figure 1, these inputs are x1 to x2, y1 to y2, and z1 to z2 given in blue color. Fluid 2 has one edge as the YZ plane at x=x1 (which is the right edge of fluid interface at t=0) and the second edge at x=x2 at outlet side of the geometry. As the entire fluid in the Y-Z space is filled with fluid 1 between x=x1 and x=x2, the Y and Z direction limits are again the geometry limits.
+**fluid2:** This input requires the initial positions of fluid 2 (usually defending fluid). As shown in Figure 1, these inputs are x1 to x2, y1 to y2, and z1 to z2 given in blue color. Fluid 2 has one edge as the YZ plane at x=x1 (which is the right edge of fluid interface at t=0) and the second edge at x=x2 at outlet side of the geometry. As the entire fluid in the Y-Z space is filled with fluid 1 between x=x1 and x=x2, the Y and Z direction limits are again the geometry limits.
 	   
-**fluids** There are multiple inputs required under this heading.
+**fluids:** There are multiple inputs required under this heading.
 
-**Gc**
-**omega_f1**
-**omega_f2**
-**force_f1**
-**force_f2**
-**Wetting forces**
+**Gc:**
+
+**omega_f1:**
+
+**omega_f2:**
+
+**force_f1:**
+
+**force_f2:**
+
+**Wetting forces:**
 (G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4)
 
-**rho_f1** This input takes the intial density of fluid 1 throughout the fluid
-**rho_f2** This input takes the intial density of fluid 2 throughout the fluid
-**pressure_bc** This input asks if a pressure gradient will be applied in the geometry. True for flow simulations and False for equilibrium calculations.
-**num_pc** 
-**rho_f1_i**
-**rho_f2_i**
-**rho_f2_f**
-**rho_d**
-**drho_f2**
+**rho_f1:** This input takes the intial density of fluid 1 throughout the geometry.
 
-**output** There are multiple inputs required under this heading.
-**out_folder**
-**save_sim**
-**convergence**
-**it_max**
-**it_conv**
-**it_info**
-**it_gif**
-**rho_vtk**
-**it_vtk**
-**print_geom**
-**print_stl**
+**rho_f2:** This input takes the intial density of fluid 2 throughout the geometry.
+
+**pressure_bc:** This input asks if a pressure gradient will be applied in the geometry. Please use True for flow simulations and False for equilibrium calculations.
+
+**rho_f1_i:** This input takes the initial density of fluid 1 at the inlet pressure boundary and is kept constant.
+
+**rho_f2_i:** This input takes the initial density of fluid 2 at the outlet pressure boundary at the beginning of the simulation.
+
+**rho_f2_f:** This input takes the final density of fluid 2 at the outlet pressure boundary at the end of the simulation. The difference between the inlet and the outlet pressure boundaries decides the capillary pressure.
+
+**rho_d:** This input takes the dissolved density of one phase in the other (both fluid1 and fluid2). The default value may be kept 0.06.
+
+**drho_f2:** This input takes the decrement in the pressure of fluid 2 at the outlet pressure boundary at every step (capillary pressure change) in the simulation. A range of 0.01 to 0.1 may be input depending on balance between sensitivity / computational time, as smaller decrement will require a longer time but will have greater sensitivity to measure change in fluid movement. 
+
+**output:** There are multiple inputs required under this heading.
+
+**out_folder:** This input takes the name of the folder where all the output files will be stored.
+
+**save_sim:** This input asks if user wants to save the simulation lattices after every capillary pressure decrement for both fluid 1 and fluid 2. The saved files are large (> 1 GB) but are overwritten after every decrement and may be used to restart the simulation from that step.
+
+**convergence:** This input takes the value of the convergence criterion (density change) for the simulation. The convergence value is inversely proportional to the computational time and the accuracy. A convergence of 10^-6 may be accurate but will require a longer time than a convergence of 10^-5 or 10^-4.
+
+**it_max:** This input takes the value of maximum iterations allowed at a particular capillary pressure if the convergence is not reached.
+
+**it_conv:** This input takes the value of number of iterations after which to check if convergence criterion is satisfied.
+
+**it_info:** This input takes the value of number of iterations after which the current state of simulation should be displayed in the terminal.
+
+**it_gif:** This input takes the value of number of iterations after which 2D images of the geometry crossection (.gif) showing the density and current fluid configuration are to be saved.
+
+**rho_vtk:** This input asks if 3D geometry files (.vtk) for both fluids 1 and 2 are to be saved: True, or only for for Fluid 1: False.
+
+**it_vtk:** This input takes the  number of iterations after which the 3D geometry files (.vtk) showing the density and current fluid configuration are to be saved.
+
+**print_geom:** This input asks if a 3D geometry file (.vtk) is to be saved at the beginning of the simulation.
+
+**print_stl:** This input asks if a 3D geometry file (.stl) is to be saved at the beginning of the simulation. This file may be used for 3D printing the geometry or for viewing.
+
+*Note:* The .vtk files may be viewed in [PARAVIEW](https://www.paraview.org/).
+
+
 
 
 
