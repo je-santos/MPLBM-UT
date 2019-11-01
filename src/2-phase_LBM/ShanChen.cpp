@@ -232,21 +232,10 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
               // Fourth contact angle (labeled with 5)
               defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s4), 5);
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s4), 5);
-            }
+
+              Array<T, 3> zeroVelocity(0., 0., 0.);
 
 
-            // Output geometry dynamics
-            if (print_geom == true) {
-              VtkImageOutput3D<int> vtkOut(createFileName("vtkgeometry", 1, 1), 1.);
-              vtkOut.writeData<int>(geometry, "Dynamics", 1.);
-              pcout << "Creating geometry vtk file" << endl;
-            }
-
-            Array<T, 3> zeroVelocity(0., 0., 0.);
-
-            if (load_state == false) {
-
-              // Initialize  uniform density for target saturation
               pcout << "Initializing Fluids" << endl;
 
               initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2-1, nx2_f2-1,
@@ -270,6 +259,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                                                             rhoNoFluid, zeroVelocity);
             }
 
+
             setExternalVector(lattice_fluid1, lattice_fluid1.getBoundingBox(),
             DESCRIPTOR<T>::ExternalField::forceBeginsAt, Array<T, 3>(0., force_f1, 0.));
             setExternalVector(lattice_fluid2, lattice_fluid2.getBoundingBox(),
@@ -277,6 +267,15 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
             lattice_fluid1.initialize();
             lattice_fluid2.initialize();
+
+
+            // Output geometry dynamics
+            if (print_geom == true) {
+              VtkImageOutput3D<int> vtkOut(createFileName("vtkgeometry", 1, 1), 1.);
+              vtkOut.writeData<int>(geometry, "Dynamics", 1.);
+              pcout << "Creating geometry vtk file" << endl;
+            }
+
           }
 
           int main(int argc, char* argv[])
@@ -440,9 +439,9 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             T mean_rho1[runnum];
             T mean_rho2[runnum];
 
-            std::string outDir = fNameOut + "/";
-            std::string Lattice1 = outDir + fNameIn + "_lattice1.dat";
-            std::string Lattice2 = outDir + fNameIn + "_lattice2.dat";
+            //std::string outDir = fNameOut + "/";
+            std::string Lattice1 =   fNameOut + "_lattice1.dat";
+            std::string Lattice2 =   fNameOut + "_lattice2.dat";
 
             for (plint readnum = 1; readnum <= runnum; ++readnum) {
               rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum-1)*drho_f2;
