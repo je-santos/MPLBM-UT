@@ -36,7 +36,7 @@
     <force_f1> 0 </force_f1>
     <force_f2> 0 </force_f2>
     <!-- Wetting forces Huang et al., 2007. -->
-    <G_ads_f1_s1>  0.4 </G_ads_f1_s1>
+    <G_ads_f1_s1> -0.4 </G_ads_f1_s1>
     <G_ads_f1_s2>  0.0 </G_ads_f1_s2>
     <G_ads_f1_s3>  0.0 </G_ads_f1_s3>
     <G_ads_f1_s4>  0.0 </G_ads_f1_s4>
