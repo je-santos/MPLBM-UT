@@ -71,11 +71,11 @@
     <!-- Save the simulation state after every capillary increment (big files) -->
     <save_sim> True </save_sim>
 	  <!-- Convergence criteron (density change) -->
-    <convergence> 0.00001 </convergence>
+    <convergence> 0.1 </convergence>
     <!-- Max iterations per Pc step -->
     <it_max> 30000 </it_max>
     <!-- Check for convergence every -->
-    <it_conv> 500 </it_conv>
+    <it_conv> 100 </it_conv>
     <!-- Print info to the terminal -->
     <it_info> 200 </it_info>
     <!-- Print density gifs -->
