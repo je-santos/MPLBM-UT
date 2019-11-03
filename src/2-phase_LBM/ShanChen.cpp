@@ -473,6 +473,8 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
               rho_fluid1[readnum] = rho_f1_inlet;
             }
 
+            rho_fluid2[1]=rho_fluid2[1]+0.02;
+
             const T nu_f1 = ( (T)1 / omega_f1 - 0.5 ) / DESCRIPTOR<T>::invCs2;
             const T nu_f2 = ( (T)1 / omega_f2 - 0.5 ) / DESCRIPTOR<T>::invCs2;
 
