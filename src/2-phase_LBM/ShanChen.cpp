@@ -25,7 +25,7 @@ typedef double T; // Use double-precision arithmetics
 #define DESCRIPTOR descriptors::ForcedShanChenD3Q19Descriptor
 
 void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates the pictures
-  MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iT)
+  MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, string runs, plint iT)
   {
     const plint imSize = 600;
     const plint zcomponent = 0;
@@ -34,8 +34,23 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
     const plint nz = lattice_fluid2.getNz();
     Box3D slice(0, nx, 0, ny, nz / 2, nz / 2);
 
+    //stringstream ss;
+    //ss << runs;
+    //string s;
+    //ss>>s;
+    //pcout << s;
+    string im_name;
+
+
+    im_name = "rho_f1_";
+    //strcat(im_name, s);
+    im_name.append(runs);
+    im_name.append("_");
+    pcout << im_name << std::endl;
+
     ImageWriter<T> imageWriter("leeloo.map");
-    imageWriter.writeScaledGif(createFileName("rho_f1_", 100000000 * runs + iT, 8),
+    //imageWriter.writeScaledGif(createFileName("rho_f1_", 100000000 * runs + iT, 8),
+    imageWriter.writeScaledGif(createFileName(im_name, iT, 8),
     *computeDensity(lattice_fluid1, slice), imSize, imSize);
   }
 
@@ -329,7 +344,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
             plint it_vtk ;
             plint it_gif ;
 
-            plint startNum ;
+            plint startNum ;  //erase this
 
             bool save_sim, rho_vtk, print_geom, print_stl ;
 
@@ -506,7 +521,15 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                   convergence);
 
                   for (plint runs = 1; runs <= runnum; ++runs) { // Loop simulations with varying saturation
+
+                    stringstream save_str;
+                    save_str << runs;
+                    string runs_str;
+                    save_str >> runs_str; //save a str for figure naming
+
                     pcout << "Run number = " << runs << endl;
+
+
                     if (runs > 1)
                     {
                       pcout << "Using previous simulation state  " << endl;
@@ -545,7 +568,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
 
                         if (iT % it_gif == 0) {
-                          writeGifs(  lattice_fluid1, lattice_fluid2, runs + startNum, iT);
+                          writeGifs(  lattice_fluid1, lattice_fluid2, runs_str, iT);
 
                           writeGifs_f2(  lattice_fluid1, lattice_fluid2, runs + startNum, iT);
 
@@ -610,7 +633,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
                           //if ((converge1.hasConverged()) && (converge2.hasConverged())) {
                           if ( checkconv == 1 ) {
-                            writeGifs(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
+                            //writeGifs(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
                             writeGifs2(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
                             writeVTK(lattice_fluid1, runs + startNum, iT, nx, ny, nz);
                             saveBinaryBlock(lattice_fluid1, Lattice1);
