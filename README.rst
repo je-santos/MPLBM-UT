@@ -65,7 +65,12 @@ Optional: Run porethroat_dist.m to calculate pore and throat size distribution o
 ################################################################################
 Numerical validations
 ################################################################################
-1
+
+- Young's equation
+
+- Young-Laplace
+
+- Washburn
 
 ################################################################################
 Examples
@@ -77,7 +82,7 @@ Examples
 FAQ
 ################################################################################
 
-Segmentation errors: Image dimensions are not correct.
+Segmentation error: Image dimensions are not correct.
 
 
 Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates
