@@ -11,15 +11,14 @@ fp = eliminate_isolatedRegions(fp, connect); %for better convergence
 
 %% print for palabos
 
-print_size = 480; %size of the Finneypack subset (in voxels per side)
-fp_printing = fp(1:print_size, 1:print_size, 1:print_size);
+print_size = 250; %size of the subset (in voxels per side)
+fp_printing = fp(1:print_size, 1:print_size, 1:print_size)/3;
 
 figure();imagesc(fp_printing(:,:,uint8(print_size/2)));
 title('Cross-section of the simulation subset')
 
 name = ['carbonate4Palabos'];
 
-palabos_3Dmat = mat2dat_4lbm(fp_printing,name,1); %although this function is slow, it 
-                                    %provides a very computationally efficient 
-                                    %geometry for Palabos
+fast_printing = false; %this option print a fast geometry but sacrifices simulation speed
 
+palabos_3Dmat = mat2dat_4lbm_singlephase(fp_printing,name,fast_printing); 
