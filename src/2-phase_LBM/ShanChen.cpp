@@ -13,8 +13,11 @@ using namespace plb;
 using namespace std;
 
 // To do:
-//      1) Check if const plint zcomponent = 0 is necessary
-//      2) File naming
+//      clean up and indent nicely
+//      figure out how to place the runnum.dat inside the output folder
+//      add a condition to output one or two rho vtks (in case user wants to calculate presssure)
+//     fix and clean naming of gifs, delete gif2 (no needed)
+//      add option to output velocity vtk (idk if it's neeeded)
 
 
 
@@ -28,7 +31,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
   MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, string runs, plint iT)
   {
     const plint imSize = 600;
-    const plint zcomponent = 0;
+    //const plint zcomponent = 0;
     const plint nx = lattice_fluid2.getNx();
     const plint ny = lattice_fluid2.getNy();
     const plint nz = lattice_fluid2.getNz();
@@ -58,7 +61,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
     MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iT)
     {
       const plint imSize = 600;
-      const plint zcomponent = 0;
+      //const plint zcomponent = 0;
       const plint nx = lattice_fluid2.getNx();
       const plint ny = lattice_fluid2.getNy();
       const plint nz = lattice_fluid2.getNz();
@@ -81,7 +84,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
     MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iT)
     {
       const plint imSize = 600;
-      const plint zcomponent = 0;
+      //const plint zcomponent = 0;
       const plint nx = lattice_fluid2.getNx();
       const plint ny = lattice_fluid2.getNy();
       const plint nz = lattice_fluid2.getNz();
@@ -262,24 +265,24 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
               pcout << "Initializing Fluids" << endl;
 
-              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2, nx2_f2-1,
-                                                            ny1_f2, ny2_f2-1,
-                                                            nz1_f2, nz2_f2-1),
+              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2-1, nx2_f2-1,
+                                                            ny1_f2-1, ny2_f2-1,
+                                                            nz1_f2-1, nz2_f2-1),
                                                             rho_f2, zeroVelocity);
 
-              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f2, nx2_f2-1,
-                                                            ny1_f2, ny2_f2-1,
-                                                            nz1_f2, nz2_f2-1),
+              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f2-1, nx2_f2-1,
+                                                            ny1_f2-1, ny2_f2-1,
+                                                            nz1_f2-1, nz2_f2-1),
                                                             rhoNoFluid, zeroVelocity);
 
-              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f1, nx2_f1-1,
-                                                            ny1_f1, ny2_f1-1,
-                                                            nz1_f1, nz2_f1-1),
+              initializeAtEquilibrium(lattice_fluid1, Box3D(nx1_f1, nx2_f1,
+                                                            ny1_f1, ny2_f1,
+                                                            nz1_f1, nz2_f1),
                                                             rho_f1, zeroVelocity);
 
-              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f1, nx2_f1-1,
-                                                            ny1_f1, ny2_f1-1,
-                                                            nz1_f1, nz2_f1-1),
+              initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f1, nx2_f1,
+                                                            ny1_f1, ny2_f1,
+                                                            nz1_f1, nz2_f1),
                                                             rhoNoFluid, zeroVelocity);
             }
 
@@ -499,9 +502,10 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                 constOmegaValues.push_back( omega_f2 );
                 constOmegaValues.push_back( omega_f1 );
                 plint processorLevel = 1;
+
                 integrateProcessingFunctional(new ShanChenMultiComponentProcessor3D<T,
-                  DESCRIPTOR>(G, constOmegaValues), Box3D(0, nx-1, 0, ny-1, 0, nz-1),
-                  blockLattices, processorLevel);
+                DESCRIPTOR>(G, constOmegaValues), Box3D(0, nx-1, 0, ny-1, 0, nz-1),
+                blockLattices, processorLevel);
 
                   pcout << " The convergence set by the user is = " << convergence << endl;
 
@@ -525,9 +529,9 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                   for (plint runs = 1; runs <= runnum; ++runs) { // Loop simulations with varying saturation
 
                     stringstream save_str;
-                    save_str << runs;
+                    save_str << std::setw(3) << std::setfill('0') << runs;
                     string runs_str;
-                    save_str >> runs_str; //save a str for figure naming
+                    save_str  >> runs_str; //save a str for figure naming
 
                     pcout << "Run number = " << runs << endl;
 
@@ -562,6 +566,11 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
                       plint checkconv = 0;
                       plint iT = 0;
+
+
+                      //lattice.toggleInternalStatistics(false);
+
+
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
 
@@ -675,10 +684,10 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                           //initializeAtEquilibrium(lattice_fluid2, Box3D(nx - 2, nx-1, 0, ny-1, 0, nz-1), rho_fluid2[runs], Array<T, 3>(0., 0., 0.));
 
                           Array<T, 3> zeroVelocity(0., 0., 0.);
-                          initializeAtEquilibrium(lattice_fluid1, Box3D(1, 2, 0, ny-1, 0, nz-1), rho_fluid1[runs], zeroVelocity);
-                          initializeAtEquilibrium(lattice_fluid2, Box3D(1, 2, 0, ny-1, 0, nz-1), rhoNoFluid, zeroVelocity);
-                          initializeAtEquilibrium(lattice_fluid1, Box3D(nx - 2, nx-1, 0, ny-1, 0, nz-1), rhoNoFluid, zeroVelocity);
-                          initializeAtEquilibrium(lattice_fluid2, Box3D(nx - 2, nx-1, 0, ny-1, 0, nz-1), rho_fluid2[runs], zeroVelocity);
+                          initializeAtEquilibrium(lattice_fluid1, Box3D(1, 2, 1, ny-2, 1, nz-2), rho_fluid1[runs], zeroVelocity);
+                          initializeAtEquilibrium(lattice_fluid2, Box3D(1, 2, 1, ny-2, 1, nz-2), rhoNoFluid, zeroVelocity);
+                          initializeAtEquilibrium(lattice_fluid1, Box3D(nx - 2, nx-1, 1, ny-2, 1, nz-2), rhoNoFluid, zeroVelocity);
+                          initializeAtEquilibrium(lattice_fluid2, Box3D(nx - 2, nx-1, 1, ny-2, 1, nz-2), rho_fluid2[runs], zeroVelocity);
 
                           lattice_fluid1.initialize();
                           lattice_fluid2.initialize();
