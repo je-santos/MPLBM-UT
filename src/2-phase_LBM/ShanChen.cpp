@@ -15,8 +15,6 @@ using namespace std;
 // To do:
 //      clean up and indent nicely
 //      figure out how to place the runnum.dat inside the output folder
-//      add a condition to output one or two rho vtks (in case user wants to calculate presssure)
-//     fix and clean naming of gifs, delete gif2 (no needed)
 //      add option to output velocity vtk (idk if it's neeeded)
 
 
@@ -27,7 +25,7 @@ typedef double T; // Use double-precision arithmetics
 // Use a grid which additionally to the f's stores two variables for the external force term.
 #define DESCRIPTOR descriptors::ForcedShanChenD3Q19Descriptor
 
-void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates the pictures
+void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates the pictures
   MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, string runs, plint iT)
   {
     const plint imSize = 600;
@@ -37,40 +35,17 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
     const plint nz = lattice_fluid2.getNz();
     Box3D slice(0, nx, 0, ny, nz / 2, nz / 2);
 
-    //stringstream ss;
-    //ss << runs;
-    //string s;
-    //ss>>s;
-    //pcout << s;
     string im_name;
 
-
     im_name = "rho_f1_";
-    //strcat(im_name, s);
     im_name.append(runs);
     im_name.append("_");
-    pcout << im_name << std::endl;
 
     ImageWriter<T> imageWriter("leeloo.map");
-    //imageWriter.writeScaledGif(createFileName("rho_f1_", 100000000 * runs + iT, 8),
     imageWriter.writeScaledGif(createFileName(im_name, iT, 8),
     *computeDensity(lattice_fluid1, slice), imSize, imSize);
   }
 
-  void writeGifs_f2(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates the pictures
-    MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iT)
-    {
-      const plint imSize = 600;
-      //const plint zcomponent = 0;
-      const plint nx = lattice_fluid2.getNx();
-      const plint ny = lattice_fluid2.getNy();
-      const plint nz = lattice_fluid2.getNz();
-      Box3D slice(0, nx, 0, ny, nz / 2, nz / 2);
-
-      ImageWriter<T> imageWriter("leeloo.map");
-      imageWriter.writeScaledGif(createFileName("rho_f2_", 100000000 * runs + iT, 8),
-      *computeDensity(lattice_fluid2, slice), imSize, imSize);
-    }
 
   void writeVTK_vel(MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1, plint runs)
   {
@@ -80,35 +55,41 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
   }
 
 
-  void writeGifs2(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
-    MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iT)
+  void writeGif_f1_y(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
+    MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, string runs, plint iT)
     {
       const plint imSize = 600;
-      //const plint zcomponent = 0;
       const plint nx = lattice_fluid2.getNx();
       const plint ny = lattice_fluid2.getNy();
       const plint nz = lattice_fluid2.getNz();
       Box3D slice(0, nx, ny / 2, ny / 2, 0, nz);
 
+      string im_name;
+
+      im_name = "rho_f1_y_";
+      im_name.append(runs);
+      im_name.append("_");
+
+
       ImageWriter<T> imageWriter("leeloo.map");
-      imageWriter.writeScaledGif(createFileName("y_rho_f1_", 1 * runs, 8),
+      imageWriter.writeScaledGif(createFileName(im_name, iT, 8),
       *computeDensity(lattice_fluid1, slice), imSize, imSize);
     }
 
-    void writeVTK(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1, plint runs, plint iter, plint nx, plint ny, plint nz) // std::string Dstring, std::string Vstring
+    void writeVTK_rho(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid,
+      string im_name, string runs, plint iter, plint nx, plint ny, plint nz)
     {
+
+
+      im_name.append(runs);
+      im_name.append("_");
+
       const plint zcomponent = 0;
-      VtkImageOutput3D<double> vtkOut(createFileName("rho1_", 1* runs, 8), 1.);
-      vtkOut.writeData<double>((*computeDensity(lattice_fluid1)), "Density", 1.);
+      VtkImageOutput3D<double> vtkOut(createFileName(im_name, iter, 8), 1.);
+      vtkOut.writeData<double>((*computeDensity(lattice_fluid)), "Density", 1.);
     }
 
-    void writeVTK2(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, plint runs, plint iter, plint nx, plint ny, plint nz) // std::string Dstring, std::string Vstring
-    {
-      const plint xcomponent = 0;
 
-      VtkImageOutput3D<double> vtkOut(createFileName("rho2_", 100000000 * runs + iter, 8), 1.);
-      vtkOut.writeData<double>((*computeDensity(lattice_fluid2)), "Density", 1.);
-    }
 
     T computeVelocity_f1(MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1, T nu_f1)
     {
@@ -288,9 +269,9 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
 
             setExternalVector(lattice_fluid1, lattice_fluid1.getBoundingBox(),
-            DESCRIPTOR<T>::ExternalField::forceBeginsAt, Array<T, 3>(0., force_f1, 0.));
+            DESCRIPTOR<T>::ExternalField::forceBeginsAt, Array<T, 3>(force_f1, 0., 0.));
             setExternalVector(lattice_fluid2, lattice_fluid2.getBoundingBox(),
-            DESCRIPTOR<T>::ExternalField::forceBeginsAt, Array<T, 3>(0., force_f2, 0.));
+            DESCRIPTOR<T>::ExternalField::forceBeginsAt, Array<T, 3>(force_f2, 0., 0.));
 
             lattice_fluid1.initialize();
             lattice_fluid2.initialize();
@@ -535,7 +516,6 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
                     pcout << "Run number = " << runs << endl;
 
-
                     if (runs > 1)
                     {
                       pcout << "Using previous simulation state  " << endl;
@@ -550,12 +530,6 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                         load_state, print_geom);
                       }
 
-
-                      //T convergemeanJ1;
-                      //T convergemeanJ2;
-                      //T convergedmeanJ1;
-                      //T convergedmeanJ2;
-
                       T new_avg_rho_f1, new_avg_rho_f2, old_avg_rho_f1, old_avg_rho_f2;
                       T relE_f1, relE_f2;
 
@@ -567,9 +541,7 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                       plint checkconv = 0;
                       plint iT = 0;
 
-
-                      //lattice.toggleInternalStatistics(false);
-
+                      //lattice.toggleInternalStatistics(false); //I need to check if this works :)
 
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
@@ -577,19 +549,17 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                         lattice_fluid1.collideAndStream();
                         lattice_fluid2.collideAndStream();
 
-
                         if (iT % it_gif == 0) {
-                          writeGifs(  lattice_fluid1, lattice_fluid2, runs_str, iT);
-
-                          writeGifs_f2(  lattice_fluid1, lattice_fluid2, runs + startNum, iT);
-
-                          writeGifs2( lattice_fluid1, lattice_fluid2, runs + startNum, iT);
+                          writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
+                          writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
                         }
 
                         if (iT % it_vtk == 0) {
-                          writeVTK(lattice_fluid1, runs + startNum, iT, nx, ny, nz);
-                          writeVTK2(lattice_fluid2, runs + startNum, iT, nx, ny, nz);
-                          writeVTK_vel(lattice_fluid1, runs + startNum);
+                          writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
+                          if (rho_vtk == true)
+                          {
+                            writeVTK_rho(lattice_fluid2, "rho_f2_", runs_str, iT, nx, ny, nz);
+                          }
                         }
 
                         if (iT % it_conv == 0 ) {
@@ -644,17 +614,21 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
 
                           //if ((converge1.hasConverged()) && (converge2.hasConverged())) {
                           if ( checkconv == 1 ) {
-                            //writeGifs(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
-                            writeGifs2(lattice_fluid1, lattice_fluid2, runs + startNum, iT);
-                            writeVTK(lattice_fluid1, runs + startNum, iT, nx, ny, nz);
+                            writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
+                            writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
+                            writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
+
+                            if (save_sim == true)
+                            {
                             saveBinaryBlock(lattice_fluid1, Lattice1);
                             saveBinaryBlock(lattice_fluid2, Lattice2);
-              //std::string runfile = fNameOut + "runnum.dat"; doesent work idk why
-              plb_ofstream ofile(  "runnum.dat" );
-							ofile << runs << endl;
+                            //std::string runfile = fNameOut + "runnum.dat"; doesent work idk why
+                            plb_ofstream ofile(  "runnum.dat" );
+              							ofile << runs << endl;
+                          }
+
 
                             // Calculate velocity here for both fluids in x-direction and pcout
-
                             T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
                             T meanU2 = computeVelocity_f2(lattice_fluid2, nu_f2);
                             mean_U1[runs] = meanU1;
@@ -678,10 +652,6 @@ void writeGifs(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates th
                         if (pressure_bc == true)
                         {
 
-                          //initializeAtEquilibrium(lattice_fluid1, Box3D(1, 2, 0, ny-1, 0, nz-1), rho_fluid1[runs], Array<T, 3>(0., 0., 0.));
-                          //initializeAtEquilibrium(lattice_fluid2, Box3D(1, 2, 0, ny-1, 0, nz-1), rhoNoFluid, Array<T, 3>(0., 0., 0.));
-                          //initializeAtEquilibrium(lattice_fluid1, Box3D(nx - 2, nx-1, 0, ny-1, 0, nz-1), rhoNoFluid, Array<T, 3>(0., 0., 0.));
-                          //initializeAtEquilibrium(lattice_fluid2, Box3D(nx - 2, nx-1, 0, ny-1, 0, nz-1), rho_fluid2[runs], Array<T, 3>(0., 0., 0.));
 
                           Array<T, 3> zeroVelocity(0., 0., 0.);
                           initializeAtEquilibrium(lattice_fluid1, Box3D(1, 2, 1, ny-2, 1, nz-2), rho_fluid1[runs], zeroVelocity);
