@@ -65,7 +65,12 @@ Optional: Run porethroat_dist.m to calculate pore and throat size distribution o
 ################################################################################
 Numerical validations
 ################################################################################
-1
+
+- Young's equation
+
+- Young-Laplace
+
+- Washburn
 
 ################################################################################
 Examples
@@ -77,16 +82,36 @@ Examples
 FAQ
 ################################################################################
 
-- Segmentation errors
-- Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates
-- SCons compilation: create a conda enviroment with python2:
+Segmentation error: Image dimensions are not correct.
+
+
+Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates
+
+
+SCons compilation error: create a conda enviroment with python2 (Palabos needs it):
 
 .. code-block:: bash
+
   conda create --name py2 python=2.7
   ./Install.sh
 
 
-and install from there
+
+Why am I seeing the same line printed multiple times? / Why is the code so slow?: Probably MPI is not installed in your system, this could be solved by:
+
+.. code-block:: bash
+
+  sudo apt-get install build-essential
+  sudo apt-get install gfortran
+  cd /tmp
+  wget http://www.mpich.org/static/downloads/1.4.1/mpich2-1.4.1.tar.gz
+  tar xzvf mpich2-1.4.1.tar.gz
+  cd mpich2-1.4.1/
+  ./configure
+  make
+  sudo make install
+
+
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
@@ -95,8 +120,11 @@ Publications
 ################################################################################
 
 1 Urtec
+
 2 AWR
+
 3 NeuralNets
+
 4 a couple under review
 
 ################################################################################
