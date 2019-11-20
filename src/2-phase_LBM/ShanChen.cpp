@@ -206,24 +206,31 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
 
             pcout << "Definition of the geometry." << endl;
+
+
             if (load_state == true) {
+
               loadBinaryBlock(lattice_fluid1, "lattice_fluid1.dat");
               loadBinaryBlock(lattice_fluid2, "lattice_fluid2.dat");
 
-			  plb_ifstream ifile("runnum.dat");
-			  if (ifile.is_open()) {
-				  ifile >> runs;
-			  }
+			        plb_ifstream ifile("runnum.dat");
+			        if (ifile.is_open()) {
+				      ifile >> runs;
+			         }
             }
 
             if (load_state == false) {
+              // NoDynamics (computational efficency, labeled with 2)
+              defineDynamics(lattice_fluid1, geometry, new NoDynamics<T, DESCRIPTOR>(), 2);
+              defineDynamics(lattice_fluid2, geometry, new NoDynamics<T, DESCRIPTOR>(), 2);
+
+            }
+
               // First contact angle (labeled with 1)
               defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s1), 1);
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s1), 1);
 
-              // NoDynamics (computational efficency, labeled with 2)
-              defineDynamics(lattice_fluid1, geometry, new NoDynamics<T, DESCRIPTOR>(), 2);
-              defineDynamics(lattice_fluid2, geometry, new NoDynamics<T, DESCRIPTOR>(), 2);
+
 
               // Second contact angle (labeled with 3)
               defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s2), 3);
@@ -243,7 +250,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
               Array<T, 3> zeroVelocity(0., 0., 0.);
 
-
+              if (load_state == false) {
               pcout << "Initializing Fluids" << endl;
 
               initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2-1, nx2_f2-1,
@@ -265,7 +272,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                                                             ny1_f1, ny2_f1,
                                                             nz1_f1, nz2_f1),
                                                             rhoNoFluid, zeroVelocity);
-            }
+
 
 
             setExternalVector(lattice_fluid1, lattice_fluid1.getBoundingBox(),
@@ -275,7 +282,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
             lattice_fluid1.initialize();
             lattice_fluid2.initialize();
-
+          }
 
             // Output geometry dynamics
             if (print_geom == true) {
