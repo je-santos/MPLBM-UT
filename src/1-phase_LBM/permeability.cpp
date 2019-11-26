@@ -353,7 +353,7 @@ int main(int argc, char **argv)
 	
 	pcout << "Printing outputs" << std::endl;
 	std::string outDir = fNameOut + "/";
-	std::string output = outDir + GeometryName + ".dat";
+	std::string output = outDir + GeometryName + "_output.dat";
 	plb_ofstream ofile(output.c_str());
 	ofile << "Outputs" << "\n\n";
 	ofile << "Krw from run: 2" << "\n" << "Krnw from run: " << (run_diff+1) << std::endl;
