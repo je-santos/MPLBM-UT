@@ -16,7 +16,7 @@ directory='C:\Users\Abhishek\Desktop\MultiphasePorousMediaPalabos-master\src\2-p
 
     
     
-    list=dir([directory 'rho1*.vti']);
+    list=dir([directory 'rho_f1*.vti']);
     listcell=struct2cell(list);
     [a,b]=size(listcell);
     listcell=listcell(1,:);
