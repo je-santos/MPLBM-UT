@@ -118,7 +118,9 @@ Why am I seeing the same line printed multiple times? / Why is the code so slow?
   make
   sudo make install
 
-
+################################################################################
+Citing the workflow
+################################################################################
 
 If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
