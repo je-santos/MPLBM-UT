@@ -9,6 +9,7 @@ Workflow created by Abhishek Bihani and Javier E. Santos
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 .. figure:: https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustrations/nw_flow.jpg
+    :align: center
     :alt: alternate text
     :figclass: align-center
     
