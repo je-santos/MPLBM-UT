@@ -40,8 +40,6 @@ Installation
 
   ./Install.sh
 
-MATLAB or Octave are used to run the domain construction and post-processing tools.
-
 ################################################################################
 Running a simulation
 ################################################################################
