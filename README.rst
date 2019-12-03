@@ -4,7 +4,7 @@ Multiphase LBM for Porous Media using the Palabos library
 
 This workflow can be used for calculation of capillary pressure curves, relative permeability and the percolation pathway of grain packs/image slices
 
-Workflow created by Abhishek Bihani and Javier Santos
+Workflow created by Abhishek Bihani and Javier E. Santos
 
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
@@ -20,6 +20,13 @@ Overview
 
 The Palabos library makes the engine flexible enought to be run on a single core of a personal laptop or in hundreds of nodes in a supercomputer.
 
+################################################################################
+Requirements
+################################################################################
+
+- Matlab or Octave (Python alternative coming soon)
+
+- Unix system (the Windows bash or the terminal in Mac)
 
 ################################################################################
 Installation
@@ -113,7 +120,7 @@ Why am I seeing the same line printed multiple times? / Why is the code so slow?
 
 
 
-If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Daigle H., and Prodanovic M. Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
+If you use our workflow, please cite as: Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
 ################################################################################
 Publications
