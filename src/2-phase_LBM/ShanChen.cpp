@@ -495,9 +495,9 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                 DESCRIPTOR>(G, constOmegaValues), Box3D(0, nx-1, 0, ny-1, 0, nz-1),
                 blockLattices, processorLevel);
 
-                  pcout << " The convergence set by the user is = " << convergence << endl;
+                  pcout << "The convergence set by the user is = " << convergence << endl;
 
-                  pcout << " The boundary conditions per run are:" << endl;
+                  pcout << "The boundary conditions per run are:" << endl;
                   for (plint readnum = 1; readnum <= runnum; ++readnum) {
                     deltaP[readnum]=(rho_fluid1[readnum]-rho_fluid2[readnum])/3;
                     pcout << "Run number = " << readnum << endl;
@@ -582,11 +582,12 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
 
 
-                          pcout << "Iteration " << iT << std::endl;
+                          pcout << "Run num " << runs;
+                          pcout << ", Iteration " << iT << std::endl;
                           pcout << "-----------------"  << std::endl;
                           pcout << "Relative difference Fluid1: " <<relE_f1<<" %"<<std::endl;
                           pcout << "Relative difference Fluid2: " <<relE_f2<<" %"<<std::endl;
-                          pcout << "-----------------"  << std::endl;
+                          //pcout << "-----------------"  << std::endl;
                           pcout << "Convergence Fluid1: "<< ((relE_f1 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
                           pcout << "Convergence Fluid2: "<< ((relE_f2 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
                           pcout << "-----------------"  << std::endl;
