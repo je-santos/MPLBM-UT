@@ -571,20 +571,21 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                         if (iT % it_conv == 0 ) {
 
-                          new_avg_rho_f1 = getStoredAverageDensity(lattice_fluid1);
-                          new_avg_rho_f2 = getStoredAverageDensity(lattice_fluid2);
+                          // calculate average change in mass
+                          new_avg_rho_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
+                          new_avg_rho_f2 = getStoredAverageDensity(lattice_fluid2)*(nx*ny*nz);
 
                           relE_f1 = std::fabs(old_avg_rho_f1-new_avg_rho_f1)*100/old_avg_rho_f1;
                           relE_f2 = std::fabs(old_avg_rho_f2-new_avg_rho_f2)*100/old_avg_rho_f2;
 
+                          mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1) ;
+                          mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
+
 
                           pcout << "Iteration " << iT << std::endl;
                           pcout << "-----------------"  << std::endl;
-                          pcout << "AvgDensity Fluid1: "<< new_avg_rho_f1<<std::endl;
-                          pcout << "AvgDensity Fluid2: "<< new_avg_rho_f2<<std::endl;
-                          pcout << "-----------------"  << std::endl;
-                          pcout << "Relative difference Fluid1: " <<  relE_f1 << std::endl;
-                          pcout << "Relative difference Fluid2: " <<  relE_f2 << std::endl;
+                          pcout << "Relative difference Fluid1: " <<relE_f1<<" %"<<std::endl;
+                          pcout << "Relative difference Fluid2: " <<relE_f2<<" %"<<std::endl;
                           pcout << "-----------------"  << std::endl;
                           pcout << "Convergence Fluid1: "<< ((relE_f1 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
                           pcout << "Convergence Fluid2: "<< ((relE_f2 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
@@ -602,15 +603,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                         //converge1.takeValue(getStoredAverageDensity(lattice_fluid1), true); //check for convergence
                         //converge2.takeValue(getStoredAverageDensity(lattice_fluid2), true); //check for convergence
-
-                        if (iT % it_conv == 0) {
-                          mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1) ;
-                          mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
-                          pcout << "Iteration:  " << iT << endl;
-                          pcout << "Average density fluid one = " << mean_rho1[runs] << endl;
-                          pcout << "Average density fluid two = " << mean_rho2[runs] << endl << endl;
-                        }
-
 
 
                         if (it_max == iT) {
