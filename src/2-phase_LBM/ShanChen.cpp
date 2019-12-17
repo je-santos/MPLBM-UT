@@ -699,6 +699,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                       ofile << "Run = " << runs << "\n" << endl;
                       ofile << "Pressure difference = " << deltaP[runs] <<"\n" << endl;
                       ofile << "Viscosity ratio =  " << M[runs] <<"\n" << endl;
-                      ofile << "Capillary number =  " << Ca[runs] <<"\n" << endl;
+                      //ofile << "Capillary number =  " << Ca[runs] <<"\n" << endl;
                     }
                   }
