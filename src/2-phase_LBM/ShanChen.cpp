@@ -688,11 +688,11 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                       }
                     }
 
-                    std::string output = outDir + fNameIn + "_output.dat";
+                    std::string output = outDir  + "/output.dat";
                     t = clock() - t;
                     pcout << "Simulation took seconds:" << ((float)t)/CLOCKS_PER_SEC << std::endl;
                     plb_ofstream ofile(output.c_str());
-                    ofile << "Outputs" << "\n\n";
+                    ofile << "Output of the Simulation Run" << "\n\n";
                     ofile << "Simulation took seconds:" << ((float)t)/CLOCKS_PER_SEC << endl;
 
                     for (plint runs = 1; runs <= runnum; ++runs) {
