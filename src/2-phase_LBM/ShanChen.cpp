@@ -514,7 +514,12 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                   util::ValueTracer<T> converge2(1.0, lattice_fluid2.getNx(),
                   convergence);
 
+
+
                   for (plint runs = 1; runs <= runnum; ++runs) { // Loop simulations with varying saturation
+
+                    lattice_fluid1.toggleInternalStatistics(false);
+                    lattice_fluid2.toggleInternalStatistics(false);
 
                     stringstream save_str;
                     save_str << std::setw(3) << std::setfill('0') << runs;
@@ -548,10 +553,17 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                       plint checkconv = 0;
                       plint iT = 0;
 
-                      //lattice.toggleInternalStatistics(false); //I need to check if this works :)
+
 
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
+
+
+                        //if (iT % (it_conv-1) == 0 || iT % it_conv == 0) {
+                        if (iT % it_conv == 0) {
+                          lattice_fluid1.toggleInternalStatistics(true); //I need to check if this works :)
+                          lattice_fluid2.toggleInternalStatistics(true); //I need to check if this works :
+                          }
 
                         lattice_fluid1.collideAndStream();
                         lattice_fluid2.collideAndStream();
@@ -574,6 +586,9 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           // calculate average change in mass
                           new_avg_rho_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
                           new_avg_rho_f2 = getStoredAverageDensity(lattice_fluid2)*(nx*ny*nz);
+
+                          lattice_fluid1.toggleInternalStatistics(false);
+                          lattice_fluid2.toggleInternalStatistics(false);
 
                           relE_f1 = std::fabs(old_avg_rho_f1-new_avg_rho_f1)*100/old_avg_rho_f1;
                           relE_f2 = std::fabs(old_avg_rho_f2-new_avg_rho_f2)*100/old_avg_rho_f2;
@@ -648,8 +663,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             Ca[runs] = Ca1;
                           }
 
-                        // Boundary conditions
-                        if (pressure_bc == true)
+
+                        if (pressure_bc == true) // Boundary conditions
                         {
 
 
@@ -678,7 +693,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                       pcout << "Run    = " << runs            << std::endl;
                       pcout << "Pressure difference =  " << deltaP[runs] << std::endl;
                       pcout << "Viscosity ratio =  " << M[runs] << std::endl;
-                      pcout << "Capillary number =  " << Ca[runs] << std::endl;
+                      //pcout << "Capillary number =  " << Ca[runs] << std::endl;
 
 
                       ofile << "Run = " << runs << "\n" << endl;
