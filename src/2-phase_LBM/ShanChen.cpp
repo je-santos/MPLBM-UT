@@ -12,14 +12,6 @@
 using namespace plb;
 using namespace std;
 
-// To do:
-//      clean up and indent nicely
-//      figure out how to place the runnum.dat inside the output folder
-//      add option to output velocity vtk (idk if it's neeeded)
-
-
-
-
 
 typedef double T; // Use double-precision arithmetics
 // Use a grid which additionally to the f's stores two variables for the external force term.
@@ -561,8 +553,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                         //if (iT % (it_conv-1) == 0 || iT % it_conv == 0) {
                         if (iT % it_conv == 0) {
-                          lattice_fluid1.toggleInternalStatistics(true); //I need to check if this works :)
-                          lattice_fluid2.toggleInternalStatistics(true); //I need to check if this works :
+                          lattice_fluid1.toggleInternalStatistics(true);
+                          lattice_fluid2.toggleInternalStatistics(true);
                           }
 
                         lattice_fluid1.collideAndStream();
@@ -600,8 +592,10 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           pcout << "Run num " << runs;
                           pcout << ", Iteration " << iT << std::endl;
                           pcout << "-----------------"  << std::endl;
-                          pcout << "Relative difference Fluid1: " <<relE_f1<<" %"<<std::endl;
-                          pcout << "Relative difference Fluid2: " <<relE_f2<<" %"<<std::endl;
+                          pcout << "Relative difference Fluid1: " << setprecision(3)
+                          << relE_f1 <<" %"<<std::endl;
+                          pcout << "Relative difference Fluid2: " << setprecision(3)
+                          << relE_f2 <<" %"<<std::endl;
                           //pcout << "-----------------"  << std::endl;
                           pcout << "Convergence Fluid1: "<< ((relE_f1 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
                           pcout << "Convergence Fluid2: "<< ((relE_f2 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
