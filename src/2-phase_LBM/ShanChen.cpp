@@ -633,26 +633,20 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
 
+                            string run_name;
+                            run_name = outDir + "/runnum.dat";
+                            plb_ofstream ofile1( run_name.c_str()  );
+              							ofile1 << runs << endl;
+
                             string rho_name;
-
                             rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
-
-
-                            //rho_name = outDir;
-                            //rho_name.append("/rho_f1_");
-                            //rho_name.append(runs_str);
-                            //rho_name.append(".dat");
-
-                            plb_ofstream ofile(rho_name.c_str());
-                            ofile << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
+                            plb_ofstream ofile2( rho_name.c_str() );
+                            ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
 
                             if (save_sim == true)
                             {
                             saveBinaryBlock(lattice_fluid1, Lattice1);
                             saveBinaryBlock(lattice_fluid2, Lattice2);
-                            //std::string runfile = fNameOut + "runnum.dat"; doesent work idk why
-                            plb_ofstream ofile(  "runnum.dat" );
-              							ofile << runs << endl;
                           }
 
 
