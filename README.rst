@@ -2,7 +2,7 @@
 Multiphase LBM for Permeable Media using the Palabos library
 ================================================================================
 
-This workflow can be used for calculation of capillary pressure curves, relative permeability, tortuosity, and the percolation pathway of grain packs/image slices
+This workflow calculates capillary pressure curves, relative permeability, tortuosity, and the percolation pathway of grain packs/image slices
 
 Workflow created by Javier E. Santos and Abhishek Bihani 
 
@@ -43,6 +43,8 @@ Installation
 ################################################################################
 Running a simulation
 ################################################################################
+
+Rewfer to the unsteady state example for a complete workflow
 
 A) Pre-processing (MATLAB):
 
