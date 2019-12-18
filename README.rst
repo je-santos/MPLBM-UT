@@ -4,11 +4,11 @@ Multiphase LBM for Porous Media using the Palabos library
 
 This workflow can be used for calculation of capillary pressure curves, relative permeability and the percolation pathway of grain packs/image slices
 
-Workflow created by Abhishek Bihani and Javier E. Santos
+Workflow created by Javier E. Santos and Abhishek Bihani 
 
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
-.. figure:: /illustrations/nw_flow.jpg
+.. figure:: /illustrations/percolation.png
     :align: center
     :alt: alternate text
     :figclass: align-center
@@ -127,6 +127,10 @@ Citing the workflow
 If you use our workflow, please cite as: 
 
 Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
+ 
+or
+
+Bihani A., Daigle H., Santos J., Landry C., Prodanović M., Milliken K. (2019). H44B-06: Insight into the Sealing Capacity of Mudrocks determined using a Digital Rock Physics Workflow. AGU Fall Meeting, 9-13 December, San Francisco, USA.
 
 ################################################################################
 Publications
