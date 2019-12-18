@@ -1,6 +1,5 @@
 ================================================================================
-Multiphase LBM Toolbox 
-Permeable media analysis using the Palabos library and in-house codes
+Multiphase LBM Toolbox: Permeable media analysis using the Palabos library and in-house codes
 ================================================================================
 
 This workflow calculates capillary pressure curves, relative permeability, tortuosity, contact angles, and the percolation pathway of grain packs/image slices
