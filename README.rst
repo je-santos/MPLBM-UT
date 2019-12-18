@@ -22,7 +22,7 @@ Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 Overview
 ################################################################################
 
-The Palabos library makes the engine flexible enought to be run on a single core of a personal laptop or in hundreds of nodes in a supercomputer.
+The Palabos library makes the engine flexible enought to be run on a single core of a personal laptop or in hundreds of nodes of a supercomputer.
 
 ################################################################################
 Requirements
