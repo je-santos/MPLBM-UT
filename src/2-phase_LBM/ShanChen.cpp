@@ -579,6 +579,11 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           new_avg_rho_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
                           new_avg_rho_f2 = getStoredAverageDensity(lattice_fluid2)*(nx*ny*nz);
 
+                          if (pressure_bc == false){
+                            new_avg_rho_f1 = getStoredAverageEnergy(lattice_fluid1)*(nx*ny*nz);
+                            new_avg_rho_f2 = getStoredAverageEnergy(lattice_fluid2)*(nx*ny*nz);
+                          }
+
                           lattice_fluid1.toggleInternalStatistics(false);
                           lattice_fluid2.toggleInternalStatistics(false);
 
@@ -587,6 +592,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                           mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1) ;
                           mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
+
+
 
 
                           pcout << "Run num " << runs;
@@ -636,6 +643,11 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
                             plb_ofstream ofile2( rho_name.c_str() );
                             ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
+
+                            string vel_name;
+                            vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
+                            plb_ofstream ofile3( rho_name.c_str() );
+                            ofile2 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
 
                             if (save_sim == true)
                             {
