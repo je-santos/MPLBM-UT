@@ -141,22 +141,20 @@ Citing the workflow
 If you use our workflow, please cite as: 
 
 Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
- 
-or
 
-Bihani A., Daigle H., Santos J., Landry C., Prodanović M., Milliken K. (2019). H44B-06: Insight into the Sealing Capacity of Mudrocks determined using a Digital Rock Physics Workflow. AGU Fall Meeting, 9-13 December, San Francisco, USA.
 
 ################################################################################
 Publications
 ################################################################################
+1. Bihani A., Daigle H., Santos J., Landry C., Prodanović M., Milliken K. (2019). H44B-06: Insight into the Sealing Capacity of Mudrocks determined using a Digital Rock Physics Workflow. AGU Fall Meeting, 9-13 December, San Francisco, USA.
 
-1 Urtec
+2. Santos, J. E., Prodanovic, M., Landry, C. J., & Jo, H. (2018, August 9). Determining the Impact of Mineralogy Composition for Multiphase Flow Through Hydraulically Induced Fractures. Unconventional Resources Technology Conference. doi:10.15530/URTEC-2018-2902986
 
-2 AWR
+3. Landry, C. J., Karpyn, Z. T., and Ayala, O. ( 2014), Relative permeability of homogenous‐wet and mixed‐wet porous media as determined by pore‐scale lattice Boltzmann modeling, Water Resour. Res., 50, 3672– 3689, doi:10.1002/2013WR015148.  
 
-3 NeuralNets
+4 NeuralNets
 
-4 a couple under review
+5 AWR2
 
 ################################################################################
 Credits/References
