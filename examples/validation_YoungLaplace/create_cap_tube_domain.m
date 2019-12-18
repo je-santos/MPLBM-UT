@@ -7,7 +7,7 @@ no_circles=1;
 spacing_between=5; %spacing between adjacent tubes
 mesh=1; % if 1x1 mesh wanted near outlet
 
-radius_c=[max(radius)];
+radius_c = max(radius);
 dom.size_x=max(radius_c*2)+spacing_between*2;
 dom.size_y=sum(radius_c*2)+spacing_between*(numel(radius_c)+1);
 dom.size_z=50; %length
@@ -140,16 +140,9 @@ for t=1:(numel(radius)-1)
     D=D*0;
     D=D+2;
     C=C*0;
-    
-    %first_layer=first_tube;
-    %first_layer(first_layer==0)=1;
-    %first_layer(second_tube==0)=0;
-    
+        
 end
 
-
-
-%dom.name=[num2str(numel(radius)), '_tubes_80x80x',num2str(numel(radius)*25)];
 
 domain=[];
 %% print
@@ -164,6 +157,7 @@ for i=1:numel(radius)
     axis equal
     [aa,bb]=size(tmp1);
     final=[final;tmp1];
+    close
     %if i==1
     %final=tmp1;
     %else
@@ -177,59 +171,57 @@ final=[2*ones(10,c) ;  final ; 2*ones(10,c)];
 
 [r,c]=size(final);
 
-NewFileName = sprintf('tubes_%g_%g_106_new',r,c);% create output directory
+%NewFileName = sprintf('tubes_%g_%g_%g',r,c,dom.size_z);% create output directory
+NewFileName = sprintf('tubes_%g_%g_%g',dom.size_z,c,r);% create output directory
 NewFileName = [NewFileName '.dat'];
 
-fid_domain1=fopen([NewFileName],'w');
+fid_domain1=fopen(['input/' NewFileName],'w');
 
 
+for j=1:1
+    fprintf(fid_domain1,'%i\n',final*0);
+    domain(:,:,end)=final*0;
+end
+
+for j=1:1
+    fprintf(fid_domain1,'%i\n',final*0);
+    domain(:,:,end+1)=final*0;
+end
+
+for j=1:1
+    tmp = final;
+    tmp(tmp==2)=1;
+    fprintf(fid_domain1,'%i\n',tmp);
+    domain(:,:,end+1)=tmp;
+end
 
 
-%for i=1:numel(radius)
-    for j=1:3
-        fprintf(fid_domain1,'%i\n',final*0);
-        domain(:,:,end+1)=final*0;
-    end
-    
+for j=1:dom.size_z-6
+    fprintf(fid_domain1,'%i\n',final);
+    domain(:,:,end+1)=final;
+end
+
+for j=1:1
+    tmp = final;
+    tmp(tmp==2)=1;
+    fprintf(fid_domain1,'%i\n',tmp);
+    domain(:,:,end+1)=final*0;
+end
+
+if mesh ==1
     for j=1:1
-        tmp = final;
-        tmp(tmp==2)=1;
-        fprintf(fid_domain1,'%i\n',tmp);
-        domain(:,:,end+1)=final*0;
+        tmp1=toeplitz(mod(1:r,2),mod(1:c,2));
+        tmp1(tmp1==1)=4;
+        fprintf(fid_domain1,'%i\n',tmp1);
+        domain(:,:,end+1)=tmp1;
     end
-    
-    
-    for j=1:100-6
-        fprintf(fid_domain1,'%i\n',final);
-        domain(:,:,end+1)=final;
-    end
-    
-    for j=1:1
-        %tmp = final;
-        %tmp(tmp==2)=1;
-        fprintf(fid_domain1,'%i\n',tmp);
-        domain(:,:,end+1)=final*0;
-    end
-    
-    for j=1:1
-        fprintf(fid_domain1,'%i\n',final*0);
-        domain(:,:,end+1)=final*0;
-    end
-    
-    if mesh ==1
-        for j=1:1
-            tmp1=toeplitz(mod(1:c,2),mod(1:r,2));
-            tmp1(tmp1==1)=4;
-            fprintf(fid_domain1,'%i\n',tmp1);
-            domain(:,:,end+1)=final*0;
-        end
-    end
-    
-    for j=1:4
-        fprintf(fid_domain1,'%i\n',final*0);
-        domain(:,:,end+1)=final*0;
-    end
-%end
+end
+
+for j=1:1
+    fprintf(fid_domain1,'%i\n',final*0);
+    domain(:,:,end+1)=final*0;
+end
+
 
 
 fclose(fid_domain1);
