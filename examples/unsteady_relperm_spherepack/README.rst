@@ -38,6 +38,8 @@ https://www.digitalrocksportal.org/projects/47/origin_data/311/
 
     run2-phase.sh
     
+    
+    
  To perform the simulation with the inputs specified in the .xml file
 
 
