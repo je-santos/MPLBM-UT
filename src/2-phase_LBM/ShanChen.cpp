@@ -534,7 +534,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                         load_state, print_geom);
                       }
 
-                      T new_avg_rho_f1, new_avg_rho_f2, old_avg_rho_f1, old_avg_rho_f2;
+                      T new_avg_f1, new_avg_f2, old_avg_f1, old_avg_f2;
                       T relE_f1, relE_f2;
 
                       pcout << endl
@@ -576,25 +576,22 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                         if (iT % it_conv == 0 ) {
 
                           // calculate average change in mass
-                          new_avg_rho_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
-                          new_avg_rho_f2 = getStoredAverageDensity(lattice_fluid2)*(nx*ny*nz);
+                          new_avg_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
+                          new_avg_f2 = getStoredAverageDensity(lattice_fluid2)*(nx*ny*nz);
 
                           if (pressure_bc == false){
-                            new_avg_rho_f1 = getStoredAverageEnergy(lattice_fluid1)*(nx*ny*nz);
-                            new_avg_rho_f2 = getStoredAverageEnergy(lattice_fluid2)*(nx*ny*nz);
+                            new_avg_f1 = getStoredAverageEnergy(lattice_fluid1);
+                            new_avg_f2 = getStoredAverageEnergy(lattice_fluid2);
                           }
+
+                          mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1);
+                          mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
 
                           lattice_fluid1.toggleInternalStatistics(false);
                           lattice_fluid2.toggleInternalStatistics(false);
 
-                          relE_f1 = std::fabs(old_avg_rho_f1-new_avg_rho_f1)*100/old_avg_rho_f1;
-                          relE_f2 = std::fabs(old_avg_rho_f2-new_avg_rho_f2)*100/old_avg_rho_f2;
-
-                          mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1) ;
-                          mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
-
-
-
+                          relE_f1 = std::fabs(old_avg_f1-new_avg_f1)*100/old_avg_f1;
+                          relE_f2 = std::fabs(old_avg_f2-new_avg_f2)*100/old_avg_f2;
 
                           pcout << "Run num " << runs;
                           pcout << ", Iteration " << iT << std::endl;
@@ -608,19 +605,14 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           pcout << "Convergence Fluid2: "<< ((relE_f2 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
                           pcout << "-----------------"  << std::endl;
 
-                          old_avg_rho_f1 = new_avg_rho_f1;
-                          old_avg_rho_f2 = new_avg_rho_f2;
+                          old_avg_f1 = new_avg_f1;
+                          old_avg_f2 = new_avg_f2;
 
                           if ( relE_f1 < convergence && relE_f2 < convergence ){
                             checkconv = 1;
                             pcout << "Pressure increment has converged" << endl;
                           }
                         }
-
-
-                        //converge1.takeValue(getStoredAverageDensity(lattice_fluid1), true); //check for convergence
-                        //converge2.takeValue(getStoredAverageDensity(lattice_fluid2), true); //check for convergence
-
 
                         if (it_max == iT) {
                           pcout << "Simulation has reached maximum iteration" << endl;
