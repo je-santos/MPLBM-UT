@@ -9,7 +9,7 @@ In this example, I show the trade-off between convergence threshold and accuracy
     :alt: alternate text
     :figclass: align-center
 
-    Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
+    Drainage process in a bundle of tubes
 
 .. contents::
 
