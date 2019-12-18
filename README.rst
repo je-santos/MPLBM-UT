@@ -98,10 +98,13 @@ Examples
 FAQ
 ################################################################################
 
-Segmentation error: Image dimensions are not correct.
+Segmentation error: Image dimensions are not correct, try switching the dimensions.
 
+-------------------------------------------------------------------------------------
 
 Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates
+
+---------------------------------------------------------------------------------------------
 
 
 SCons compilation error: create a conda enviroment with python2 (Palabos needs it):
@@ -112,6 +115,7 @@ SCons compilation error: create a conda enviroment with python2 (Palabos needs i
   ./Install.sh
 
 
+-----------------------------------------------------------------------------------------------------------
 
 Why am I seeing the same line printed multiple times? / Why is the code so slow?: Probably MPI is not installed in your system, this could be solved by:
 
