@@ -44,7 +44,12 @@ Installation
 Running a simulation
 ################################################################################
 
-Rewfer to the unsteady state example for a complete workflow
+Please refer to the unsteady state example for a complete workflow
+
+
+
+
+
 
 A) Pre-processing (MATLAB):
 
