@@ -4,7 +4,7 @@ Numerical validation using a bundle of tubes
 
 In this example, I show the trade-off between convergence threshold and accuracy (compared to the Young-Laplace, or in this specific case, the Washburn equation)
 
-.. figure:: /illustrations/nw_flow.jpg
+.. figure:: /illustrations/tubes_nw.gif
     :align: center
     :alt: alternate text
     :figclass: align-center
@@ -21,6 +21,10 @@ Instructions
 1. The domain is created using the create_cap_tube_domain.m file. In there a different number of individual tubes with varying radius can be specified.
 2. The convergence threshold (mass balance can be changed in the input_tubes.xml file)
 3. The simulation can be carried-out by running the run2-pahse.sh file
+
+################################################################################
+Results
+################################################################################
 
 ################################################################################
 References
