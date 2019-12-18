@@ -5,12 +5,12 @@ Relative permeability calculation using an steady state approach (constant satur
 In this example, an steady state (fluids with constant body forces) method will be used to simulate flow through a permeable material (in this case, a spherepack).
 Additionally, we show how to download and simulate on volumes hosted at the digitalrockportal.
 
-.. figure:: /illustrations/nw_flow.jpg
+.. figure:: /illustrations/steady.JPG
     :align: center
     :alt: alternate text
     :figclass: align-center
 
-    Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
+    Percolating path of a non-wetting fluid 
 
 .. contents::
 
