@@ -32,6 +32,14 @@ https://www.digitalrocksportal.org/projects/47/origin_data/311/
 
 2. Run create_geom_4sim.m to create a computationally efficient (and artifact free) domain for simulation
 
+3. Run
+
+.. code-block:: bash
+
+    run2-phase.sh
+    
+ To perform the simulation with the inputs specified in the .xml file
+
 
 
 ################################################################################
