@@ -2,7 +2,7 @@
 Multiphase LBM for Porous Media using the Palabos library
 ================================================================================
 
-This workflow can be used for calculation of capillary pressure curves, relative permeability and the percolation pathway of grain packs/image slices
+This workflow can be used for calculation of capillary pressure curves, relative permeability, tortuosity, and the percolation pathway of grain packs/image slices
 
 Workflow created by Javier E. Santos and Abhishek Bihani 
 
