@@ -639,7 +639,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             string vel_name;
                             vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
                             plb_ofstream ofile3( rho_name.c_str() );
-                            ofile2 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
+                            ofile3 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
 
                             if (save_sim == true)
                             {
