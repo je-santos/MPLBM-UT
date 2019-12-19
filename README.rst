@@ -9,9 +9,10 @@ Workflow created by Javier E. Santos and Abhishek Bihani
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 .. figure:: /illustrations/percolation.png
+    
     :align: right
     :alt: alternate text
-    :figclass: align-center
+    :figclass: align-right
     
     Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
 
