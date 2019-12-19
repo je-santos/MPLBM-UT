@@ -9,7 +9,7 @@ Workflow created by Javier E. Santos and Abhishek Bihani
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 .. figure:: /illustrations/percolation.png
-    :align: center
+    :align: right
     :alt: alternate text
     :figclass: align-center
     
