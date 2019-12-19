@@ -152,9 +152,9 @@ Publications
 
 3. Landry, C. J., Karpyn, Z. T., and Ayala, O. ( 2014), Relative permeability of homogenous‐wet and mixed‐wet porous media as determined by pore‐scale lattice Boltzmann modeling, Water Resour. Res., 50, 3672– 3689, doi:10.1002/2013WR015148.  
 
-4 NeuralNets
+4. NeuralNets
 
-5 AWR2
+5. AWR2
 
 ################################################################################
 Credits/References
