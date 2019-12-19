@@ -8,7 +8,7 @@ Workflow created by Javier E. Santos and Abhishek Bihani
 
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
-.. figure:: /illustrations/percolation.png
+.. image:: /illustrations/percolation.png
     :align: right
     :alt: alternate text
     :figclass: align-right
