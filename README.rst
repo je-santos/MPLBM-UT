@@ -9,7 +9,6 @@ Workflow created by Javier E. Santos and Abhishek Bihani
 Collaborators: Christopher Landry, Hugh Daigle and Masa Prodanovic
 
 .. figure:: /illustrations/percolation.png
-    
     :align: right
     :alt: alternate text
     :figclass: align-right
@@ -96,7 +95,7 @@ Example description
 - Unsteady state
 - Steady state: an video example is shown in 
 
-.. youtube:: <https://www.youtube.com/watch?v=wc8ZxwejcHk>
+(`youtube <https://www.youtube.com/watch?v=wc8ZxwejcHk>`__)
 
 ################################################################################
 FAQ
