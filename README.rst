@@ -171,9 +171,10 @@ Bibliographic references
 Code references
 ################################################################################
 
-1. Geometry creation and permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
+1. Absolute permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
 2. Skeletonization code modified from Kollmannsberger Philip- https://www.mathworks.com/matlabcentral/profile/authors/4556277-philip-kollmannsberger
 3. Dijkstra's algorithm code modified from Kirk Joseph- https://www.mathworks.com/matlabcentral/fileexchange/12850-dijkstra-s-shortest-path-algorithm
+
 
 
 We welcome contributions
