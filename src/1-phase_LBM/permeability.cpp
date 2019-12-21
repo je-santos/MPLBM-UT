@@ -1,28 +1,4 @@
-/* This file is part of the Palabos library.
- *
- * Copyright (C) 2011-2017 FlowKit Sarl
- * Route d'Oron 2
- * 1010 Lausanne, Switzerland
- * E-mail contact: contact@flowkit.com
- *
- * The most recent release of Palabos can be downloaded at
- * <http://www.palabos.org/>
- *
- * The library Palabos is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * The library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* Main author: Wim Degruyter */
+/* Modified from file by Wim Degruyter */
 
 #include "palabos3D.h"
 #include "palabos3D.hh"
@@ -60,7 +36,6 @@ public:
     {
         velocity.resetToZero();
         density = (T)1 - deltaP*DESCRIPTOR<T>::invCs2 / (T)(nx-1) * (T)iX;
-
     }
 private:
     T deltaP;
@@ -80,10 +55,8 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
 	
     Box3D sliceBox(3,3, 0,ny-1, 0,nz-1);
 	
-	// lattice_f1_forK_1_.dat
 	
 	if (run == 1) {  // original geometry - absolute permeability
-//	pcout  << "Run geometry "<< std::endl; 
 	fNameIn_temp = fNameIn_temp1 + ".dat";
 	pcout  << "Run absolute permeability "<< std::endl;
 	}
@@ -115,8 +88,6 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
 
     {
 		VtkImageOutput3D<T> vtkOut(createFileName("PorousMedium", run, 6), 1.0);
-		
-   //     VtkImageOutput3D<T> vtkOut("porousMedium", run, 1.0);
         vtkOut.writeData<float>(*copyConvert<int,T>(geometry, geometry.getBoundingBox()), "tag", 1.0);
     }
 
@@ -145,11 +116,11 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     const plint nz = lattice.getNz();
 
     pcout << "Definition of inlet/outlet." << std::endl;
-    Box3D inlet (15,15, 1,ny-2, 1,nz-2);
+    Box3D inlet (15,15, 1,ny-2, 1,nz-2); // inlet slice assumed little inside the geometry to prevent issues of anomalous fluid invasion at inlet 
     boundaryCondition->addPressureBoundary0N(inlet, lattice);
     setBoundaryDensity(lattice, inlet, (T) 1.);
 
-    Box3D outlet(nx-4,nx-4, 1,ny-2, 1,nz-2);
+    Box3D outlet(nx-4,nx-4, 1,ny-2, 1,nz-2); // outlet slice assumed little inside the geometry
     boundaryCondition->addPressureBoundary0P(outlet, lattice);
     setBoundaryDensity(lattice, outlet, (T) 1. - deltaP*DESCRIPTOR<T>::invCs2);
 
@@ -177,7 +148,7 @@ void writeGifs(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, plint iter, plint run
 
     // Write velocity-norm at x=1.
     imageWriter.writeScaledGif(createFileName("ux_inlet", run, 6),
-            *computeVelocityNorm(lattice, Box3D(4,4, 0,ny-1, 0,nz-1)),
+            *computeVelocityNorm(lattice, Box3D(15,15, 0,ny-1, 0,nz-1)),
             imSize, imSize );
 
     // Write velocity-norm at x=nx/2.
@@ -208,7 +179,7 @@ void computePermeability(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, T nu, T del
 
     pcout << "Average velocity     = " << meanU                         << std::endl;
     pcout << "Lattice viscosity nu = " << nu                            << std::endl;
-    pcout << "Grad P               = " << deltaP/(T)(nx-10)             << std::endl;
+    pcout << "Grad P               = " << deltaP/(T)(nx-20)             << std::endl; //Gradient of pressure accounting for corrected length
 	perm = nu*meanU / (deltaP/(T)(nx-20));
   //  pcout << "Permeability         = " << perm 						<< std::endl;
   //  return meanU;
@@ -365,6 +336,7 @@ int main(int argc, char **argv)
 	if (runs == 1) {
 	ofile << "Absolute Permeability   = " << perm[runs]         << std::endl;
 	}
+//	ofile << "Effective Permeability   = " << perm[runs]         << std::endl;
 	ofile << "Relative Permeability   = " << rel_perm[runs]         << std::endl;
 //	ofile << "Velocity   = " << meanU[runs]  <<"\n"         << std::endl;
 	}

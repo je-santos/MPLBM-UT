@@ -1,10 +1,16 @@
-function [geom4palabos]=create_geom_edist(data,name,num_slices,add_mesh)
+function [geom4palabos]=create_geom_edist(data,name,num_slices,add_mesh,swapXZ,scale_2)
 
 %%%% Inputs:
 % data: image, where the pore-space is represented with zeros
 % name: string with the name of the file for printing
 
 tic
+
+% Swap x and z data if needed to ensure Palabos simulation in Z-direction
+if swapXZ == true
+ data=permute(data,[3 2 1]);
+end
+
 
 %creates the computationally efficent geometry
 edist = bwdist(~data);
@@ -16,6 +22,12 @@ geom4palabos(edist==0)=0;
 
 geom4palabos(geom4palabos>0 & geom4palabos<2)=1;
 geom4palabos(geom4palabos>1)=2;
+
+% Double the grain (pore) size if needed to prevent single pixel throats
+% for tight/ low porosity geometries
+if scale_2 == true
+    geom4palabos = imresize3(geom4palabos, 2, 'nearest'); 
+end
 
 % add a mesh if requested
 if add_mesh == true

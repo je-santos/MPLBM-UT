@@ -80,6 +80,23 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
       VtkImageOutput3D<double> vtkOut(createFileName(im_name, iter, 8), 1.);
       vtkOut.writeData<double>((*computeDensity(lattice_fluid)), "Density", 1.);
     }
+	
+	 void writeVTK_vel(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid,
+      string im_name, string runs, plint iter)
+    {
+      plint xComponent = 0;
+      const plint nx = lattice_fluid.getNx();
+      const plint ny = lattice_fluid.getNy();
+      const plint nz = lattice_fluid.getNz();
+      Box3D domain(0, nx-1, 0, ny-1, 0, nz-1);
+
+      im_name.append(runs);
+      im_name.append("_");
+	  
+      const plint zcomponent = 0;
+      VtkImageOutput3D<double> vtkOut(createFileName(im_name, iter, 8), 1.);
+      vtkOut.writeData<double>((*computeVelocityComponent(lattice_fluid, domain, xComponent)), "Velocity", 1.);
+    }
 
 
 
@@ -90,7 +107,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
       const plint ny = lattice_fluid1.getNy();
       const plint nz = lattice_fluid1.getNz();
 
-      Box3D domain(3, nx-4, 0, ny-1, 0, nz-1);
+      Box3D domain(3, 4, 0, ny-1, 0, nz-1);
       T meanU1 = computeAverage(*computeVelocityComponent(lattice_fluid1, domain, xComponent));
       pcout << "Average velocity for fluid1 in x direction    = "<< meanU1<<std::endl;
       return meanU1;
@@ -108,38 +125,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
       pcout << "Average velocity for fluid2 in x direction    = " << meanU2            << std::endl;
       return meanU2;
     }
-
-    void computeRatios(MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1,
-      MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid2, T rho_F1, T rho_F2,
-      T nu_f1, T nu_f2, T Gads_f1_s2, T Gads_f1_s1, T G, T rhoNoFluid, T meanU1,
-      T& meanRho1, T& meanRho2, T& M, T& Ca)
-      {
-        const plint nx = lattice_fluid1.getNx();
-        const plint ny = lattice_fluid1.getNy();
-        const plint nz = lattice_fluid1.getNz();
-
-        Box3D domain(3, nx-4, 0, ny-1, 0, nz-1);
-
-        meanRho1 = computeAverageDensity(lattice_fluid1, domain);
-        meanRho2 = computeAverageDensity(lattice_fluid2, domain);
-        T mu1 = meanRho1*nu_f1;
-        T mu2 = meanRho2*nu_f2;
-
-        M = (mu1 / mu2);
-        const T sigma = 0.15;
-        const T cosTheta = abs((Gads_f1_s2-Gads_f1_s1)/(G*(meanRho1-rhoNoFluid)*0.5));
-        Ca = (abs(mu1*meanU1)/(sigma*cosTheta));
-
-        meanRho1 = getStoredAverageDensity<T>(lattice_fluid1);
-        meanRho2 = getStoredAverageDensity<T>(lattice_fluid2);
-
-        pcout << "MeanRho1    = " << meanRho1            << std::endl;
-        pcout << "MeanRho2    = " << meanRho2            << std::endl;
-        pcout << "Domain 1     = " << nx <<"x" << ny <<"x" << nz            << std::endl;
-        pcout << "Domain 2     = " << nx <<"x" << ny <<"x" << nz            << std::endl;
-        pcout << "M     = " << M            << std::endl;
-        pcout << "Ca    = " << Ca            << std::endl;
-      }
 
       void readGeometry(std::string fNameIn, std::string fNameOut,
         MultiScalarField3D<int>& geometry)
@@ -221,7 +206,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
               // First contact angle (labeled with 1)
               defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s1), 1);
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s1), 1);
-
 
 
               // Second contact angle (labeled with 3)
@@ -327,7 +311,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
             plint it_vtk ;
             plint it_gif ;
 
-            plint startNum ;  //erase this
 
             bool save_sim, rho_vtk, print_geom, print_stl ;
 
@@ -428,8 +411,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
             T rho_fluid1[runnum] ;
             T rho_fluid2[runnum] ;
-            T M[runnum];
-            T Ca[runnum];
             T deltaP[runnum];
             T k1_high;
             T k2_high;
@@ -437,8 +418,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
             T meanRho2;
             T mu1;
             T mu2;
-            T M1;
-            T Ca1;
             T rho_F1;
             T rho_F2;
             T mean_U1[runnum];
@@ -456,7 +435,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
               rho_fluid1[readnum] = rho_f1_inlet;
             }
 
-            rho_fluid2[1]=rho_fluid2[1]+0.02;
+            rho_fluid2[1]=rho_fluid2[1]+0.02; // Adding 0.02 to fluid 2 at outlet in first run to prevent premature fluid invasion
 
             const T nu_f1 = ( (T)1 / omega_f1 - 0.5 ) / DESCRIPTOR<T>::invCs2;
             const T nu_f2 = ( (T)1 / omega_f2 - 0.5 ) / DESCRIPTOR<T>::invCs2;
@@ -625,21 +604,24 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
-
+							writeVTK_vel(lattice_fluid1, "vel_f1_", runs_str, iT);
+							
                             string run_name;
                             run_name = outDir + "/runnum.dat";
                             plb_ofstream ofile1( run_name.c_str()  );
               							ofile1 << runs << endl;
 
-                            string rho_name;
-                            rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
-                            plb_ofstream ofile2( rho_name.c_str() );
-                            ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
+                             string rho_name;
+                             rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
+						     plb_ofstream ofile2( rho_name.c_str() );
+                             ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
+							 
 
                             string vel_name;
                             vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
                             plb_ofstream ofile3( vel_name.c_str() );
                             ofile3 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
+							
 
                             if (save_sim == true)
                             {
@@ -648,7 +630,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           }
 
 
-                            // Calculate velocity here for both fluids in x-direction and pcout
+                            // Calculate velocity here for both fluids in x-direction 
                             T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
                             T meanU2 = computeVelocity_f2(lattice_fluid2, nu_f2);
                             mean_U1[runs] = meanU1;
@@ -658,14 +640,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             T rho_F1=rho_fluid1[runs];
                             T rho_F2=rho_fluid2[runs];
 
-                            // calculate capillary number & dynamic viscosity ratio
-                            computeRatios(lattice_fluid1, lattice_fluid2,
-                              rho_F1, rho_F2, nu_f1, nu_f2,
-                               Gads_f1_s2, Gads_f1_s1, G, rhoNoFluid, meanU1,
-                               meanRho1, meanRho2, M1, Ca1);
-
-                            M[runs]  = M1;
-                            Ca[runs] = Ca1;
                           }
 
 
@@ -691,19 +665,24 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                     pcout << "Simulation took seconds:" << ((float)t)/CLOCKS_PER_SEC << std::endl;
                     plb_ofstream ofile(output.c_str());
                     ofile << "Output of the Simulation Run" << "\n\n";
-                    ofile << "Simulation took seconds:" << ((float)t)/CLOCKS_PER_SEC << endl;
+                    ofile << "Simulation took seconds =" << ((float)t)/CLOCKS_PER_SEC <<"\n" << endl;
+					
+					ofile << "Kinematic viscosity f1 = " << nu_f1 <<"\n" << endl;
+					ofile << "Kinematic viscosity f2 = " << nu_f2 <<"\n" << endl;
+					ofile << "Gads_f1_s1 = " << Gads_f1_s1 <<"\n" << endl;
+					ofile << "Gads_f1_s2 = " << Gads_f1_s2 <<"\n" << endl;
+					ofile << "Gc = " << G <<"\n" << endl;
+					ofile << "Dissolved density = " << rhoNoFluid <<"\n" << endl;
+					ofile << "Inlet density = " << rho_f1_inlet <<"\n" << endl; 
+					ofile << "Geometry flow length = " << nx <<"\n" << endl;
 
                     for (plint runs = 1; runs <= runnum; ++runs) {
 
-                      pcout << "Run    = " << runs            << std::endl;
+                      pcout << "Run    = " << runs       << std::endl;
                       pcout << "Pressure difference =  " << deltaP[runs] << std::endl;
-                      pcout << "Viscosity ratio =  " << M[runs] << std::endl;
-                      //pcout << "Capillary number =  " << Ca[runs] << std::endl;
-
 
                       ofile << "Run = " << runs << "\n" << endl;
                       ofile << "Pressure difference = " << deltaP[runs] <<"\n" << endl;
-                      ofile << "Viscosity ratio =  " << M[runs] <<"\n" << endl;
-                      //ofile << "Capillary number =  " << Ca[runs] <<"\n" << endl;
+
                     }
                   }
