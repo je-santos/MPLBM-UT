@@ -12,6 +12,12 @@ if swapXZ == true
 end
 
 
+% Double the grain (pore) size if needed to prevent single pixel throats
+% for tight/ low porosity geometries
+if scale_2 == true
+    data = imresize3(data, 2, 'nearest'); 
+end
+
 %creates the computationally efficent geometry
 edist = bwdist(~data);
 geom4palabos = edist;
@@ -23,11 +29,6 @@ geom4palabos(edist==0)=0;
 geom4palabos(geom4palabos>0 & geom4palabos<2)=1;
 geom4palabos(geom4palabos>1)=2;
 
-% Double the grain (pore) size if needed to prevent single pixel throats
-% for tight/ low porosity geometries
-if scale_2 == true
-    geom4palabos = imresize3(geom4palabos, 2, 'nearest'); 
-end
 
 % add a mesh if requested
 if add_mesh == true

@@ -80,7 +80,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
       VtkImageOutput3D<double> vtkOut(createFileName(im_name, iter, 8), 1.);
       vtkOut.writeData<double>((*computeDensity(lattice_fluid)), "Density", 1.);
     }
-	
+
 	 void writeVTK_vel(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid,
       string im_name, string runs, plint iter)
     {
@@ -92,7 +92,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
       im_name.append(runs);
       im_name.append("_");
-	  
+
       const plint zcomponent = 0;
       VtkImageOutput3D<double> vtkOut(createFileName(im_name, iter, 8), 1.);
       vtkOut.writeData<double>((*computeVelocityComponent(lattice_fluid, domain, xComponent)), "Velocity", 1.);
@@ -604,8 +604,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
-							writeVTK_vel(lattice_fluid1, "vel_f1_", runs_str, iT);
-							
+							              writeVTK_vel(lattice_fluid1, "vel_f1_", runs_str, iT);
+
                             string run_name;
                             run_name = outDir + "/runnum.dat";
                             plb_ofstream ofile1( run_name.c_str()  );
@@ -613,15 +613,15 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                              string rho_name;
                              rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
-						     plb_ofstream ofile2( rho_name.c_str() );
+						                 plb_ofstream ofile2( rho_name.c_str() );
                              ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
-							 
+
 
                             string vel_name;
                             vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
                             plb_ofstream ofile3( vel_name.c_str() );
                             ofile3 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
-							
+
 
                             if (save_sim == true)
                             {
@@ -630,7 +630,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           }
 
 
-                            // Calculate velocity here for both fluids in x-direction 
+                            // Calculate velocity here for both fluids in x-direction
                             T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
                             T meanU2 = computeVelocity_f2(lattice_fluid2, nu_f2);
                             mean_U1[runs] = meanU1;
@@ -666,15 +666,15 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                     plb_ofstream ofile(output.c_str());
                     ofile << "Output of the Simulation Run" << "\n\n";
                     ofile << "Simulation took seconds =" << ((float)t)/CLOCKS_PER_SEC <<"\n" << endl;
-					
-					ofile << "Kinematic viscosity f1 = " << nu_f1 <<"\n" << endl;
-					ofile << "Kinematic viscosity f2 = " << nu_f2 <<"\n" << endl;
-					ofile << "Gads_f1_s1 = " << Gads_f1_s1 <<"\n" << endl;
-					ofile << "Gads_f1_s2 = " << Gads_f1_s2 <<"\n" << endl;
-					ofile << "Gc = " << G <<"\n" << endl;
-					ofile << "Dissolved density = " << rhoNoFluid <<"\n" << endl;
-					ofile << "Inlet density = " << rho_f1_inlet <<"\n" << endl; 
-					ofile << "Geometry flow length = " << nx <<"\n" << endl;
+
+          					ofile << "Kinematic viscosity f1 = " << nu_f1 <<"\n" << endl;
+          					ofile << "Kinematic viscosity f2 = " << nu_f2 <<"\n" << endl;
+          					ofile << "Gads_f1_s1 = " << Gads_f1_s1 <<"\n" << endl;
+          					ofile << "Gads_f1_s2 = " << Gads_f1_s2 <<"\n" << endl;
+          					ofile << "Gc = " << G <<"\n" << endl;
+          					ofile << "Dissolved density = " << rhoNoFluid <<"\n" << endl;
+          					ofile << "Inlet density = " << rho_f1_inlet <<"\n" << endl;
+          					ofile << "Geometry flow length = " << nx <<"\n" << endl;
 
                     for (plint runs = 1; runs <= runnum; ++runs) {
 
