@@ -93,9 +93,7 @@ Example description
 ################################################################################
 
 - Unsteady state
-- Steady state: an video example is shown in 
-
-(`youtube <https://www.youtube.com/watch?v=wc8ZxwejcHk>`__)
+- Steady state: an video example is shown in:  `youtube video <https://www.youtube.com/watch?v=wc8ZxwejcHk>`__
 
 ################################################################################
 FAQ
@@ -133,6 +131,8 @@ Why am I seeing the same line printed multiple times? / Why is the code so slow?
   ./configure
   make
   sudo make install
+  
+Note that this process takes a few hours.
 
 ################################################################################
 Citing the workflow
@@ -144,7 +144,7 @@ Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code 
 
 
 ################################################################################
-Publications
+Author's Publications
 ################################################################################
 1. Bihani A., Daigle H., Santos J., Landry C., Prodanović M., Milliken K. (2019). H44B-06: Insight into the Sealing Capacity of Mudrocks determined using a Digital Rock Physics Workflow. AGU Fall Meeting, 9-13 December, San Francisco, USA.
 
@@ -157,12 +157,24 @@ Publications
 5. AWR2
 
 ################################################################################
-Credits/References
+Bibliographic references
 ################################################################################
 
-1. Geometry creation and permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
+1. Unsteady state simulation set-up: Pan, C., Hilpert, M., and Miller, C. T. ( 2004), Lattice‐Boltzmann simulation of two‐phase flow in porous media, Water Resour. Res., 40, W01501, doi:10.1029/2003WR002120 .
+
+2. Contact angle approximation: Huang, H., Thorne, D. T., Schaap, M. G., & Sukop, M. C. (2007). Proposed approximation for contact angles in Shan-and-Chen-type multicomponent multiphase lattice Boltzmann models. Physical Review E - Statistical, Nonlinear, and Soft Matter Physics, 76(6), 1–6. https://doi.org/10.1103/PhysRevE.76.066701 .
+
+3. Fluid flow model: Santos, J. E. (2018). Lattice-Boltzmann modeling of multiphase flow through rough heterogeneously wet fractures. University of Texas at Austin (Master thesis). https://repositories.lib.utexas.edu/handle/2152/69246 .
+
+
+################################################################################
+Code references
+################################################################################
+
+1. Absolute permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
 2. Skeletonization code modified from Kollmannsberger Philip- https://www.mathworks.com/matlabcentral/profile/authors/4556277-philip-kollmannsberger
 3. Dijkstra's algorithm code modified from Kirk Joseph- https://www.mathworks.com/matlabcentral/fileexchange/12850-dijkstra-s-shortest-path-algorithm
+
 
 
 We welcome contributions
