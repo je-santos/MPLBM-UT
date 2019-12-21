@@ -5,9 +5,9 @@
 
 <geometry>
     <!-- The name of the .dat file that with the geometry. -->
-    <file_geom> input/tubes_50_92_286.dat </file_geom>
+    <file_geom> input/tubes_75_92_286.dat </file_geom>
     <!-- Size (in voxels) of the simulation domain. -->
-    <size> <x> 50 </x> <y> 92 </y> <z> 286 </z> </size>
+    <size> <x> 75 </x> <y> 92 </y> <z> 286 </z> </size>
     <!-- Periodicity in the boundary conditions -->
     <per>
           <fluid1> <x> false </x> <y> false </y> <z> false </z> </fluid1>
@@ -24,7 +24,7 @@
   <!-- Initial position of fluid 2  -->
     <fluid2>
           <x1> 003 </x1> <y1> 001 </y1> <z1> 001 </z1>
-          <x2> 50 </x2> <y2> 92 </y2> <z2> 286 </z2>
+          <x2> 75 </x2> <y2> 92 </y2> <z2> 286 </z2>
     </fluid2>
 </init>
 

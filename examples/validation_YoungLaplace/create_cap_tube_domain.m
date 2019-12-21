@@ -2,15 +2,18 @@
 %radius to test the capillary pressure needed to flow through each tube
 
 radius=[31,21,16,11,6,5,4,3];
+dom.size_z=75; %length of the domain
+
+
 
 no_circles=1;
 spacing_between=5; %spacing between adjacent tubes
-mesh=1; % if 1x1 mesh wanted near outlet
+mesh=true; % if 1x1 mesh wanted near outlet
 
 radius_c = max(radius);
 dom.size_x=max(radius_c*2)+spacing_between*2;
 dom.size_y=sum(radius_c*2)+spacing_between*(numel(radius_c)+1);
-dom.size_z=50; %length
+
 
 B=zeros(dom.size_x,dom.size_y,dom.size_z); %3D matrix
 C=zeros(dom.size_x,dom.size_y);  %fracture walls
@@ -145,7 +148,9 @@ end
 
 
 domain=[];
-%% print
+
+
+%% print the domain
 final=[];
 for i=1:numel(radius)
     tmp=[];
@@ -158,12 +163,9 @@ for i=1:numel(radius)
     [aa,bb]=size(tmp1);
     final=[final;tmp1];
     close
-    %if i==1
-    %final=tmp1;
-    %else
-    %   final([end+1:bb],:)=tmp1;
-    %end
 end
+
+
 [r,c]=size(final);
 c=c+20;
 final=[2*ones(r,10) final 2*ones(r,10)];
@@ -197,7 +199,7 @@ for j=1:1
 end
 
 
-for j=1:dom.size_z-6
+for j=1:dom.size_z-7
     fprintf(fid_domain1,'%i\n',final);
     domain(:,:,end+1)=final;
 end
@@ -206,10 +208,10 @@ for j=1:1
     tmp = final;
     tmp(tmp==2)=1;
     fprintf(fid_domain1,'%i\n',tmp);
-    domain(:,:,end+1)=final*0;
+    domain(:,:,end+1)=tmp;
 end
 
-if mesh ==1
+if mesh == true
     for j=1:1
         tmp1=toeplitz(mod(1:r,2),mod(1:c,2));
         tmp1(tmp1==1)=4;
@@ -218,7 +220,7 @@ if mesh ==1
     end
 end
 
-for j=1:1
+for j=1:2
     fprintf(fid_domain1,'%i\n',final*0);
     domain(:,:,end+1)=final*0;
 end
