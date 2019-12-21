@@ -133,6 +133,8 @@ Why am I seeing the same line printed multiple times? / Why is the code so slow?
   ./configure
   make
   sudo make install
+  
+Note that this process takes a few hours.
 
 ################################################################################
 Citing the workflow
