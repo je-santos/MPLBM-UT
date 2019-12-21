@@ -71,7 +71,7 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 **rho_vtk:** This input asks if 3D geometry files (.vtk) for both fluids 1 and 2 are to be saved: True, or only for for Fluid 1: False.
 
-**it_vtk:** This input takes the  number of iterations after which the 3D geometry files (.vtk) showing the density and current fluid configuration are to be saved.
+**it_vtk:** This input takes the  number of iterations after which the 3D geometry files (.vtk) showing the density and current fluid configuration are to be saved. If this number is greater than 100000 no vtk files will be output (which keeps the output lighter and the run faster).
 
 **print_geom:** This input asks if a 3D geometry file (.vtk) is to be saved at the beginning of the simulation.
 
