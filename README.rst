@@ -93,9 +93,7 @@ Example description
 ################################################################################
 
 - Unsteady state
-- Steady state: an video example is shown in 
-
-(`youtube <https://www.youtube.com/watch?v=wc8ZxwejcHk>`__)
+- Steady state: an video example is shown in:  `youtube video <https://www.youtube.com/watch?v=wc8ZxwejcHk>`__
 
 ################################################################################
 FAQ
