@@ -21,8 +21,11 @@ name = ['spheres4Palabos'];
 add_mesh   = true; % add a neutral-wet mesh at the end of the domain
 num_slices = 2;    % add n empty slices at the beggining and end of domain 
                    % for pressure bcs
+swapXZ = true;     % Swap x and z data if needed to ensure Palabos simulation in Z-direction              
+scale_2 = false;   % Double the grain (pore) size if needed to prevent single pixel throats
+                   % for tight/ low porosity geometries                   
 
-palabos_3Dmat = create_geom_edist(fp_printing,name,num_slices, add_mesh);  
+palabos_3Dmat = create_geom_edist(fp_printing,name,num_slices, add_mesh, swapXZ, scale_2);  
                                     %provides a very computationally efficient 
                                     %geometry for Palabos
 
@@ -32,10 +35,9 @@ palabos_3Dmat = create_geom_edist(fp_printing,name,num_slices, add_mesh);
                                     %provides a very computationally efficient 
                                     %geometry for Palabos
 
-
 %% Mixed Wettability                                 
 rng(123)                                    
-rnd_array = rand( size(palabos_3Dmat) );
+rnd_array = rand(size(palabos_3Dmat) );
 
 palabos_3Dmat_mixedWet = palabos_3Dmat;
 palabos_3Dmat_mixedWet(palabos_3Dmat==1 & rnd_array>0.5)=3;
