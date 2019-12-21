@@ -175,6 +175,7 @@ final=[2*ones(10,c) ;  final ; 2*ones(10,c)];
 NewFileName = sprintf('tubes_%g_%g_%g',dom.size_z,c,r);% create output directory
 NewFileName = [NewFileName '.dat'];
 
+mkdir('input')
 fid_domain1=fopen(['input/' NewFileName],'w');
 
 
@@ -231,5 +232,6 @@ figure()
 
 imagesc(final);
 axis equal;
+title('Cross-section of the capillary tube domain')
 
 disp('2. Surface Created')
