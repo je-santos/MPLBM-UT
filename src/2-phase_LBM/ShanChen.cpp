@@ -603,8 +603,18 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           if ( checkconv == 1 ) {
                             writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
+
+                          if ( it_vtk < 100000 ) {
+
                             writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
 							              writeVTK_vel(lattice_fluid1, "vel_f1_", runs_str, iT);
+
+                            if (rho_vtk == true)
+                            {
+                              writeVTK_rho(lattice_fluid2, "rho_f2_", runs_str, iT, nx, ny, nz);
+                            }
+
+                          }
 
                             string run_name;
                             run_name = outDir + "/runnum.dat";
