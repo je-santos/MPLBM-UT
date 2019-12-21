@@ -316,7 +316,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       if (run == 1) {
         pcout << "Absolute Permeability   = " << perm[run]         << std::endl;
       }
-      pcout << "Relative Permeability = " << rel_perm[run]/perm[1] << std::endl;
+      pcout << "Relative Permeability = " << rel_perm[run] << std::endl;
 
       pcout << "Writing VTK file ..." << std::endl;
       writeVTK(lattice, iT, run);
