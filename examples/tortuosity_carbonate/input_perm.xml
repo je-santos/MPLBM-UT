@@ -9,7 +9,7 @@
 
 <folder>
     <!-- Output folder -->
-    <out_f> output/ </out_f>
+    <out_f> tmp/ </out_f>
     <!-- Input folder -->
     <in_f> input/ </in_f>
 </folder>
@@ -20,6 +20,5 @@
 	<!-- Pressure-->
     <press> 0.0005 </press>
 	<!-- Max iterations-->
-    <iter> 2000 </iter>
+    <iter> 2600 </iter>
 </simulations>
-

@@ -9,6 +9,11 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace plb;
+using namespace std;
 
 namespace patch
 {
@@ -280,7 +285,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       // 1st and second parameters ae used for the length of the time average (size/velocity)
 
 
-      util::ValueTracer<T> converge(1.0,1000.0,1.0e-5);
+      util::ValueTracer<T> converge(1.0,500.0,1.0e-5);
 
       pcout << "Simulation begins" << std::endl;
       plint iT=0;
@@ -299,6 +304,11 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
         converge.takeValue(getStoredAverageEnergy(lattice),true);
 
         if (converge.hasConverged()) {
+
+          std::string outDir = fNameOut + "/";
+          std::string vel_name = outDir + GeometryName + "_vel.dat";
+          plb_ofstream ofile3( vel_name.c_str() );
+          ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
           break;
         }
       }
