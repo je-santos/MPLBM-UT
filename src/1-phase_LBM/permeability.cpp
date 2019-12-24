@@ -205,6 +205,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     T Run;
     std::string GeometryName ;
     plint maxT;
+	plint conv;
 
     std::string xmlFname;
     try {
@@ -233,6 +234,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       document["simulations"]["press"].read(deltaP);
       document["simulations"]["num"].read(Run);
       document["simulations"]["iter"].read(maxT);
+	  document["simulations"]["conv"].read(conv);
     }
     catch (PlbIOException& exception) {
       pcout << exception.what() << std::endl;
@@ -285,7 +287,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       // 1st and second parameters ae used for the length of the time average (size/velocity)
 
 
-      util::ValueTracer<T> converge(1.0,500.0,1.0e-5);
+      util::ValueTracer<T> converge(1.0,500.0,conv);
 
       pcout << "Simulation begins" << std::endl;
       plint iT=0;
@@ -304,11 +306,6 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
         converge.takeValue(getStoredAverageEnergy(lattice),true);
 
         if (converge.hasConverged()) {
-
-          std::string outDir = fNameOut + "/";
-          std::string vel_name = outDir + GeometryName + "_vel.dat";
-          plb_ofstream ofile3( vel_name.c_str() );
-          ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
           break;
         }
       }
@@ -317,6 +314,11 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
       //   pcout << "Permeability:" << std::endl;
       computePermeability(lattice, nu, deltaP, lattice.getBoundingBox(), Perm, Vel);
+	  
+	  std::string outDir = fNameOut + "/";
+      std::string vel_name = outDir + GeometryName + "_vel.dat";
+      plb_ofstream ofile3( vel_name.c_str() );
+      ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
 
 
       perm[run]=Perm;

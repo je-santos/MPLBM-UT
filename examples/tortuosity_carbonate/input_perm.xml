@@ -21,4 +21,6 @@
     <press> 0.0005 </press>
 	<!-- Max iterations-->
     <iter> 2600 </iter>
+	<!-- Convergence-->
+    <conv> 0.001 </conv>
 </simulations>
