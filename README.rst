@@ -160,11 +160,11 @@ Author's Publications
 Bibliographic references
 ################################################################################
 
-1. Unsteady state simulation set-up: Pan, C., Hilpert, M., and Miller, C. T. ( 2004), Lattice‐Boltzmann simulation of two‐phase flow in porous media, Water Resour. Res., 40, W01501, doi:10.1029/2003WR002120 .
+1. Unsteady state simulation set-up: Pan, C., Hilpert, M., and Miller, C. T. ( 2004), Lattice‐Boltzmann simulation of two‐phase flow in porous media, Water Resour. Res., 40, W01501, https://doi.org/10.1029/2003WR002120.
 
-2. Contact angle approximation: Huang, H., Thorne, D. T., Schaap, M. G., & Sukop, M. C. (2007). Proposed approximation for contact angles in Shan-and-Chen-type multicomponent multiphase lattice Boltzmann models. Physical Review E - Statistical, Nonlinear, and Soft Matter Physics, 76(6), 1–6. https://doi.org/10.1103/PhysRevE.76.066701 .
+2. Contact angle approximation: Huang, H., Thorne, D. T., Schaap, M. G., & Sukop, M. C. (2007). Proposed approximation for contact angles in Shan-and-Chen-type multicomponent multiphase lattice Boltzmann models. Physical Review E - Statistical, Nonlinear, and Soft Matter Physics, 76(6), 1–6. https://doi.org/10.1103/PhysRevE.76.066701.
 
-3. Fluid flow model: Santos, J. E. (2018). Lattice-Boltzmann modeling of multiphase flow through rough heterogeneously wet fractures. University of Texas at Austin (Master thesis). https://repositories.lib.utexas.edu/handle/2152/69246 .
+3. Fluid flow model: Santos, J. E. (2018). Lattice-Boltzmann modeling of multiphase flow through rough heterogeneously wet fractures. University of Texas at Austin (Master thesis). https://repositories.lib.utexas.edu/handle/2152/69246.
 
 
 ################################################################################
