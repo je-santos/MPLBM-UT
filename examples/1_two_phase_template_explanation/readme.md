@@ -37,10 +37,10 @@ Figure 1- Geometry setup for 2-phase flow simulations
 **Wetting forces:**
 (G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4): These terms refer to the interaction force between the fluids and the solid walls. This code has the option to add 4 different wetting conditions ( 4 different solid surfaces ), but more could be added with ease. In the 3D image, the voxels labeled with 1, 3, 5, 6 are assigned G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4, respectively (2 is reserved for inside solids, 4 for the neutral-wet mesh and 0 for the fluids). The contact angle is calculated as: cos(theta) = 4*G_ads_f1_si/( Gc*( rho_f1-rho_d ) )
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=     \frac{ 4G_{ads_{f1,si}} }{G_c \cdot (rho_{f1}-rho_{d}) }" title="\Large cos(\theta)=     \frac{ 4\cdot G_{ads_{f1,si}} }{G_c \cdot (rho_{f1}-rho_{d}) }" />
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{ 4G_{ads_{f1,si}} }{ 2 }" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{ 4G_{ads_{f1,si}} }{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 **rho_f1:** This input takes the initial density of fluid 1 throughout the geometry.
 
