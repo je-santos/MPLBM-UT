@@ -65,11 +65,11 @@ often, the second term can be neglected because its many orders of magnitude sma
 
 To calculate the capillary pressure of the system we use:
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;Pc(x)=P_{nw}-P_{w}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;P_c=P_{nw}-P_{w}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 if we substitute the expression to calculate the pressure, we get:
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;P(x)=\frac{2}{3}-\frac{(2-\Delta \rho)}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;P_c=\frac{2}{3}-\frac{(2-\Delta\rho)}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 
 
