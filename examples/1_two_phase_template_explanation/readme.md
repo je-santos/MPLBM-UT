@@ -69,9 +69,9 @@ To calculate the capillary pressure of the system we use:
 
 if we substitute the expression to calculate the pressure, we get:
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;P_c=\frac{2}{3}-\frac{(2-\Delta\rho)}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;P_c=\frac{2}{3}-\frac{(2-\Delta\rho)}{3}=\frac{\Delta\rho}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
-
+where the first term represents the pressure at the inlet and consequently, the second term is the pressure at the outlet.
 
 **output:** There are multiple inputs required under this heading.
 
