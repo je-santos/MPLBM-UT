@@ -2,8 +2,8 @@
 
 #SBATCH -J conv_1e0         # job name
 #SBATCH -o conv_1e0.o       # name of the outfile file
-#SBATCH -N 2                # number of nodes requested
-#SBATCH -n 96               # total number of mpi tasks requested
+#SBATCH -N 4                # number of nodes requested
+#SBATCH -n 192               # total number of mpi tasks requested
 #SBATCH -p normal           # queue (partition) -- normal, development, etc.
 #SBATCH -t 48:00:00         # run time (hh:mm:ss) - 1.5 hours
 

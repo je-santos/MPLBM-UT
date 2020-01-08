@@ -1,10 +1,17 @@
 %This script creates a number of parallel capillary tubes of specified
 %radius to test the capillary pressure needed to flow through each tube
+%author: Javier E. Santos UT-PGE 2016
 
-radius=[31,21,16,11,6,5,4,3];
+clear all
+
+%radius=[31,21,16,11,6,5,4,3];
+radius=[21,16,11,6,5,4,3];
+%the approximated 'effective' radii are
+r_widest = [41/2, 31/2, 20/2, 11/2, 9/2, 7/2 5/2];
+
+
+
 dom.size_z=75; %length of the domain
-
-
 
 no_circles=1;
 spacing_between=5; %spacing between adjacent tubes
