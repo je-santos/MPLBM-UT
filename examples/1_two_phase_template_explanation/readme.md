@@ -61,6 +61,17 @@ The pressure in the Shan-Chen model is calculated as:
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;P(x)=\frac{\rho_1(x)+\rho_2(x)}{3}+G_c\frac{\rho_1(x)\rho_2(x)}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
+often, the second term can be neglected because its many orders of magnitude smaller than the first.
+
+To calculate the capillary pressure of the system we use:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;Pc(x)=P_{nw}-P_{w}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
+if we substitute the expression to calculate the pressure, we get:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;P(x)=\frac{2}{3}-\frac{(2-\Delta \rho)}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
+
 
 **output:** There are multiple inputs required under this heading.
 
