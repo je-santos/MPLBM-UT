@@ -40,7 +40,7 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{ 4G_{ads_{f1,si}} }{ 2 }" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{4G_{ads_{f1,si}}-b\pm\sqrt{b^2-4ac}}{G_c(a-b)}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{4G_{ads_{f1,si}}-b\pm\sqrt{b^2-4ac}}{G_c(rho_{f1}-rho_d)}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 **rho_f1:** This input takes the initial density of fluid 1 throughout the geometry.
 
