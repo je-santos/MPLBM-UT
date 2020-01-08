@@ -73,6 +73,10 @@ if we substitute the expression to calculate the pressure, we get:
 
 where the first term represents the pressure at the inlet and consequently, the second term is the pressure at the outlet.
 
+Comparing this expression with the Young-Laplace equation for a capillary tube (circular cross section), we finally get:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\Delta\rho=\frac{5\sigma cos(\theta)}{r}-\frac{(2-\Delta\rho)}{3}=\frac{\Delta\rho}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
 **output:** There are multiple inputs required under this heading.
 
 **out_folder:** This input takes the name of the folder where all the output files will be stored.
