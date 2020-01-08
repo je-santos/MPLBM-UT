@@ -8,7 +8,7 @@ fp = fread(f1, d_size*d_size*d_size,'uint8=>uint8');
 fp = reshape(fp, d_size,d_size,d_size);
 
 %% selecting a smaller subset
-print_size = 100; %size of the Finneypack subset (in voxels per side)
+print_size = 200; %size of the Finneypack subset (in voxels per side)
 fp_printing = fp(1:print_size, 1:print_size, 1:print_size);
 figure();imagesc(fp_printing(:,:,uint8(print_size/2)));
 title('Cross-section of the simulation subset')
