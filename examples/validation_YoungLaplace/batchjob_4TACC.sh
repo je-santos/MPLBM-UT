@@ -12,4 +12,4 @@
 #SBATCH --mail-type=end     # email me when the job finishes
 #SBATCH -A pge-fracture     # allocation
 # run the executable
-ibrun ../../src/2-phase_LBM/ShanChen input_tubes.xml
+ibrun ../../src/2-phase_LBM/ShanChen input_tubes_1e0.xml

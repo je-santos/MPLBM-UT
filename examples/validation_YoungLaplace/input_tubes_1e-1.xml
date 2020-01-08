@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+
+<!-- Load the state of a saved simulation -->
+<load_savedstated> False </load_savedstated>
+
+<geometry>
+    <!-- The name of the .dat file that with the geometry. -->
+    <file_geom> input/tubes_75_72_215.dat </file_geom>
+    <!-- Size (in voxels) of the simulation domain. -->
+    <size> <x> 75 </x> <y> 72 </y> <z> 215 </z> </size>
+    <!-- Periodicity in the boundary conditions -->
+    <per>
+          <fluid1> <x> false </x> <y> false </y> <z> false </z> </fluid1>
+          <fluid2> <x> false </x> <y> false </y> <z> false </z> </fluid2>
+    </per>
+</geometry>
+
+<init>
+  <!-- Initial position of fluid 1 -->
+    <fluid1>
+          <x1> 001 </x1> <y1> 001 </y1> <z1> 001 </z1>
+          <x2> 002 </x2> <y2> 72 </y2> <z2> 215 </z2>
+    </fluid1>
+  <!-- Initial position of fluid 2  -->
+    <fluid2>
+          <x1> 003 </x1> <y1> 001 </y1> <z1> 001 </z1>
+          <x2> 075 </x2> <y2> 072 </y2> <z2> 215 </z2>
+    </fluid2>
+</init>
+
+
+<fluids>
+    <Gc> 0.9 </Gc>
+    <omega_f1> 1 </omega_f1>
+    <omega_f2> 1 </omega_f2>
+    <force_f1> 0 </force_f1>
+    <force_f2> 0 </force_f2>
+    <!-- Wetting forces Huang et al., 2007. -->
+    <G_ads_f1_s1> -0.4 </G_ads_f1_s1>
+    <G_ads_f1_s2>  0.0 </G_ads_f1_s2>
+    <G_ads_f1_s3>  0.0 </G_ads_f1_s3>
+    <G_ads_f1_s4>  0.0 </G_ads_f1_s4>
+
+	  <!-- Intial density of fluid 1 -->
+    <rho_f1> 2 </rho_f1>
+    <!-- Initial density of fluid 2 -->
+    <rho_f2> 2 </rho_f2>
+    <!-- Include a pressure gradient bc (for flow)-->
+    <pressure_bc> True </pressure_bc>
+    <!-- Density of fluid 1 at the inlet (Constant)-->
+    <rho_f1_i> 2 </rho_f1_i>
+    <!-- Initial Density of fluid 2 at the outlet -->
+    <rho_f2_i> 2 </rho_f2_i>
+    <!-- Final density of fluid 2 at the outlet (after n-steps) -->
+    <rho_f2_f> 1.0 </rho_f2_f>
+    <!-- Dissolved density of one phase in the other (both f1 and f2) -->
+    <rho_d> 0.06 </rho_d>
+    <!-- Decrement in outlet density (equivalent to pressure change) per cap increment -->
+    <drho_f2> 0.05 </drho_f2>
+</fluids>
+
+
+<output>
+    <!-- Output folder -->
+    <out_folder> 1e-1/ </out_folder>
+    <!-- Save the simulation state after every capillary increment (big files) -->
+    <save_sim> False </save_sim>
+	  <!-- Convergence criteron (density change) -->
+    <convergence> 0.1 </convergence>
+    <!-- Max iterations per Pc step -->
+    <it_max> 1000000 </it_max>
+    <!-- Check for convergence every -->
+    <it_conv> 500 </it_conv>
+    <!-- Print density gifs -->
+    <it_gif> 1000000 </it_gif>
+    <!-- Write f1 and f2 density vtks (True). Only f1 (False) -->
+    <rho_vtk> False </rho_vtk>
+    <!-- print vtks every (big files) -->
+    <it_vtk> 100000000 </it_vtk>
+    <!-- print geometry at the beginning -->
+    <print_geom> True </print_geom>
+    <!-- print stl (for 3D printing and viewing)  -->
+    <print_stl> True </print_stl>
+</output>

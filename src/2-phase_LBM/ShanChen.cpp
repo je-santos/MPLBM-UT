@@ -388,8 +388,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
               document["output"]["it_max"].read(it_max);
               document["output"]["it_conv"].read(it_conv);
-              document["output"]["it_info"].read(it_info);
-
 
               document["output"]["it_gif"].read(it_gif);
               document["output"]["it_vtk"].read(it_vtk);
