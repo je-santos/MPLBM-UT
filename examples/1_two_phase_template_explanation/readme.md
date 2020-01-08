@@ -75,7 +75,11 @@ where the first term represents the pressure at the inlet and consequently, the 
 
 Comparing this expression with the Young-Laplace equation for a capillary tube (circular cross section), we finally get:
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;P_c=\frac{6\sigma}{r}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\Delta\rho=\frac{6\sigma}{r}cos(\theta)" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
+For the example shown above, we performed a buble test where the interfacial tension (sigma) showed a value of 0.15. Substituting that, for a non-wetting condition of G_ads_f1 = -0.4 (156.4 degrees), we get:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\Delta\rho\approx\frac{0.825}{r}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 
 
