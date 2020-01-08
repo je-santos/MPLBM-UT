@@ -40,7 +40,7 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{ 4G_{ads_{f1,si}} }{ 2 }" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{4G_{ads_{f1,si}}-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 **rho_f1:** This input takes the initial density of fluid 1 throughout the geometry.
 
@@ -60,7 +60,6 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 **drho_f2:** This input takes the decrement in the pressure of fluid 2 at the outlet pressure boundary at every step (capillary pressure change) in the simulation. A range of 0.01 to 0.1 may be input depending on balance between sensitivity / computational time, as smaller decrement will require a longer time but will have greater sensitivity to measure change in fluid movement.
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large xx=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 **output:** There are multiple inputs required under this heading.
 
