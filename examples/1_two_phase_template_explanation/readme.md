@@ -37,9 +37,6 @@ Figure 1- Geometry setup for 2-phase flow simulations
 **Wetting forces:**
 (G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4): These terms refer to the interaction force between the fluids and the solid walls. This code has the option to add 4 different wetting conditions ( 4 different solid surfaces ), but more could be added with ease. In the 3D image, the voxels labeled with 1, 3, 5, 6 are assigned G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4, respectively (2 is reserved for inside solids, 4 for the neutral-wet mesh and 0 for the fluids). The contact angle is calculated as: cos(theta) = 4*G_ads_f1_si/( Gc*( rho_f1-rho_d ) )
 
-
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{ 4G_{ads_{f1,si}} }{ 2 }" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
-
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{4G_{ads_{f1,si}}-b\pm\sqrt{b^2-4ac}}{G_c(rho_{f1}-rho_d)}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 **rho_f1:** This input takes the initial density of fluid 1 throughout the geometry.
@@ -59,6 +56,10 @@ Figure 1- Geometry setup for 2-phase flow simulations
 **rho_d:** This input takes the dissolved density of one phase in the other (both fluid1 and fluid2). The default value may be kept 0.06.
 
 **drho_f2:** This input takes the decrement in the pressure of fluid 2 at the outlet pressure boundary at every step (capillary pressure change) in the simulation. A range of 0.01 to 0.1 may be input depending on balance between sensitivity / computational time, as smaller decrement will require a longer time but will have greater sensitivity to measure change in fluid movement.
+
+The pressure in the Shan-Chen model is calculated as:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;P(x)=\frac{\rho_1(x)+\rho_2(x)}{3}+G_c\frac{\rho_1(x)\rho_2(x)}{3}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 
 **output:** There are multiple inputs required under this heading.
