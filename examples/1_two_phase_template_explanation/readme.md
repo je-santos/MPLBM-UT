@@ -75,7 +75,9 @@ where the first term represents the pressure at the inlet and consequently, the 
 
 Comparing this expression with the Young-Laplace equation for a capillary tube (circular cross section), we finally get:
 
-<img src="https://latex.codecogs.com/svg.latex?\Large&space;\Delta\rho=\frac{5\sigma\cdotcos(\theta)}{r}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;P_c=\frac{6\sigma}{r}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
+
 
 **output:** There are multiple inputs required under this heading.
 
