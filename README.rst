@@ -4,7 +4,7 @@ Multiphase LBM Toolbox: Permeable media analysis using the Palabos library and i
 
 This workflow calculates capillary pressure curves, relative permeability, tortuosity, contact angles, and the percolation pathway of grain packs/image slices. The direct fluid flow simulation is performed using Palabos v2.
 
-This repository was created by Javier E. Santos and Abhishek Bihani 
+This repository was created by Javier E. Santos and Abhishek Bihani
 
 in collaboration with Christopher Landry, Hugh Daigle and Masa Prodanovic
 
@@ -12,7 +12,7 @@ in collaboration with Christopher Landry, Hugh Daigle and Masa Prodanovic
     :align: right
     :alt: alternate text
     :figclass: align-right
-    
+
     Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
 
 .. contents::
@@ -51,30 +51,24 @@ Please refer to the unsteady state example for a complete workflow
 
 
 
-A) Pre-processing (MATLAB):
+A) Pre-processing (Matlab/Octave):
 
-- To create the .dat file geometry for Palabos,
-a) If the geometry is a matrix in MATLAB, use createLBM_MAT2DAT.m
-b) If the geometry is an image sequence, use createDAT.m
+- To create the geometry for simulating with Palabos (.dat file),
+a) If the geometry is a 3D array, use pre-processing/create_geom_edist.m
+b) If the geometry is an image sequence, use pre-processing/createDAT.m
 
-Both codes add 2 blank slices at beginning and end of geometry in YZ plane, (optional) adds a unit mesh slice 3rd from outlet
+B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
-B) 2-Phase LBM Simulation (PALABOS):
+- Update geometry and simulation parameters in input xml file. An explanation of every input is provided in examples/1_two_phase_template_explanation
 
-- Update geometry and simulation parameters in input xml file
-- Modify the Makefile to point out to the directory where Palabos is saved and make
-- Run 2-phase LBM simulation file ShanChen.cpp in bash to simulate capillary drainage
-
-C) Post-processing (MATLAB):
+C) Post-processing (Matlab/Octave):
 
 - Read the generated vtk files using read_save_fluids.m
 (It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate percolation path at breakthrough)
 
-D) 1-Phase LBM Simulation (PALABOS):
+D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
 - Update geometry and simulation parameters in input xml file
-- Modify the Makefile to point out to the directory where Palabos is saved and make
-- Make/Run 1-phase LBM simulation file permeability.cpp in bash to calculate absolute and relative permeabilities of the flow from fluid geometries
 
 Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation
 
@@ -131,14 +125,14 @@ Why am I seeing the same line printed multiple times? / Why is the code so slow?
   ./configure
   make
   sudo make install
-  
+
 Note that this process takes a few hours.
 
 ################################################################################
 Citing the workflow
 ################################################################################
 
-If you use our workflow, please cite as: 
+If you use our workflow, please cite as:
 
 Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
 
@@ -150,11 +144,11 @@ Author's Publications
 
 2. Santos, J. E., Prodanovic, M., Landry, C. J., & Jo, H. (2018, August 9). Determining the Impact of Mineralogy Composition for Multiphase Flow Through Hydraulically Induced Fractures. Unconventional Resources Technology Conference. doi:10.15530/URTEC-2018-2902986
 
-3. Landry, C. J., Karpyn, Z. T., and Ayala, O. ( 2014), Relative permeability of homogenous‐wet and mixed‐wet porous media as determined by pore‐scale lattice Boltzmann modeling, Water Resour. Res., 50, 3672– 3689, doi:10.1002/2013WR015148.  
+3. Landry, C. J., Karpyn, Z. T., and Ayala, O. (2014), Relative permeability of homogenous‐wet and mixed‐wet porous media as determined by pore‐scale lattice Boltzmann modeling, Water Resour. Res., 50, 3672– 3689, doi:10.1002/2013WR015148.
 
 4. NeuralNets
 
-5. AWR2
+5. AWR
 
 ################################################################################
 Bibliographic references

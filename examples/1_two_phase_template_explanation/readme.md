@@ -11,14 +11,14 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 **geometry:** There are multiple inputs required under this heading.
 
-**file_geom:** This input asks for the name of the geometry for simulation. PALABOS requires the input geometry be in .DAT file format which can be created using the [pre-processing steps](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/pre-processing) The geometry file should be placed in the same folder as the [2-phase simulation code](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/src/2-phase_LBM) or if placed elsewhere, the path should be modified to point to the geometry.
+**file_geom:** This input asks for the name of the geometry for simulation. PALABOS requires the input geometry be in .dat file format which can be created using the [pre-processing steps](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/pre-processing) The geometry file should be placed in the same folder as the [2-phase simulation code](https://github.com/je-santos/MultiphasePorousMediaPalabos/tree/master/src/2-phase_LBM) or if placed elsewhere, the path should be modified to point to the geometry.
 
 **size:** This input requires the size (in voxels) in the X, Y, and Z directions of the geometry (Figure 1).
 
 *Note:*
 
 1) PALABOS conducts simulations in X-direction, so please double-check X and Z directions of the geometry.
-2) If the blank slices and mesh are added in the pre-proccesing step, 5 voxels will be added to the original geometry in the X-direction.
+2) If the blank slices and a mesh are added in the pre-proccesing step, the original size in the X-direction would be larger.
 
 **init:** There are multiple inputs required under this heading.
 
@@ -30,18 +30,20 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 **Gc:** Interparticle (cohesion) force. This input controls the fluid-fluid interfacial tension. This value assures phase separation. A stable separation is reached by Gc > 1/(rho_f1+rho_f2). A value of 0.9 is recommended.
 
-**omega_f1 and omega_f2:** This parameter is used to calculate the kinematic viscosity of fluid 1 and 2, using:  v=( 1 / omega_fi - 0.5 ) / c^2
+**omega_f1 and omega_f2:** This parameter is used to calculate the kinematic viscosity of fluid 1 and 2, using:  v=( 1 / omega_fi - 0.5 ) / c^2.
 
-**force_f1 and force_f2** If this term is different than zero, a driving force will be added to each fluid (i.e. gravitational). The pressure boundary conditions are suggested to be turned off and periodicity should be enabled.
+**force_f1 and force_f2** If this term is different than zero, a driving force will be added to each fluid (i.e. gravitational) in the x-direction. The pressure boundary conditions are suggested to be turned off and periodicity should be enabled (to reach a steady-state).
 
 **Wetting forces:**
 (G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4): These terms refer to the interaction force between the fluids and the solid walls. This code has the option to add 4 different wetting conditions ( 4 different solid surfaces ), but more could be added with ease. In the 3D image, the voxels labeled with 1, 3, 5, 6 are assigned G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4, respectively (2 is reserved for inside solids, 4 for the neutral-wet mesh and 0 for the fluids). The contact angle is calculated as: cos(theta) = 4*G_ads_f1_si/( Gc*( rho_f1-rho_d ) )
 
-**rho_f1:** This input takes the intial density of fluid 1 throughout the geometry.
+**rho_f1:** This input takes the initial density of fluid 1 throughout the geometry.
 
-**rho_f2:** This input takes the intial density of fluid 2 throughout the geometry.
+**rho_f2:** This input takes the initial density of fluid 2 throughout the geometry.
 
-**pressure_bc:** This input asks if a pressure gradient will be applied in the geometry. Please use True for flow simulations and False for equilibrium calculations.
+*Note:* A stable value for both densities is 2. High density ratios tend to be numerically unstable.
+
+**pressure_bc:** This input asks if a pressure gradient will be applied in the geometry. Please use True for un-steady state flow simulations and False for steady state calculations.
 
 **rho_f1_i:** This input takes the initial density of fluid 1 at the inlet pressure boundary and is kept constant.
 
@@ -53,19 +55,19 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 **drho_f2:** This input takes the decrement in the pressure of fluid 2 at the outlet pressure boundary at every step (capillary pressure change) in the simulation. A range of 0.01 to 0.1 may be input depending on balance between sensitivity / computational time, as smaller decrement will require a longer time but will have greater sensitivity to measure change in fluid movement.
 
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
+
 **output:** There are multiple inputs required under this heading.
 
 **out_folder:** This input takes the name of the folder where all the output files will be stored.
 
 **save_sim:** This input asks if user wants to save the simulation lattices after every capillary pressure decrement for both fluid 1 and fluid 2. The saved files are large (> 1 GB) but are overwritten after every decrement and may be used to restart the simulation from that step.
 
-**convergence:** This input takes the value of the convergence criterion (density change) for the simulation. The convergence value is inversely proportional to the computational time and the accuracy. A convergence of 10^-6 may be accurate but will require a longer time than a convergence of 10^-5 or 10^-4.
+**convergence:** This input takes the value of the convergence criterion for the simulation. The convergence value is inversely proportional to the computational time and the accuracy. See the examples for best practices.
 
 **it_max:** This input takes the value of maximum iterations allowed at a particular capillary pressure if the convergence is not reached.
 
-**it_conv:** This input takes the value of number of iterations after which to check if convergence criterion is satisfied.
-
-**it_info:** This input takes the value of number of iterations after which the current state of simulation should be displayed in the terminal.
+**it_conv:** This input takes the value of number of iterations after which to check if convergence criterion is satisfied. This takes a certain computational overhead, since general statistics have to be computed.
 
 **it_gif:** This input takes the value of number of iterations after which 2D images of the geometry crossection (.gif) showing the density and current fluid configuration are to be saved.
 

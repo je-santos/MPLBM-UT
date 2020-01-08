@@ -17,11 +17,11 @@ typedef double T; // Use double-precision arithmetics
 // Use a grid which additionally to the f's stores two variables for the external force term.
 #define DESCRIPTOR descriptors::ForcedShanChenD3Q19Descriptor
 
-void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates the pictures
+ //creates the gifs
+void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
   MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2, string runs, plint iT)
   {
     const plint imSize = 600;
-    //const plint zcomponent = 0;
     const plint nx = lattice_fluid2.getNx();
     const plint ny = lattice_fluid2.getNy();
     const plint nz = lattice_fluid2.getNz();
@@ -379,7 +379,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
               document["fluids"]["rho_f2_i"].read(rho_f2_outlet_initial);
               document["fluids"]["rho_f2_f"].read(rho_f2_outlet_final);
               document["fluids"]["rho_d"].read(rhoNoFluid);
-              //document["fluids"]["num_pc"].read(rho_f2_step);
               document["fluids"]["drho_f2"].read(drho_f2);
 
 
@@ -440,7 +439,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
             const T nu_f1 = ( (T)1 / omega_f1 - 0.5 ) / DESCRIPTOR<T>::invCs2;
             const T nu_f2 = ( (T)1 / omega_f2 - 0.5 ) / DESCRIPTOR<T>::invCs2;
 
-            // Use regularized BGK dynamics to improve numerical stability (but note that BGK dynamics works well too).
+            // Use regularized BGK dynamics to improve numerical stability
+            // (but note that BGK dynamics works well too).
             MultiBlockLattice3D<T, DESCRIPTOR> lattice_fluid2( nx, ny, nz,
               new ExternalMomentRegularizedBGKdynamics<T, DESCRIPTOR>(omega_f2));
             MultiBlockLattice3D<T, DESCRIPTOR> lattice_fluid1( nx, ny, nz,
@@ -468,41 +468,41 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                   pcout << "The convergence set by the user is = " << convergence << endl;
 
-                  pcout << "The boundary conditions per run are:" << endl;
-                  for (plint readnum = 1; readnum <= runnum; ++readnum) {
-                    deltaP[readnum]=(rho_fluid1[readnum]-rho_fluid2[readnum])/3;
-                    pcout << "Run number = " << readnum << endl;
-                    pcout << "Rho_no_1 = " << rho_fluid1[readnum] << endl;
-                    pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
-                  }
+                  if (pressure_bc == true) {
+                    pcout << "The boundary conditions per run are:" << endl;
+                    for (plint readnum = 1; readnum <= runnum; ++readnum) {
+                      deltaP[readnum]=(rho_fluid1[readnum]-rho_fluid2[readnum])/3;
+                      pcout << "Run number = " << readnum << endl;
+                      pcout << "Rho_no_1 = " << rho_fluid1[readnum] << endl;
+                      pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
+                    }
+                }
 
                   pcout << "Reading the geometry file." << endl;
                   MultiScalarField3D<int> geometry(nx, ny, nz);
                   readGeometry(fNameIn, fNameOut, geometry);
 
-                  util::ValueTracer<T> converge1(1.0, lattice_fluid1.getNx(),
-                  convergence); // convergence parameters velocity/size/threshold
-                  util::ValueTracer<T> converge2(1.0, lattice_fluid2.getNx(),
-                  convergence);
+                  // Loop simulations with varying saturation
+                  for (plint runs = 1; runs <= runnum; ++runs) {
 
-
-
-                  for (plint runs = 1; runs <= runnum; ++runs) { // Loop simulations with varying saturation
-
+                    // turn off stats for efficency
                     lattice_fluid1.toggleInternalStatistics(false);
                     lattice_fluid2.toggleInternalStatistics(false);
 
+                    // save a str for figure naming
                     stringstream save_str;
                     save_str << std::setw(3) << std::setfill('0') << runs;
                     string runs_str;
-                    save_str  >> runs_str; //save a str for figure naming
+                    save_str  >> runs_str;
 
                     pcout << "Run number = " << runs << endl;
 
+                    // re-use the final state of the previous run
                     if (runs > 1)
                     {
                       pcout << "Using previous simulation state  " << endl;
                     }
+                    // set-up a new simulation domain
                     else
                     {
                       PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry,
@@ -524,13 +524,10 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                       plint checkconv = 0;
                       plint iT = 0;
 
-
-
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
 
-
-                        //if (iT % (it_conv-1) == 0 || iT % it_conv == 0) {
+                        // turn on stats to check convergence
                         if (iT % it_conv == 0) {
                           lattice_fluid1.toggleInternalStatistics(true);
                           lattice_fluid2.toggleInternalStatistics(true);
@@ -539,11 +536,13 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                         lattice_fluid1.collideAndStream();
                         lattice_fluid2.collideAndStream();
 
+                        // save gifs
                         if (iT % it_gif == 0) {
                           writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
                           writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
                         }
 
+                        // save vtks
                         if (iT % it_vtk == 0) {
                           writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
                           if (rho_vtk == true)
@@ -553,37 +552,38 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                         }
 
                         if (iT % it_conv == 0 ) {
-
-                          // calculate average change in mass
+                          // calculate average change in mass if bcs == pressure
                           new_avg_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
                           new_avg_f2 = getStoredAverageDensity(lattice_fluid2)*(nx*ny*nz);
 
                           if (pressure_bc == false){
+                          // calculate average change in momentum if bcs == force
                             new_avg_f1 = getStoredAverageEnergy(lattice_fluid1);
                             new_avg_f2 = getStoredAverageEnergy(lattice_fluid2);
                           }
 
-                          mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1);
-                          mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
+                          //mean_rho1[runs] = getStoredAverageDensity<T>(lattice_fluid1);
+                          //mean_rho2[runs] = getStoredAverageDensity<T>(lattice_fluid2);
 
                           lattice_fluid1.toggleInternalStatistics(false);
                           lattice_fluid2.toggleInternalStatistics(false);
 
+                          // calculate relative difference
                           relE_f1 = std::fabs(old_avg_f1-new_avg_f1)*100/old_avg_f1;
                           relE_f2 = std::fabs(old_avg_f2-new_avg_f2)*100/old_avg_f2;
 
                           pcout << "Run num " << runs;
                           pcout << ", Iteration " << iT << std::endl;
                           pcout << "-----------------"  << std::endl;
-                          pcout << "Relative difference Fluid1: " << setprecision(3)
+                          pcout << "Relative difference fluid1: " << setprecision(3)
                           << relE_f1 <<" %"<<std::endl;
-                          pcout << "Relative difference Fluid2: " << setprecision(3)
+                          pcout << "Relative difference fluid2: " << setprecision(3)
                           << relE_f2 <<" %"<<std::endl;
-                          //pcout << "-----------------"  << std::endl;
-                          pcout << "Convergence Fluid1: "<< ((relE_f1 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
-                          pcout << "Convergence Fluid2: "<< ((relE_f2 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
+                          pcout << "Has fluid 1 converged?: "<< ((relE_f1 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
+                          pcout << "Has fluid 2 converged?: "<< ((relE_f2 < convergence) ? "TRUE" : "FALSE") <<  std::endl;
                           pcout << "-----------------"  << std::endl;
 
+                          // store new properties
                           old_avg_f1 = new_avg_f1;
                           old_avg_f2 = new_avg_f2;
 
@@ -598,16 +598,15 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                           checkconv = 1;
                         }
 
-
-                          //if ((converge1.hasConverged()) && (converge2.hasConverged())) {
                           if ( checkconv == 1 ) {
                             writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
                             writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
 
+                          // saves converged state vtks
                           if ( it_vtk < 100000 ) {
 
                             writeVTK_rho(lattice_fluid1, "rho_f1_", runs_str, iT, nx, ny, nz);
-							              writeVTK_vel(lattice_fluid1, "vel_f1_", runs_str, iT);
+							              //writeVTK_vel(lattice_fluid1, "vel_f1_", runs_str, iT);
 
                             if (rho_vtk == true)
                             {
@@ -616,28 +615,30 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
 
                           }
 
+                            // saves a .dat file with the run number (for restarting sim)
                             string run_name;
                             run_name = outDir + "/runnum.dat";
                             plb_ofstream ofile1( run_name.c_str()  );
               							ofile1 << runs << endl;
 
-                             string rho_name;
-                             rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
-						                 plb_ofstream ofile2( rho_name.c_str() );
-                             ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
+                            // saves a .dat file (lightweight) with the density
+                            string rho_name;
+                            rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
+  					                plb_ofstream ofile2( rho_name.c_str() );
+                            ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
 
-
+                            // saves a .dat file (lightweight) with the velocity
                             string vel_name;
                             vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
                             plb_ofstream ofile3( vel_name.c_str() );
                             ofile3 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
 
-
+                            // saves a binary file (heavy) with the sim state
                             if (save_sim == true)
                             {
                             saveBinaryBlock(lattice_fluid1, Lattice1);
                             saveBinaryBlock(lattice_fluid2, Lattice2);
-                          }
+                            }
 
 
                             // Calculate velocity here for both fluids in x-direction
@@ -646,16 +647,14 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,  //creates 
                             mean_U1[runs] = meanU1;
                             mean_U2[runs] = meanU2;
 
-
                             T rho_F1=rho_fluid1[runs];
                             T rho_F2=rho_fluid2[runs];
 
                           }
 
 
-                        if (pressure_bc == true) // Boundary conditions
+                        if (pressure_bc == true) // Pressure boundary conditions
                         {
-
 
                           Array<T, 3> zeroVelocity(0., 0., 0.);
                           initializeAtEquilibrium(lattice_fluid1, Box3D(1, 2, 1, ny-2, 1, nz-2), rho_fluid1[runs], zeroVelocity);

@@ -59,9 +59,6 @@
     <rho_d> 0.06 </rho_d>
     <!-- Decrement in outlet density -->
     <drho_f2> 0.1 </drho_f2>
-    <!-- Number of capillary step increments -->
-    <num_pc> NA </num_pc>
-
 </fluids>
 
 
@@ -76,8 +73,6 @@
     <it_max> 3000000 </it_max>
     <!-- Check for convergence every -->
     <it_conv> 1000 </it_conv>
-    <!-- Print info to the terminal -->
-    <it_info> 200 </it_info>
     <!-- Print density gifs -->
     <it_gif> 1000 </it_gif>
     <!-- Write f1 and f2 density vtks (True). Only f1 (False) -->

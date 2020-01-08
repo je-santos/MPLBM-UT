@@ -73,8 +73,6 @@
     <it_max> 1000000 </it_max>
     <!-- Check for convergence every -->
     <it_conv> 500 </it_conv>
-    <!-- Print info to the terminal -->
-    <it_info> 200 </it_info>
     <!-- Print density gifs -->
     <it_gif> 1000000 </it_gif>
     <!-- Write f1 and f2 density vtks (True). Only f1 (False) -->
