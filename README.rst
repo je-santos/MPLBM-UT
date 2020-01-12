@@ -59,7 +59,7 @@ b) If the geometry is an image sequence, use pre-processing/createDAT.m
 
 B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
-- Update geometry and simulation parameters in input xml file. An explanation of every input is provided in   `examples/1_two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
+- Update geometry and simulation parameters in input xml file. An explanation of every input (in english and chinese) is provided in   `examples/1_two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
 
 C) Post-processing (Matlab/Octave):
 
