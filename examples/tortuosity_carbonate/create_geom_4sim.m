@@ -9,13 +9,13 @@ fp = reshape(fp, d_size,d_size,d_size);
 
 %% selecting a smaller subset
 print_size = 250; %size of the Finneypack subset (in voxels per side)
-fp_printing = fp(1:print_size, 1:print_size, 1:print_size);
+fp_printing = fp(1:print_size, 1:print_size, 1:print_size)/max(fp(:));
 figure();imagesc(fp_printing(:,:,uint8(print_size/2)));
 title('Cross-section of the simulation subset')
 
 %% eliminating non-connected regions 
 connect = 6; % pixel connectivity 6, 18, 26
-fp = eliminate_isolatedRegions(fp, connect); %for better convergence
+fp_printing = eliminate_isolatedRegions(fp_printing, connect); %for better convergence
 
 %% making a computationally efficent domain for sim
 name = ['carbonate4Palabos'];
@@ -36,10 +36,4 @@ palabos_3Dmat = create_geom_edist(fp_printing,name,num_slices, add_mesh, ...
 %palabos_3Dmat = mat2dat_4lbm(fp_printing,name,1); %although this function is slow, it 
                                     
 
-%% Mixed Wettability (the user could experiment with this)                                
-rng(123)                                    
-rnd_array = rand(size(palabos_3Dmat) );
-
-palabos_3Dmat_mixedWet = palabos_3Dmat;
-palabos_3Dmat_mixedWet(palabos_3Dmat==1 & rnd_array>0.5)=3;
 

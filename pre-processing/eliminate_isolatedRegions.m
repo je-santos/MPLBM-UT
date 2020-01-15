@@ -2,7 +2,7 @@ function [ M ] = eliminate_isolatedRegions( M, connect )
 % M is a binary image. Where 0 represents the pore space and 1 the solid
 
 tmp=bwconncomp( ~M ,connect ); %check for unconnected regions in the pore-space
-phi_i=1-sum(M(:))/500^3;  %Initial porosity
+phi_i=1-sum(M(:))/numel(M);  %Initial porosity
 
 fprintf('The intial porosity is %.3f %% with %d connected regions \n', ...
             phi_i*100, tmp.NumObjects)

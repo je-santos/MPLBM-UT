@@ -20,7 +20,7 @@
 	<!-- Pressure-->
     <press> 0.0005 </press>
 	<!-- Max iterations-->
-    <iter> 2600 </iter>
+    <iter> 150000 </iter>
 	<!-- Convergence-->
-    <conv> 0.001 </conv>
+    <conv> 0.01 </conv>
 </simulations>

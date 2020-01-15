@@ -29,7 +29,8 @@ namespace patch
 using namespace plb;
 
 typedef double T;
-#define DESCRIPTOR descriptors::D3Q19Descriptor
+//#define DESCRIPTOR descriptors::D3Q19Descriptor
+#define DESCRIPTOR descriptors::MRTD3Q19Descriptor
 
 // This function object returns a zero velocity, and a pressure which decreases
 //   linearly in x-direction. It is used to initialize the particle populations.
@@ -205,7 +206,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     T Run;
     std::string GeometryName ;
     plint maxT;
-	plint conv;
+	  plint conv;
 
     std::string xmlFname;
     try {
@@ -267,8 +268,9 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       // Switch off periodicity.
       //lattice.periodicity().toggleAll(false);
 
-      lattice.periodicity().toggle(1, true);
-      lattice.periodicity().toggle(2, true);
+      lattice.periodicity().toggle(0, false);
+      lattice.periodicity().toggle(1, true );
+      lattice.periodicity().toggle(2, true );
 
       MultiScalarField3D<int> geometry(nx,ny,nz);
       readGeometry(fNameIn, fNameOut, geometry, run, runnum, GeometryName);
@@ -328,9 +330,6 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
       pcout << "Writing VTK file ..." << std::endl;
       writeVTK(lattice, iT, run);
-      //   pcout << "Finished!" << std::endl << std::endl;
-
-      //   return 0;
     }
 
     pcout << "Printing outputs" << std::endl;
@@ -347,8 +346,8 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       if (runs == 1) {
         ofile << "Absolute Permeability   = " << perm[runs]         << std::endl;
       }
-      //	ofile << "Effective Permeability   = " << perm[runs]         << std::endl;
+
       ofile << "Relative Permeability   = " << rel_perm[runs]         << std::endl;
-      //	ofile << "Velocity   = " << meanU[runs]  <<"\n"         << std::endl;
+
     }
   }
