@@ -623,7 +623,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             string rho_name;
                             rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
   					                plb_ofstream ofile2( rho_name.c_str() );
-                            ofile2 << setprecision(1) <<*computeDensity(lattice_fluid1) << endl;
+                            ofile2 << setprecision(2) <<*computeDensity(lattice_fluid1) << endl;
 
                             // saves a .dat file (lightweight) with the velocity
                             string vel_name;
