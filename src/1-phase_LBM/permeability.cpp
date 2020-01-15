@@ -234,7 +234,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       document["simulations"]["press"].read(deltaP);
       document["simulations"]["num"].read(Run);
       document["simulations"]["iter"].read(maxT);
-	  document["simulations"]["conv"].read(conv);
+	    document["simulations"]["conv"].read(conv);
     }
     catch (PlbIOException& exception) {
       pcout << exception.what() << std::endl;
@@ -262,51 +262,47 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
     for (plint run = 1; run <= runnum; ++run) {
 
-      //   pcout << "Creation of the lattice." << std::endl;
-      MultiBlockLattice3D<T,DESCRIPTOR> lattice(nx,ny,nz, new BGKdynamics<T,DESCRIPTOR>(omega));
+      MultiBlockLattice3D<T,DESCRIPTOR> lattice( nx,ny,nz,
+                                        new BGKdynamics<T,DESCRIPTOR>(omega) );
       // Switch off periodicity.
-      lattice.periodicity().toggleAll(false);
+      //lattice.periodicity().toggleAll(false);
 
-      //   pcout << "Reading the geometry file." << std::endl;
+      lattice.periodicity().toggle(1, true);
+      lattice.periodicity().toggle(2, true);
+
       MultiScalarField3D<int> geometry(nx,ny,nz);
       readGeometry(fNameIn, fNameOut, geometry, run, runnum, GeometryName);
 
-      // pcout << "nu = " << nu << std::endl;
-      // pcout << "deltaP = " << deltaP << std::endl;
-      // pcout << "omega = " << omega << std::endl;
-      // pcout << "nx = " << lattice.getNx() << std::endl;
-      // pcout << "ny = " << lattice.getNy() << std::endl;
-      // pcout << "nz = " << lattice.getNz() << std::endl;
+      porousMediaSetup(lattice, createLocalBoundaryCondition3D<T,DESCRIPTOR>(),
+                       geometry, deltaP);
 
-      porousMediaSetup(lattice, createLocalBoundaryCondition3D<T,DESCRIPTOR>(), geometry, deltaP);
-
-      // The value-tracer is used to stop the simulation once is has converged.
-      // 1st parameter:velocity
-      // 2nd parameter:size
-      // 3rd parameters:threshold
-      // 1st and second parameters ae used for the length of the time average (size/velocity)
-
-
-      util::ValueTracer<T> converge(1.0,500.0,conv);
 
       pcout << "Simulation begins" << std::endl;
       plint iT=0;
-
-      //   const plint maxT = 1000;
+      T new_avg_f, old_avg_f, relE_f1;
+      lattice.toggleInternalStatistics(false);
 
       for (;iT<maxT; ++iT) {
-        if (iT % 200 == 0) {
-          pcout << "Iteration " << iT << std::endl;
-        }
+
+
         if (iT % 250 == 0 && iT > 0) {
+
+          lattice.toggleInternalStatistics(true);
+          pcout << "Iteration " << iT   << std::endl;
+          pcout << "-----------------"  << std::endl;
           writeGifs(lattice,iT,run);
-        }
+          lattice.collideAndStream();
+          new_avg_f = getStoredAverageEnergy(lattice);
+          lattice.toggleInternalStatistics(false);
+          relE_f1 = std::fabs(old_avg_f-new_avg_f)*100/old_avg_f;
+          pcout << "Relative difference of Energy: " << setprecision(3)
+          << relE_f1 <<" %"<<std::endl;
 
-        lattice.collideAndStream();
-        converge.takeValue(getStoredAverageEnergy(lattice),true);
-
-        if (converge.hasConverged()) {
-          break;
+          if ( relE_f1<conv ){
+            break;
+          }
+          // store new properties
+          old_avg_f = new_avg_f;
         }
       }
 
@@ -314,11 +310,11 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
       //   pcout << "Permeability:" << std::endl;
       computePermeability(lattice, nu, deltaP, lattice.getBoundingBox(), Perm, Vel);
-	  
+
 	  std::string outDir = fNameOut + "/";
       std::string vel_name = outDir + GeometryName + "_vel.dat";
       plb_ofstream ofile3( vel_name.c_str() );
-      ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
+      ofile3 << setprecision(2) <<*computeVelocity(lattice) << endl;
 
 
       perm[run]=Perm;
