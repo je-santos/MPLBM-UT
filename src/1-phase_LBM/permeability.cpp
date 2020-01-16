@@ -29,8 +29,8 @@ namespace patch
 using namespace plb;
 
 typedef double T;
-//#define DESCRIPTOR descriptors::D3Q19Descriptor
-#define DESCRIPTOR descriptors::MRTD3Q19Descriptor
+#define DESCRIPTOR descriptors::D3Q19Descriptor
+//#define DESCRIPTOR descriptors::MRTD3Q19Descriptor
 
 // This function object returns a zero velocity, and a pressure which decreases
 //   linearly in x-direction. It is used to initialize the particle populations.
