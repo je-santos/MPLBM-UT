@@ -1,12 +1,18 @@
 %% Input for the function
+xml_name = 'tmp';
+
 dir_name = '1e-2';
+
 domain_size = [75,72,215];
 
-mesh_added = true; % was add a neutral-wet mesh at the end of the domain?
+mesh_added = true; % was a neutral-wet mesh added at the end of the domain?
 num_slices = 2;    % how many n empty slices at the beggining and end of domain 
+
 
 %% function
 breakthrough = 0;
+
+%read xml to get omega and geometry name and pressures and contact angle
 
 addpath ('../../pre-processing') %pre-precesing libraries
 all_rhos = dir( [dir_name '/rho*dat'] );
@@ -23,6 +29,7 @@ vol_total = sum(~domain(:)); %total volume available for flow
 
 for pc_inc= 1:size(all_rhos,1)
     
+   pc_inc
     
    rho = load( [dir_name '/' all_rhos(pc_inc).name] );
    rho = reshape(rho, flip(domain_size));
@@ -56,9 +63,8 @@ for pc_inc= 1:size(all_rhos,1)
    name='tmp';
    
    %palabos_kr_f1 = create_geom_edist(domain4kr_f1,name,0,false,false,false);  
-   
                                 
-                    %print a file with headers with runnum, Pc, S, Bk, Ca, Tortuosity
+   %print a file with headers with runnum, Pc, S, Bk, Ca, Tortuosity
    
 end
 
