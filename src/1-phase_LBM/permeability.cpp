@@ -48,7 +48,10 @@ private:
   plint nx;
 };
 
-void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<int>& geometry, plint run, plint runnum, std::string GeometryName)
+// This function grabs the appropiate geometry for the single-phase simulation
+void readGeometry(std::string fNameIn, std::string fNameOut,
+  MultiScalarField3D<int>& geometry, plint run, plint runnum,
+  std::string GeometryName)
 {
   const plint nx = geometry.getNx();
   const plint ny = geometry.getNy();
@@ -57,27 +60,29 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
   std::string fNameIn_temp1 = fNameIn + GeometryName;
   std::string fNameIn_temp = "0";
 
-  pcout  <<"\n"   << " Run"<< run << std::endl;
+  pcout  << "\n" << " Run: "<< run << std::endl;
 
   Box3D sliceBox(3,3, 0,ny-1, 0,nz-1);
 
+  // Selects between the original geometry or the fluid 1,2 final config from multiphase sim
 
   if (run == 1) {  // original geometry - absolute permeability
     fNameIn_temp = fNameIn_temp1 + ".dat";
-    pcout  << "Run absolute permeability "<< std::endl;
+    pcout  << "Running absolute permeability "<< std::endl;
   }
 
-  if (run > run_diff) { // Fluid 1 - Krnw
+  if (run > run_diff) { // Fluid 1 : Krnw
     const plint runner = run - run_diff;
-    fNameIn_temp =  fNameIn +"/lattice_f1_forK_" + patch::to_string(runner) + "_.dat";
+    fNameIn_temp =  fNameIn +"/lattice_f1_forK_" + patch::to_string(runner)+"_.dat";
     pcout  << "Run Krnw "<< std::endl;
   }
 
-  if (run > 1 && run < (run_diff+1)) { // Fluid 2 - Krw
-
-    fNameIn_temp =  fNameIn +"/lattice_f2_forK_"+ patch::to_string(run-1) + "_.dat";
+  if ( run > 1 && run < (run_diff+1) ) { // Fluid 2 : Krw
+    fNameIn_temp =  fNameIn +"/lattice_f2_forK_"+ patch::to_string(run-1)+"_.dat";
     pcout  << "Run Krw "<< std::endl;
   }
+
+
   pcout  << "Geometry name is  "<< fNameIn_temp << std::endl;
 
   std::auto_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
@@ -88,6 +93,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
       pcout << "Error: could not open the geometry file " << fNameIn_temp << std::endl;
       exit(EXIT_FAILURE);
     }
+
     geometryFile >> *slice;
     copy(*slice, slice->getBoundingBox(), geometry, Box3D(iX,iX, 0,ny-1, 0,nz-1));
   }
@@ -97,20 +103,22 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
     vtkOut.writeData<float>(*copyConvert<int,T>(geometry, geometry.getBoundingBox()), "tag", 1.0);
   }
 
-  {
-    std::auto_ptr<MultiScalarField3D<T> > floatTags = copyConvert<int,T>(geometry, geometry.getBoundingBox());
-    std::vector<T> isoLevels;
-    isoLevels.push_back(0.5);
-    typedef TriangleSet<T>::Triangle Triangle;
-    std::vector<Triangle> triangles;
-    Box3D domain = floatTags->getBoundingBox().enlarge(-1);
-    domain.x0++;
-    domain.x1--;
-    isoSurfaceMarchingCube(triangles, *floatTags, isoLevels, domain);
-    TriangleSet<T> set(triangles);
-    std::string outDir = fNameOut + "/";
-    set.writeBinarySTL(outDir + "porousMedium.stl");
-  }
+
+ // code to create .st file. Uncomment if needed
+  //{
+    //std::auto_ptr<MultiScalarField3D<T> > floatTags = copyConvert<int,T>(geometry, geometry.getBoundingBox());
+    //std::vector<T> isoLevels;
+    //isoLevels.push_back(0.5);
+    //typedef TriangleSet<T>::Triangle Triangle;
+    //std::vector<Triangle> triangles;
+    //Box3D domain = floatTags->getBoundingBox().enlarge(-1);
+    //domain.x0++;
+    //domain.x1--;
+    //isoSurfaceMarchingCube(triangles, *floatTags, isoLevels, domain);
+    //TriangleSet<T> set(triangles);
+    //std::string outDir = fNameOut + "/";
+    //set.writeBinarySTL(outDir + "porousMedium.stl");
+  //}
 }
 
 void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
@@ -122,22 +130,26 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     const plint nz = lattice.getNz();
 
     pcout << "Definition of inlet/outlet." << std::endl;
-    Box3D inlet (15,15, 1,ny-2, 1,nz-2); // inlet slice assumed little inside the geometry to prevent issues of anomalous fluid invasion at inlet
+
+    // inlet slice assumed little inside the geometry to prevent
+    // issues of anomalous fluid invasion at inlet
+    Box3D inlet (15,15, 0,ny-1, 0,nz-1);
     boundaryCondition->addPressureBoundary0N(inlet, lattice);
     setBoundaryDensity(lattice, inlet, (T) 1.);
 
-    Box3D outlet(nx-4,nx-4, 1,ny-2, 1,nz-2); // outlet slice assumed little inside the geometry
+     // outlet slice assumed little inside the geometry
+    Box3D outlet(nx-4,nx-4, 0,ny-1, 0,nz-1);
     boundaryCondition->addPressureBoundary0P(outlet, lattice);
     setBoundaryDensity(lattice, outlet, (T) 1. - deltaP*DESCRIPTOR<T>::invCs2);
 
-    //   pcout << "Definition of the geometry." << std::endl;
     // Where "geometry" evaluates to 1, use bounce-back.
     defineDynamics(lattice, geometry, new BounceBack<T,DESCRIPTOR>(), 1);
     // Where "geometry" evaluates to 2, use no-dynamics (which does nothing).
     defineDynamics(lattice, geometry, new NoDynamics<T,DESCRIPTOR>(), 2);
 
     //   pcout << "Initialization of rho and u." << std::endl;
-    initializeAtEquilibrium( lattice, lattice.getBoundingBox(), PressureGradient(deltaP, nx) );
+    initializeAtEquilibrium( lattice, lattice.getBoundingBox(),
+                                PressureGradient(deltaP, nx) );
 
     lattice.initialize();
     delete boundaryCondition;
@@ -185,7 +197,8 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
     pcout << "Average velocity     = " << meanU                         << std::endl;
     pcout << "Lattice viscosity nu = " << nu                            << std::endl;
-    pcout << "Grad P               = " << deltaP/(T)(nx-20)             << std::endl; //Gradient of pressure accounting for corrected length
+    // Gradient of pressure accounting for corrected length
+    pcout << "Grad P               = " << deltaP/(T)(nx-20)             << std::endl;
     perm = nu*meanU / (deltaP/(T)(nx-20));
     //  pcout << "Permeability         = " << perm 						<< std::endl;
     //  return meanU;
@@ -214,7 +227,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     }
     catch (PlbIOException& exception) {
       pcout << "Wrong parameters; the syntax is: "
-      << (std::string)global::argv(0) << " input-file.xml" << std::endl;
+      << (std::string) global::argv(0) << " input-file.xml" << std::endl;
       return -1;
     }
 
@@ -258,7 +271,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     T rel_perm[runnum];
     T Perm;
     T Vel;
-    pcout << "Total simulations" << runnum << std::endl;
+    pcout << "Total simulations: " << runnum << std::endl;
 
 
     for (plint run = 1; run <= runnum; ++run) {
@@ -303,8 +316,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
           if ( relE_f1<conv ){
             break;
           }
-          // store new properties
-          old_avg_f = new_avg_f;
+          old_avg_f = new_avg_f; // store new properties
         }
       }
 
@@ -313,11 +325,10 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       //   pcout << "Permeability:" << std::endl;
       computePermeability(lattice, nu, deltaP, lattice.getBoundingBox(), Perm, Vel);
 
-	  std::string outDir = fNameOut + "/";
+	    std::string outDir = fNameOut + "/";
       std::string vel_name = outDir + GeometryName + "_vel.dat";
       plb_ofstream ofile3( vel_name.c_str() );
-      ofile3 << setprecision(2) <<*computeVelocity(lattice) << endl;
-
+      ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
 
       perm[run]=Perm;
       meanU[run]=Vel;
@@ -339,7 +350,6 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     ofile << "Outputs" << "\n\n";
     ofile << "Krw from run: 2" << "\n" << "Krnw from run: " << (run_diff+1) << std::endl;
     for (plint runs = 1; runs <= runnum; ++runs) {
-
 
 
       ofile << "Run   = " << runs        << std::endl;
