@@ -23,7 +23,7 @@ Instructions
 
 .. code-block:: bash
 
-  wget "https://www.digitalrocksportal.org/media/projects/47/archive.zip"
+  wget "https://www.digitalrocksportal.org/media/projects/47/archive.zip" &&
   unzip -j archive.zip origin/311/images/spheres_a10_dx0.04_n500_segmented_unsigned_char.raw -d input/.
 
 or manually by downloading it from:
