@@ -50,7 +50,7 @@ private:
 
 // This function grabs the appropiate geometry for the single-phase simulation
 void readGeometry(std::string fNameIn, std::string fNameOut,
-  MultiScalarField3D<int>& geometry, plint run, plint runnum,
+  MultiScalarField3D<int>& geometry, plint run, plint runnum, bool vtk_out,
   std::string GeometryName)
 {
   const plint nx = geometry.getNx();
@@ -98,7 +98,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
     copy(*slice, slice->getBoundingBox(), geometry, Box3D(iX,iX, 0,ny-1, 0,nz-1));
   }
 
-  {
+  if  (vtk_out == true) {
     VtkImageOutput3D<T> vtkOut(createFileName("PorousMedium", run, 6), 1.0);
     vtkOut.writeData<float>(*copyConvert<int,T>(geometry, geometry.getBoundingBox()), "tag", 1.0);
   }
@@ -177,7 +177,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
   void writeVTK(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, plint iter, plint run)
   {
-    VtkImageOutput3D<T> vtkOut(createFileName("vtk", run, 6), 1.);
+    VtkImageOutput3D<T> vtkOut(createFileName("vtk_vel", run, 6), 1.);
     vtkOut.writeData<float>(*computeVelocityNorm(lattice), "velocityNorm", 1.);
     vtkOut.writeData<3,float>(*computeVelocity(lattice), "velocity", 1.);
   }
@@ -217,6 +217,8 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     plint nz;
     T deltaP ;
     T Run;
+	bool nx_p, ny_p, nz_p;
+	bool vtk_out;
     std::string GeometryName ;
     plint maxT;
 	  plint conv;
@@ -240,6 +242,9 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       document["geometry"]["size"]["x"].read(nx);
       document["geometry"]["size"]["y"].read(ny);
       document["geometry"]["size"]["z"].read(nz);
+	  document["geometry"]["per"]["x"].read(nx_p);
+      document["geometry"]["per"]["y"].read(ny_p);
+      document["geometry"]["per"]["z"].read(nz_p);
 
 
       document["folder"]["out_f"].read(fNameOut);
@@ -248,7 +253,9 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       document["simulations"]["press"].read(deltaP);
       document["simulations"]["num"].read(Run);
       document["simulations"]["iter"].read(maxT);
-	    document["simulations"]["conv"].read(conv);
+	  document["simulations"]["conv"].read(conv);
+	  document["simulations"]["vtk_out"].read(vtk_out);
+	  
     }
     catch (PlbIOException& exception) {
       pcout << exception.what() << std::endl;
@@ -281,12 +288,12 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       // Switch off periodicity.
       //lattice.periodicity().toggleAll(false);
 
-      lattice.periodicity().toggle(0, false);
-      lattice.periodicity().toggle(1, true );
-      lattice.periodicity().toggle(2, true );
+      lattice.periodicity().toggle(0, nx_p);
+      lattice.periodicity().toggle(1, ny_p);
+      lattice.periodicity().toggle(2, nz_p);
 
       MultiScalarField3D<int> geometry(nx,ny,nz);
-      readGeometry(fNameIn, fNameOut, geometry, run, runnum, GeometryName);
+      readGeometry(fNameIn, fNameOut, geometry, run, runnum, vtk_out, GeometryName);
 
       porousMediaSetup(lattice, createLocalBoundaryCondition3D<T,DESCRIPTOR>(),
                        geometry, deltaP);
@@ -305,7 +312,6 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
           lattice.toggleInternalStatistics(true);
           pcout << "Iteration " << iT   << std::endl;
           pcout << "-----------------"  << std::endl;
-          writeGifs(lattice,iT,run);
           lattice.collideAndStream();
           new_avg_f = getStoredAverageEnergy(lattice);
           lattice.toggleInternalStatistics(false);
@@ -324,8 +330,9 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
       //   pcout << "Permeability:" << std::endl;
       computePermeability(lattice, nu, deltaP, lattice.getBoundingBox(), Perm, Vel);
-
-	    std::string outDir = fNameOut + "/";
+	  
+	  writeGifs(lattice,iT,run);
+	  std::string outDir = fNameOut + "/";
       std::string vel_name = outDir + GeometryName + "_vel.dat";
       plb_ofstream ofile3( vel_name.c_str() );
       ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
@@ -339,8 +346,10 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       }
       pcout << "Relative Permeability = " << rel_perm[run] << std::endl;
 
+	 if  (vtk_out == true) {
       pcout << "Writing VTK file ..." << std::endl;
       writeVTK(lattice, iT, run);
+	 }
     }
 
     pcout << "Printing outputs" << std::endl;
