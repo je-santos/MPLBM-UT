@@ -32,6 +32,12 @@ Requirements
 
 - Unix system (the Windows bash or the terminal in Mac)
 
+- The following dependencies are also needed (these are versions known to work):
+    - GCC 7.2
+    - OpenMPI 2.1.1
+    - Python 2.7.x
+
+
 ################################################################################
 Installation
 ################################################################################
