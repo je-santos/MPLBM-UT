@@ -4,7 +4,7 @@ Two periodic (in all directions) spherepacks
 
 Special thanks to Chiyu Xie for providing these geometries.
 
-The .txt files are the binary image from the XYZ coordinates (from the .dat files)
+The binary images are in the form of .txt files from  XYZ coordinates (.dat files)
 
 
 .. figure:: /illustrations/geos.png
