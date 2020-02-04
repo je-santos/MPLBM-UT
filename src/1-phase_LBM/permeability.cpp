@@ -135,7 +135,6 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     boundaryCondition->addPressureBoundary0N(inlet, lattice);
     setBoundaryDensity(lattice, inlet, (T) 1.);
 
-     // outlet slice assumed little inside the geometry
     Box3D outlet(nx-1,nx-1, 1,ny-2, 1,nz-2);
     boundaryCondition->addPressureBoundary0P(outlet, lattice);
     setBoundaryDensity(lattice, outlet, (T) 1. - deltaP*DESCRIPTOR<T>::invCs2);
@@ -164,7 +163,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
     // Write velocity-norm at x=1.
     imageWriter.writeScaledGif(createFileName("ux_inlet", run, 6),
-    *computeVelocityNorm(lattice, Box3D(0,0, 0,ny-1, 0,nz-1)),
+    *computeVelocityNorm(lattice, Box3D(2,2, 0,ny-1, 0,nz-1)),
     imSize, imSize );
 
     // Write velocity-norm at x=nx/2.
@@ -182,7 +181,6 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
   void computePermeability(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, T nu, T deltaP, Box3D domain, T& perm, T& meanU)
   {
-    pcout << "Computing the permeability." << std::endl;
 
     // Compute only the x-direction of the velocity (direction of the flow).
     plint xComponent = 0;
@@ -194,9 +192,9 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     meanU = computeAverage(*computeVelocityComponent(lattice, domain1, xComponent));
 
     pcout << "Average velocity     = " << meanU                    << std::endl;
-    pcout << "Lattice viscosity nu = " << nu                       << std::endl;
-    pcout << "Grad P               = " << deltaP/(T)(nx-1)         << std::endl;
-    perm = nu*meanU / (deltaP/(T)(nx-20));
+    //pcout << "Lattice viscosity nu = " << nu                       << std::endl;
+    //pcout << "Grad P               = " << deltaP/(T)(nx-1)         << std::endl;
+    perm = nu*meanU / (deltaP/(T)(nx-1));
     pcout << "Permeability         = " << perm 						<< std::endl;
     //  return meanU;
   }
@@ -218,7 +216,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 	  bool vtk_out;
     std::string GeometryName ;
     plint maxT;
-	  plint conv;
+	  T conv;
 
     std::string xmlFname;
     try {
@@ -276,6 +274,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     T Perm;
     T Vel;
     pcout << "Total simulations: " << runnum << std::endl;
+    pcout << "The convergence threshold is: " << conv << " %" << std::endl;
 
 
     for (plint run = 1; run <= runnum; ++run) {
@@ -356,16 +355,18 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     std::string output = outDir + GeometryName + "_output.dat";
     plb_ofstream ofile(output.c_str());
     ofile << "Outputs" << "\n\n";
-    ofile << "Krw from run: 2" << "\n" << "Krnw from run: " << (run_diff+1) << std::endl;
+    ofile << "Krw from run: " << "\n" << "Krnw from run: " << (run_diff+1) << std::endl;
     for (plint runs = 1; runs <= runnum; ++runs) {
 
 
       ofile << "Run   = " << runs        << std::endl;
       if (runs == 1) {
         ofile << "Absolute Permeability   = " << perm[runs]         << std::endl;
+
       }
 
       ofile << "Relative Permeability   = " << rel_perm[runs]         << std::endl;
+      ofile << "Mean Velocity   = " << meanU[runs]         << std::endl;
 
     }
   }

@@ -40,7 +40,7 @@ if add_mesh == true
 end
 
 % add a additional slices if requested
-blank_slice = squeeze( geom4palabos(1:num_slices,:,:)*0 );
+blank_slice  = geom4palabos(1:num_slices,:,:)*0 ;
 geom4palabos = cat(1, blank_slice, geom4palabos);
 geom4palabos = cat(1, geom4palabos, blank_slice);
 
