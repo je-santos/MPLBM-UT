@@ -3,6 +3,9 @@
 %% opening the file
 addpath ('../../pre-processing') %pre-precesing libraries
 im_loc = '../../domain_construction/Periodic_spherepacks/';
+unzip([im_loc 'periodic_spherepacks_data.zip'], ...
+      [im_loc 'periodic_spherepacks_data'])  % unzips the files that contain the geoemtry
+
 d_size = 200; %voxels each side
 fp = dlmread([im_loc 'periodic_spherepacks_data/1_200.txt']); %read raw file
 fp = reshape(fp, d_size,d_size,d_size);
