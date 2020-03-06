@@ -2,9 +2,9 @@
 
 %% opening the file
 addpath ('../../pre-processing') %pre-precesing libraries
-d_size = 500; %voxels each side
-f1 = fopen('input/spheres_a10_dx0.04_n500_segmented_unsigned_char.raw','r'); %read raw file
-fp = fread(f1, d_size*d_size*d_size,'uint8=>uint8');
+im_loc = '../../domain_construction/Periodic_spherepacks/';
+d_size = 200; %voxels each side
+fp = dlmread([im_loc 'periodic_spherepacks_data/1_200.txt']); %read raw file
 fp = reshape(fp, d_size,d_size,d_size);
 
 %% selecting a smaller subset
@@ -30,12 +30,7 @@ palabos_3Dmat = create_geom_edist(fp_printing,name,num_slices, add_mesh, ...
                                     swapXZ, scale_2);  
                                     %provides a very  efficient 
                                     %geometry for Palabos
-
-
-% old version
-%palabos_3Dmat = mat2dat_4lbm(fp_printing,name,1); %although this function is slow, it 
-                                    
-
+                               
 %% Mixed Wettability (the user could experiment with this)                                
 rng(123)                                    
 rnd_array = rand(size(palabos_3Dmat) );
