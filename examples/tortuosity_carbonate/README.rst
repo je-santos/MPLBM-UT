@@ -30,3 +30,10 @@ https://www.digitalrocksportal.org/projects/57/origin_data/287/
 
 
 To perform the simulation with the inputs specified in the .xml file
+
+.. figure:: /illustrations/tau.png
+    :align: center
+    :alt: alternate text
+    :figclass: align-center
+
+    Single-phase fluid velocity (as outputted by LBM) and time of flight (tortuosity)
