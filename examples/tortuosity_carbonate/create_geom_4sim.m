@@ -18,16 +18,16 @@ connect = 6; % pixel connectivity 6, 18, 26
 fp_printing = eliminate_isolatedRegions(fp_printing, connect); %for better convergence
 
 %% making a computationally efficent domain for sim
-name = ['carbonate4Palabos'];
-add_mesh   = false;% add a neutral-wet mesh at the end of the domain
-num_slices = 1;    % add n empty slices at the beggining and end of domain 
+geom.name       = ['carbonate4Palabos'];
+geom.print_size = true;
+geom.add_mesh   = false;% add a neutral-wet mesh at the end of the domain
+geom.num_slices = 1;    % add n empty slices at the beggining and end of domain 
                    % for pressure bcs
-swapXZ = true;     % Swap x and z data if needed to ensure Palabos simulation in Z-direction              
-scale_2 = false;   % Double the grain (pore) size if needed to prevent single pixel throats
+geom.swapXZ     = true;     % Swap x and z data if needed to ensure Palabos simulation in Z-direction              
+geom.scale_2    = false;   % Double the grain (pore) size if needed to prevent single pixel throats
                    % for tight/ low porosity geometries                   
 
-palabos_3Dmat = create_geom_edist(fp_printing,name,num_slices, add_mesh, ...
-                                    swapXZ, scale_2);  
+palabos_3Dmat = create_geom_edist(fp_printing,geom);  
                                     %provides a very  efficient 
                                     %geometry for Palabos
 

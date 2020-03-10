@@ -73,17 +73,17 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
 
   if (run > run_diff) { // Fluid 1 : Krnw
     const plint runner = run - run_diff;
-    fNameIn_temp =  fNameIn +"/lattice_f1_forK_" + patch::to_string(runner)+"_.dat";
-    pcout  << "Run Krnw "<< std::endl;
+    fNameIn_temp =  fNameIn + "f1_for_kr_" + patch::to_string(runner)+".dat";
+    pcout  << "Running kr_f1 "<< std::endl;
   }
 
   if ( run > 1 && run < (run_diff+1) ) { // Fluid 2 : Krw
-    fNameIn_temp =  fNameIn +"/lattice_f2_forK_"+ patch::to_string(run-1)+"_.dat";
-    pcout  << "Run Krw "<< std::endl;
+    fNameIn_temp =  fNameIn + "f2_for_kr_"+ patch::to_string(run-1)+".dat";
+    pcout  << "Running kr_f2 "<< std::endl;
   }
 
 
-  pcout  << "Geometry name is  "<< fNameIn_temp << std::endl;
+  pcout  << "The geometry name is  "<< fNameIn_temp << std::endl;
 
   std::auto_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
   plb_ifstream geometryFile(fNameIn_temp.c_str());
