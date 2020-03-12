@@ -14,7 +14,7 @@ for subdir_num = 1:length( subdirs_names )
     subdir = char( subdirs_names( subdir_num ) )
     if strcmp(subdir, kr.input_dir)
         domain_loc = dir([subdir '/' kr.input_geom '*dat']);
-        domain = load( [ subdir '/' domain_loc.name ] );
+        domain = load( [ subdir '/' domain_loc(end).name ] );
         domain = reshape(domain, flip(kr.domain_size));
         domain = erase_voxels(domain,kr.mesh_added,kr.num_slices);
         
@@ -39,7 +39,7 @@ for subdir_num = 1:length( subdirs_names )
         rho_loc = dir([subdir '/rho*dat']);
         for rhos = 1:length(rho_loc)
             rho_count = rho_count + 1;
-            rho = load( [ subdir '/' rho_loc.name] );
+            rho = load( [ subdir '/' rho_loc(rhos).name] );
             rho = reshape(rho, flip(kr.domain_size));
             rho = erase_voxels(rho,kr.mesh_added,kr.num_slices);
             fluid_mask = rho>1;
@@ -91,7 +91,7 @@ end
 fclose(fileID);
 
 function array = erase_voxels(array,mesh_added,num_slices)
-array(:,:,1:num_slices                       )=[];  %removes the first slices
-array(:,:,end-num_slices-(mesh_added*2)+1:end)=[];  %removes the last slices + mesh +1 more
+    array(:,:,1:num_slices                       )=[];  %removes the first slices
+    array(:,:,end-num_slices-(mesh_added*1)+1:end)=[];  %removes the last slices + mesh +1 more
 end
 
