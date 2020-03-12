@@ -91,7 +91,7 @@ For the example shown above, we performed a buble test where the interfacial ten
 
 **convergence:** This input takes the value of the convergence criterion for the simulation. The convergence value is inversely proportional to the computational time and the accuracy. See the examples for best practices.
 
-**it_max:** This input takes the value of maximum iterations allowed at a particular capillary pressure if the convergence is not reached.
+**it_max:** This input takes the value of maximum iterations allowed at  if the convergence is not reached. Roughly, in our supercomputer (LoneStar5) we can get 1M its ruuning in 96 cores for two days for a 200x200x200 domain. This is useful in case one would like to save the simulation dats files before the max run time (in our case, 2 days).
 
 **it_conv:** This input takes the value of number of iterations after which to check if convergence criterion is satisfied. This takes a certain computational overhead, since general statistics have to be computed.
 
