@@ -6,7 +6,7 @@ This workflow calculates capillary pressure curves, relative permeability, tortu
 
 This repository was created by Javier E. Santos and Abhishek Bihani
 
-in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic and Wenhui Song
+in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz
 
 .. figure:: /illustrations/percolation.png
     :align: right

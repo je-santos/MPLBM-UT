@@ -1,21 +1,21 @@
-function [geom4palabos]=create_geom_edist(data,name,num_slices,add_mesh,swapXZ,scale_2)
-
+%function [geom4palabos]=create_geom_edist(data,name,num_slices,add_mesh,swapXZ,scale_2)
+function [geom4palabos]=create_geom_edist(data,struct)
 %%%% Inputs:
 % data: image, where the pore-space is represented with zeros
-% name: string with the name of the file for printing
+% struct: structure with different fields
 
 tic
 
 % Swap x and z data if needed to ensure Palabos simulation in Z-direction
-if swapXZ == true
- data=permute(data,[3 2 1]);
+if struct.swapXZ == true
+    data=permute(data,[3 2 1]);
 end
 
 
 % Double the grain (pore) size if needed to prevent single pixel throats
 % for tight/ low porosity geometries
-if scale_2 == true
-    data = imresize3(data, 2, 'nearest'); 
+if struct.scale_2 == true
+    data = imresize3(data, 2, 'nearest');
 end
 
 %creates the computationally efficent geometry
@@ -31,7 +31,7 @@ geom4palabos(geom4palabos>1)=2;
 
 
 % add a mesh if requested
-if add_mesh == true
+if struct.add_mesh == true
     mesh = toeplitz(mod(1:size(geom4palabos,2),2),mod(1:size(geom4palabos,3),2));
     mesh(mesh==1)=4; %change the mesh to be neutral-wet
     mesh_s = zeros([1 size(mesh)]);
@@ -39,15 +39,21 @@ if add_mesh == true
     geom4palabos = cat(1, geom4palabos, mesh_s);
 end
 
-% add a additional slices if requested
-blank_slice = squeeze( geom4palabos(1:num_slices,:,:)*0 );
+% add additional slices if requested
+blank_slice  = geom4palabos(1:struct.num_slices,:,:)*0 ;
 geom4palabos = cat(1, blank_slice, geom4palabos);
 geom4palabos = cat(1, geom4palabos, blank_slice);
 
-% print the geometry 
-geom_name = [name '_' num2str( size(geom4palabos,1) ) '_' ...
-     num2str( size(geom4palabos,2) ) '_' num2str( size(geom4palabos,3) ) '.dat'];
- 
+% print the geometry
+
+if struct.print_size == true
+    geom_name = [struct.name '_' num2str( size(geom4palabos,1) ) '_' ...
+                                 num2str( size(geom4palabos,2) ) '_' ...
+                                 num2str( size(geom4palabos,3) ) '.dat'];
+else
+    geom_name = [struct.name '.dat'];
+end
+
 fid = fopen(['input/' geom_name], 'w'); % open the output file to write in
 
 for x_coor=1:size(geom4palabos,1)

@@ -14,9 +14,7 @@ Instructions
 
 .. code-block:: bash
 
-    wget "https://www.digitalrocksportal.org/media/projects/57/archive.zip" &&
-    unzip -j archive.zip 57/origin/287/images/grid_25.bin -d input/. &&
-    rm archive.zip
+    ./get_geom_fromDRP.sh
 
 or manually, from:
 
@@ -32,3 +30,10 @@ https://www.digitalrocksportal.org/projects/57/origin_data/287/
 
 
 To perform the simulation with the inputs specified in the .xml file
+
+.. figure:: /illustrations/tau.png
+    :align: center
+    :alt: alternate text
+    :figclass: align-center
+
+    Single-phase fluid velocity (as outputted by LBM) and time of flight (tortuosity)
