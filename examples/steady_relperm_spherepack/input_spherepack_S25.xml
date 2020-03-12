@@ -65,10 +65,10 @@
     <out_folder> tmp_25/ </out_folder>
     <!-- Save the simulation state after every capillary increment (big files) -->
     <save_sim> False </save_sim>
-	  <!-- Convergence criteron (density change) -->
+    <!-- Convergence criteron (density change) -->
     <convergence> 0.001 </convergence>
     <!-- Max iterations per Pc step -->
-    <it_max> 3000000 </it_max>
+    <it_max> 1000000 </it_max>
     <!-- Check for convergence every -->
     <it_conv> 1000 </it_conv>
     <!-- Print density gifs -->
