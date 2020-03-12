@@ -41,7 +41,7 @@
     <G_ads_f1_s3>  0.0 </G_ads_f1_s3>
     <G_ads_f1_s4>  0.0 </G_ads_f1_s4>
 
-	  <!-- Intial density of fluid 1 -->
+    <!-- Intial density of fluid 1 -->
     <rho_f1> 2 </rho_f1>
     <!-- Initial density of fluid 2 -->
     <rho_f2> 2 </rho_f2>
@@ -67,10 +67,10 @@
     <out_folder> tmp/ </out_folder>
     <!-- Save the simulation state after every capillary increment (big files) -->
     <save_sim> True </save_sim>
-	  <!-- Convergence criteron (density change) -->
+    <!-- Convergence criteron (density change) -->
     <convergence> 0.1 </convergence>
     <!-- Max iterations per Pc step -->
-    <it_max> 30000 </it_max>
+    <it_max> 1000000 </it_max>
     <!-- Check for convergence every -->
     <it_conv> 100 </it_conv>
     <!-- Print density gifs -->
