@@ -32,10 +32,9 @@ Requirements
 
 - Unix system (the Windows bash or the terminal in Mac)
 
-- The following dependencies are also needed (these are versions known to work):
-    - GCC 7.2
-    - OpenMPI 2.1.1
-    - Python 2.7.x
+- GCC 7.2
+- OpenMPI 2.1.1 or MPICH2
+- Python 2.7.x (to complie Palabos)
 
 
 ################################################################################
@@ -133,6 +132,22 @@ Why am I seeing the same line printed multiple times? / Why is the code so slow?
   sudo make install
 
 Note that this process takes a few hours.
+
+-----------------------------------------------------------------------------------------------------------
+
+I am getting a Java Heap Memory error in Matlab?
+You need to change the JavaHeapMemory setting in Matlab:
+
+If you're working on a remote system/cluster or supercomputer, the easiest way to do this is to find and change your matlab.prf file diretly.
+
+You will find the matlab.prf in your user storage directory. It will be something like:
+```[user home]/.matlab/[Matlab version]/matlab.prf```
+
+Once the file is open add the following line to the file:
+```JavaMemHeapMax = [Java Memory Code]```
+You will need to find the sepcific Java memory code that corresponds to the amount of RAM you need.
+
+Or you can try this fix (If you are on a remote system, cluster, or supercomputer this may not work): https://www.mathworks.com/matlabcentral/answers/74296-change-java-heap-memory-settings-without-starting-matlab
 
 ################################################################################
 Citing the workflow
