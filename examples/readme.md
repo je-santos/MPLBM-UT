@@ -1,5 +1,5 @@
-## English Explanation of inputs for 2 phase flow XML file (input_sc.xml)
-# followed by Chinese
+# English explanation of inputs for 2 phase flow XML file (input_sc.xml)
+## followed by the explaination in Chinese
 
 <img src="https://github.com/je-santos/MultiphasePorousMediaPalabos/blob/master/illustrations/LBM%20geometry%203D.png" align="middle" width="600" height="400" alt="geometry inputs explanation">
 
@@ -109,7 +109,7 @@ For the example shown above, we performed a buble test where the interfacial ten
 *Note:* The .vtk files may be viewed in [PARAVIEW](https://www.paraview.org/).
 
 
-## Chinese Explanation of inputs for 2 phase flow XML file (input_sc.xml)
+# Chinese explanation of inputs for 2 phase flow XML file (input_sc.xml)
 
 **两相流模型输入参数解释（input_sc.xml）
 
