@@ -15,6 +15,8 @@ in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui S
 
     Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
 
+----------------------------------------------------------------------------
+
 .. contents::
 
 
@@ -68,7 +70,7 @@ B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
 C) Post-processing (Matlab/Octave):
 
-- Read the generated vtk files using read_save_fluids.m
+- Read the generated  files using post-porcessing/domains_4_kr.m
 (It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate percolation path at breakthrough)
 
 D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):
