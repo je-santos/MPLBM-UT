@@ -14,7 +14,13 @@ for subdir_num = 1:length( subdirs_names )
     subdir = char( subdirs_names( subdir_num ) )
     if strcmp(subdir, kr.input_dir)
         domain_loc = dir([subdir '/' kr.input_geom '*dat']);
-        domain = load( [ subdir '/' domain_loc(end).name ] );
+        
+        if kr.pressure_bcs == true
+            domain = load( [ subdir '/' domain_loc(1).name ] );
+        else
+            domain = load( [ subdir '/' domain_loc(end).name ] );
+        end
+        
         domain = reshape(domain, flip(kr.domain_size));
         domain = erase_voxels(domain,kr.mesh_added,kr.num_slices);
         
