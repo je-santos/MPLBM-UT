@@ -4,9 +4,7 @@ Multiphase LBM Toolbox: Permeable media analysis using the Palabos library and i
 
 This workflow calculates capillary pressure curves, relative permeability, tortuosity, contact angles, and the percolation pathway of grain packs/image slices. The direct fluid flow simulation is performed using Palabos v2.
 
-This repository was created by Javier E. Santos and Abhishek Bihani
-
-in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz
+This repository was created by Javier E. Santos and Abhishek Bihani in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz
 
 .. figure:: /illustrations/percolation.png
     :align: right
