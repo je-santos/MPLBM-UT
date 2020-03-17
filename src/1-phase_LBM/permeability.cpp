@@ -352,7 +352,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
     pcout << "Printing outputs" << std::endl;
     std::string outDir = fNameOut + "/";
-    std::string output = outDir + GeometryName + "_output.dat";
+    std::string output = outDir + "relPerm&vels.txt";
     plb_ofstream ofile(output.c_str());
     ofile << "Outputs" << "\n\n";
     ofile << "Krw from run: " << "\n" << "Krnw from run: " << (run_diff+1) << std::endl;
