@@ -16,9 +16,9 @@ for subdir_num = 1:length( subdirs_names )
         domain_loc = dir([subdir '/' kr.input_geom '*dat']);
         
         if kr.pressure_bcs == true
-            domain = load( [ subdir '/' domain_loc(1).name ] );
-        else
             domain = load( [ subdir '/' domain_loc(end).name ] );
+        else
+            domain = load( [ subdir '/' domain_loc(1).name ] );
         end
         
         domain = reshape(domain, flip(kr.domain_size));
