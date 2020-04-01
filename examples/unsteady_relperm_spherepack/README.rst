@@ -23,23 +23,28 @@ Instructions
 
 .. code-block:: bash
 
-  wget "https://www.digitalrocksportal.org/media/projects/47/archive.zip" &&
-  unzip -j archive.zip origin/311/images/spheres_a10_dx0.04_n500_segmented_unsigned_char.raw -d input/.
+  fetch_image.sh
 
 or manually by downloading it from:
 
 https://www.digitalrocksportal.org/projects/47/origin_data/311/
 
-2. Run create_geom_4sim.m to create a computationally efficient (and artifact free) domain for simulation
+2. Run 
 
-3. Run
+.. code-block:: bash
+   
+   create_geom_4_2phase.m 
+   
+to create a computationally efficient (and artifact free) domain for simulation
+
+3. Then, run
 
 .. code-block:: bash
 
     run2-phase.sh
     
     
-To perform the simulation with the inputs specified in the .xml file
+To perform the simulation with the inputs specified in the .xml file. At several capillary pressure increments. For more information about this procedure, please refer to the validation_YoungLaplace in the examples folder.
 
 
 
