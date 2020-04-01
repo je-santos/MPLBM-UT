@@ -167,9 +167,8 @@ Author's Publications
 
 3. Landry, C. J., Karpyn, Z. T., and Ayala, O. (2014), Relative permeability of homogenous‐wet and mixed‐wet porous media as determined by pore‐scale lattice Boltzmann modeling, Water Resour. Res., 50, 3672– 3689, doi:10.1002/2013WR015148.
 
-4. NeuralNets
+4. Santos, J. E., Xu, D., Jo, H., Landry, C. J., Prodanović, M., & Pyrcz, M. J. (2020). PoreFlow-Net: A 3D convolutional neural network to predict fluid flow through porous media. Advances in Water Resources, 138, 103539.
 
-5. AWR
 
 ################################################################################
 Bibliographic references
