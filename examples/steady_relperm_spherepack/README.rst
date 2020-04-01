@@ -19,19 +19,43 @@ Additionally, we show how to download and simulate on volumes hosted at the digi
 Instructions
 ################################################################################
 
-1. Fetch the raw image from the digitalrockportal:
+1. Run:
 
 .. code-block:: bash
 
-  wget "https://www.digitalrocksportal.org/media/projects/47/archive.zip" &&
-  unzip -j archive.zip origin/311/images/spheres_a10_dx0.04_n500_segmented_unsigned_char.raw -d input/.
+  create_geom_4_2phase.m
 
-or manually by downloading it from:
+to build the geometry for simulation. In this example, this geometry is a spherepack with geometrically periodic boundary conditions in all directions.
 
-https://www.digitalrocksportal.org/projects/47/origin_data/311/
 
-2. Run create_geom_4sim.m to create a computationally efficient (and artifact free) domain for simulation
+2. In the input file (input_spherepack_S25.xml), I have set a simulation with periodic boundary conditions of a non-wetting fluid with a saturation of 25% (this can be changed in line 22) with a fluid force driving both fluids in the x-direction.
 
+3. Run:
+
+.. code-block:: bash
+
+  run_rel_perm.sh
+  
+to run the two-phase simulation. When this is done: 
+
+.. code-block:: bash
+
+  create_geoms_4_kr.m
+  
+builds geometries to calculate the relative permeability of the sample. These simulations are carried out with:
+
+.. code-block:: bash
+
+  run_rel_perm.sh
+  
+The final relative permeability curve looks like this:
+
+.. figure:: /illustrations/Steady_kr.PNG
+    :align: center
+    :alt: alternate text
+    :figclass: align-center
+
+    Resulting kr curves
 
 
 ################################################################################
