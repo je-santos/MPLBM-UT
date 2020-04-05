@@ -47,6 +47,15 @@ to create a computationally efficient (and artifact free) domain for simulation
 To perform the simulation with the inputs specified in the .xml file. At several capillary pressure increments. For more information about this procedure, please refer to the validation_YoungLaplace in the examples folder.
 
 
+The capillary pressure-saturation curve looks like this:
+
+.. figure:: /illustrations/PcSat.PNG
+    :align: center
+    :alt: alternate text
+    :figclass: align-center
+
+    Resulting Pc-Sat curve
+
 
 ################################################################################
 References
