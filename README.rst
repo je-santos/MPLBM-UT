@@ -80,8 +80,9 @@ Please refer to the unsteady state example for a complete workflow
 A) Pre-processing (Matlab/Octave):
 
 - To create the geometry for simulating with Palabos (.dat file),
-a) If the geometry is a 3D array, use pre-processing/create_geom_edist.m
-b) If the geometry is an image sequence, use pre-processing/createDAT.m
+
+    a) If the geometry is a 3D array, use pre-processing/create_geom_edist.m
+    b) If the geometry is an image sequence, use pre-processing/createDAT.m
 
 B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
