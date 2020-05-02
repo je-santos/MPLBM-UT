@@ -86,16 +86,16 @@ A) Pre-processing (Matlab/Octave):
 
 B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
-- Update geometry and simulation parameters in input xml file. An explanation of every input (in english and chinese) is provided in   `examples/1_two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
+    - Update geometry and simulation parameters in input xml file. An explanation of every input (in english and chinese) is provided in   `examples/1_two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
 
 C) Post-processing (Matlab/Octave):
 
-- Read the generated  files using post-porcessing/domains_4_kr.m
-(It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate percolation path at breakthrough)
+    - Read the generated  files using post-porcessing/domains_4_kr.m
+    (It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate percolation path at breakthrough)
 
 D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
-- Update geometry and simulation parameters in input xml file
+    - Update geometry and simulation parameters in input xml file
 
 Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation
 
