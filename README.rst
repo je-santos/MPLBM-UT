@@ -6,6 +6,20 @@ This workflow calculates capillary pressure curves, relative permeability, tortu
 
 This repository was created by Javier E. Santos and Abhishek Bihani in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz
 
+################################################################################
+Illustrations
+################################################################################
+
+.. figure:: /illustrations/purple_lbm.gif
+    :align: right
+    :alt: alternate text
+    :figclass: align-right
+
+    Non-wetting fluid (purple) traveling through a spherepack.
+
+----------------------------------------------------------------------------
+
+
 .. figure:: /illustrations/percolation.png
     :align: right
     :alt: alternate text
