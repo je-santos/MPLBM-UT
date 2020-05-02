@@ -19,6 +19,15 @@ Illustrations
 
 ----------------------------------------------------------------------------
 
+.. figure:: /illustrations/Tropical_simulation.gif
+    :align: right
+    :alt: alternate text
+    :figclass: align-right
+
+    Unsteady flow simulation showing a capillary pressure increment with different colors.
+
+----------------------------------------------------------------------------
+
 
 .. figure:: /illustrations/percolation.png
     :align: right
