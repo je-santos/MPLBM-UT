@@ -31,6 +31,15 @@ https://www.digitalrocksportal.org/projects/57/origin_data/287/
 
 To perform the simulation with the inputs specified in the .xml file
 
+
+4. Run 
+
+.. code-block:: bash
+
+    calculate_tau.m
+    
+To load the resulting velocity field (from the single-phase simulation) and use this to calculate the time of flight (tortuosity). 
+
 .. figure:: /illustrations/tau.png
     :align: center
     :alt: alternate text
