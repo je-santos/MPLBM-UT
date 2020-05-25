@@ -180,7 +180,8 @@ Citing the workflow
 
 If you use our workflow, please cite as:
 
-Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). https://github.com/je-santos/MultiphasePorousMediaPalabos
+Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). 
+DOI: 10.5281/zenodo.3842280 
 
 
 ################################################################################
