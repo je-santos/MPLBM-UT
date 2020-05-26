@@ -45,7 +45,7 @@ Illustrations
     :align: right
     :alt: alternate text
     :figclass: align-right
-    :figwidth: 10 
+   
 
     Velocity magnitude of a single phase flow simulation.
 
