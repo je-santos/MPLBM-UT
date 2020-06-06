@@ -148,6 +148,9 @@ SCons compilation error: create a conda enviroment with python2 (Palabos needs i
   ./Install.sh
 
 
+Another SCons compilation error: Because of the palabos source code.
+
+  "../MultiphasePorousMediaPalabos-0.1.0/src/palabos-v2.0r0/src/gridRefinement/couplingInterfaceGenerator3D.h" line 145,    "return dataProcessors;" should be "return *dataProcessors;".
 -----------------------------------------------------------------------------------------------------------
 
 Why am I seeing the same line printed multiple times? / Why is the code so slow?: Probably MPI is not installed in your system, this could be solved by:
