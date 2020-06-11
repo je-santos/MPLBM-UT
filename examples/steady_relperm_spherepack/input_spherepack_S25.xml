@@ -1,7 +1,16 @@
 <?xml version="1.0" ?>
 
 <!-- Load the state of a saved simulation -->
-<load_savedstated> False </load_savedstated>
+<restart>
+    <!-- Load the state of a saved simulation -->
+    <load_savedstated> false </load_savedstated>
+    <!-- Path of the fluid1 save state WITH PATH! -->
+    <fluid1_savefile> restart/spheres4Palabos_130000_lattice1.dat </fluid1_savefile>
+    <!-- Path of the fluid2 save state WITH PATH!-->
+    <fluid2_savefile> restart/spheres4Palabos_130000_lattice2.dat </fluid2_savefile>
+    <!-- Restart time  -->
+    <restart_time> 130000 </restart_time>
+</restart>
 
 <geometry>
     <!-- The name of the .dat file that with the geometry. -->
@@ -63,8 +72,6 @@
 <output>
     <!-- Output folder -->
     <out_folder> tmp_25/ </out_folder>
-    <!-- Save the simulation state after every capillary increment (big files) -->
-    <save_sim> False </save_sim>
     <!-- Convergence criteron (density change) -->
     <convergence> 0.001 </convergence>
     <!-- Max iterations per Pc step -->
@@ -77,6 +84,12 @@
     <rho_vtk> False </rho_vtk>
     <!-- print vtks every (big files) -->
     <it_vtk> 1000 </it_vtk>
+    <!-- Save the simulation state after every capillary increment (big files) -->
+    <save_sim> True </save_sim>
+    <!-- The name of the .dat file that Save the simulation state -->
+    <save_name> pheres4Palabos </save_name>
+    <!-- Save state every.. -->
+    <it_save> 10000 </it_save>
     <!-- print geometry at the beginning -->
     <print_geom> True </print_geom>
     <!-- print stl (for 3D printing and viewing)  -->

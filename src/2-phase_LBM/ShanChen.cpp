@@ -169,6 +169,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
         void PorousMediaSetup(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
           MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2,
+          std::string fluid1_savefile, std::string fluid2_savefile,
           MultiScalarField3D<int>& geometry,
           T rhoNoFluid, T rho_f1, T rho_f2, T Gads_f1_s1, T Gads_f1_s2,
           T Gads_f1_s3, T Gads_f1_s4, T force_f1, T force_f2,
@@ -187,8 +188,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
             if (load_state == true) {
 
-              loadBinaryBlock(lattice_fluid1, "lattice_fluid1.dat");
-              loadBinaryBlock(lattice_fluid2, "lattice_fluid2.dat");
+              loadBinaryBlock(lattice_fluid1, fluid1_savefile);
+              loadBinaryBlock(lattice_fluid2, fluid2_savefile);
 
 			        plb_ifstream ifile("runnum.dat");
 			        if (ifile.is_open()) {
@@ -269,6 +270,20 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
           }
 
+          void savestate(std::string outDir,
+                  MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1,
+                  MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid2,
+                  plint iT,std::string save_name) {
+                  
+                  std::string savetime = std::to_string(iT);
+                  //path to save state
+                  std::string Lattice1 = outDir + save_name + "_" + savetime + "_lattice1.dat";
+                  std::string Lattice2 = outDir + save_name + "_" + savetime + "_lattice2.dat";
+                  // saves a binary file (heavy) with the sim state
+                  saveBinaryBlock(lattice_fluid1, Lattice1);
+                  saveBinaryBlock(lattice_fluid2, Lattice2);
+          }
+
           int main(int argc, char* argv[])
           {
             // 1. Declaring the variables
@@ -277,8 +292,11 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             plbInit(&argc, &argv);
 
             bool load_state ;
+            std::string fluid1_savefile;
+            std::string fluid2_savefile;
             std::string fNameOut ;
             std::string fNameIn  ;
+            std::string save_name;
             plint nx, ny, nz;
 
             bool px_f1, py_f1, pz_f1, px_f2, py_f2, pz_f2; //periodicity
@@ -310,7 +328,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             plint it_info ;
             plint it_vtk ;
             plint it_gif ;
-
+            plint it_save;
+            plint restart_time;
 
             bool save_sim, rho_vtk, print_geom, print_stl ;
 
@@ -331,7 +350,10 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             try {
               XMLreader document(xmlFname);
 
-              document["load_savedstated"].read(load_state);
+              document["restart"]["load_savedstated"].read(load_state);
+              document["restart"]["fluid1_savefile"].read(fluid1_savefile);
+              document["restart"]["fluid2_savefile"].read(fluid2_savefile);
+              document["restart"]["restart_time"].read(restart_time);
 
               document["geometry"]["file_geom"].read(fNameIn);
               document["geometry"]["size"]["x"].read(nx);
@@ -383,7 +405,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
 
               document["output"]["out_folder"].read(fNameOut);
-              document["output"]["save_sim"].read(save_sim);
               document["output"]["convergence"].read(convergence);
 
               document["output"]["it_max"].read(it_max);
@@ -392,6 +413,9 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
               document["output"]["it_gif"].read(it_gif);
               document["output"]["it_vtk"].read(it_vtk);
               document["output"]["rho_vtk"].read(rho_vtk);
+              document["output"]["it_save"].read(it_save);
+              document["output"]["save_sim"].read(save_sim);
+              document["output"]["save_name"].read(save_name);
 
               document["output"]["print_geom"].read(print_geom);
               document["output"]["print_stl"].read(print_stl);
@@ -480,6 +504,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                   MultiScalarField3D<int> geometry(nx, ny, nz);
                   readGeometry(fNameIn, fNameOut, geometry);
 
+                  plint iT = 0;
                   // Loop simulations with varying saturation
                   for (plint runs = 1; runs <= runnum; ++runs) {
 
@@ -503,7 +528,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                     // set-up a new simulation domain
                     else
                     {
-                      PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry,
+                      PorousMediaSetup(lattice_fluid1, lattice_fluid2, fluid1_savefile,
+                        fluid2_savefile,geometry,
                         rhoNoFluid, rho_f1, rho_f2, Gads_f1_s1, Gads_f1_s2,
                         Gads_f1_s3, Gads_f1_s4, force_f1, force_f2,
                         nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
@@ -520,7 +546,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                       << "Starting simulation with rho 2:  " << rho_fluid2[runs] << endl;
 
                       plint checkconv = 0;
-                      plint iT = 0;
 
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
@@ -548,7 +573,12 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             writeVTK_rho(lattice_fluid2, "rho_f2_", runs_str, iT, nx, ny, nz);
                           }
                         }
-
+                        if (save_sim == true) {
+                          if (iT % it_save == 0 || iT == it_max) {
+                            // saves a binary file (heavy) with the sim state
+                            savestate(outDir,lattice_fluid1, lattice_fluid2,iT,save_name);
+                          }
+                        }
                         if (iT % it_conv == 0 ) {
                           // calculate average change in mass if bcs == pressure
                           new_avg_f1 = getStoredAverageDensity(lattice_fluid1)*(nx*ny*nz);
@@ -630,14 +660,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
                             plb_ofstream ofile3( vel_name.c_str() );
                             ofile3 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
-
-                            // saves a binary file (heavy) with the sim state
-                            if (save_sim == true)
-                            {
-                            saveBinaryBlock(lattice_fluid1, Lattice1);
-                            saveBinaryBlock(lattice_fluid2, Lattice2);
-                            }
-
 
                             // Calculate velocity here for both fluids in x-direction
                             T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
