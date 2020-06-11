@@ -54,8 +54,27 @@
     <rho_f1> 2 </rho_f1>
     <!-- Initial density of fluid 2 -->
     <rho_f2> 2 </rho_f2>
-    <!-- Include a pressure gradient bc (for flow)-->
-    <pressure_bc> False </pressure_bc>
+    <!-- Include a pressure gradient bc (for flow), Use palabos bulidin boundary condition-->
+    <bulidin_pressure_bc> false </bulidin_pressure_bc>
+
+    <manual_boundary>
+        <!-- Achieve density boundary condition by change density at boundary-->
+        <use_manual_boundary> True </use_manual_boundary>
+        <!-- Frequence of update density at boundary-->
+        <update_frequence> 10 </update_frequence>
+    </manual_boundary>
+    <!-- position of inlet boundary-->
+    <inlet_position>
+            <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
+            <x1> 0 </x1> <y1> 0 </y1> <z1> 0 </z1>
+            <x2> 1 </x2> <y2> 138 </y2> <z2> 138 </z2>
+    </inlet_position>
+    <!-- position of outlet boundary-->
+    <outlet_position>
+            <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
+            <x1> 137 </x1> <y1> 0 </y1> <z1> 0 </z1>
+            <x2> 137 </x2> <y2> 138 </y2> <z2> 138 </z2>
+    </outlet_position>
     <!-- Density of fluid 1 at the inlet (Constant)-->
     <rho_f1_i> 2 </rho_f1_i>
     <!-- Initial Density of fluid 2 at the outlet -->
