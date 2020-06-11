@@ -374,7 +374,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             }
 
             // 2. Read input parameters from the XML file.
-            cout << "Reading inputs from xml file \n";
+            pcout << "Reading inputs from xml file \n";
             try {
               XMLreader document(xmlFname);
 
