@@ -232,25 +232,10 @@ Contributing
 
 We welcome contributions. Find some ideas bellow:
 
-.. |check| raw:: html
-
-    <input checked=""  type="checkbox">
-
-.. |check_| raw:: html
-
-    <input checked=""  disabled="" type="checkbox">
-
-.. |uncheck| raw:: html
-
-    <input type="checkbox">
-
-.. |uncheck_| raw:: html
-
-    <input disabled="" type="checkbox">
-
-
-uncheck enable: |uncheck|
-
+- Moving boundary problem: propant transport or formation damage
+- Fluid with variable density
+- 3D grid refinement
+- better initialization for unsteady state sim
 
 
 
