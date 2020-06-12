@@ -298,12 +298,13 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
           void savestate(std::string outDir,
                   MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1,
                   MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid2,
-                  plint iT,std::string save_name) {
+                  plint iT,plint runs, std::string save_name) {
                   
                   std::string savetime = std::to_string(iT);
+                  std::string runnumber = std::to_string(runs);
                   //path to save state
-                  std::string Lattice1 = outDir + save_name + "_" + savetime + "_lattice1.dat";
-                  std::string Lattice2 = outDir + save_name + "_" + savetime + "_lattice2.dat";
+                  std::string Lattice1 = outDir + save_name + "_run_" + runnumber + "_" + savetime + "_lattice1.dat";
+                  std::string Lattice2 = outDir + save_name + "_run_" + runnumber + "_" + savetime + "_lattice2.dat";
                   // saves a binary file (heavy) with the sim state
                   saveBinaryBlock(lattice_fluid1, Lattice1);
                   saveBinaryBlock(lattice_fluid2, Lattice2);
@@ -645,7 +646,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                         if (save_sim == true) {
                           if (iT % it_save == 0 || iT == it_max) {
                             // saves a binary file (heavy) with the sim state
-                            savestate(outDir,lattice_fluid1, lattice_fluid2,iT,save_name);
+                            savestate(outDir,lattice_fluid1, lattice_fluid2, iT, runs, save_name);
                           }
                         }
                         if (iT % it_conv == 0 ) {
@@ -733,8 +734,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             // saves a binary file (heavy) with the sim state
                             if (save_sim == true) {      
 
-                              save_name = save_name + "_converged_";
-                              savestate(outDir,lattice_fluid1, lattice_fluid2,iT,save_name);
+                              string converged_save_name = save_name + "_converged";
+                              savestate(outDir,lattice_fluid1, lattice_fluid2, iT, runs, converged_save_name);
 
                             }
 
