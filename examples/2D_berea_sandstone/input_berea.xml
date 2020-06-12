@@ -7,8 +7,10 @@
     <fluid1_savefile> restart/berea_1106_991_220000_lattice1.dat </fluid1_savefile>
     <!-- Path of the fluid2 save state WITH PATH!-->
     <fluid2_savefile> restart/berea_1106_991_220000_lattice2.dat </fluid2_savefile>
+    <!-- Restart form run number..  -->
+    <restart_run_number> 1 </restart_run_number>
     <!-- Restart time  -->
-    <!-- <restart_time> 220000 </restart_time> -->
+    <restart_time> 220000 </restart_time>
 </restart>
 
 <geometry>

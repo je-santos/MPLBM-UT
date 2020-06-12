@@ -357,6 +357,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             plint it_vtk ;
             plint it_gif ;
             plint it_save;
+            plint restart_run_number;
             plint restart_time;
 
             bool save_sim, rho_vtk, print_geom, print_stl ;
@@ -381,7 +382,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
               document["restart"]["load_savedstated"].read(load_state);
               document["restart"]["fluid1_savefile"].read(fluid1_savefile);
               document["restart"]["fluid2_savefile"].read(fluid2_savefile);
-              // document["restart"]["restart_time"].read(restart_time);
+              document["restart"]["restart_run_number"].read(restart_run_number);
+              document["restart"]["restart_time"].read(restart_time);
 
               document["geometry"]["file_geom"].read(fNameIn);
               document["geometry"]["size"]["x"].read(nx);
@@ -546,16 +548,27 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                   MultiScalarField3D<int> geometry(nx, ny, nz);
                   readGeometry(fNameIn, fNameOut, geometry);
 
+                  //  iteration time steps
+                  plint iT = 0;
+                  // logging the current run type to see if it's the first run of a restart simulation
+                  bool restart_sim = false;
                   //TODO RESTORE BOUNDARY VALUE WHEN LOADING A STATE
-                  // if (load_state == true){
-                  //   iT = restart_time;
-                  //   pcout << "simulation restart at iT = " << iT <<"\n"<< std::endl;
-                  // }
+                  if (load_state == true) {
+                    iT = restart_time;
+                    restart_sim == true;
+                    pcout << "simulation restart at iT = " << iT <<"\n"<< std::endl;
+                    pcout <<"simulation restart at run number: " << restart_run_number <<"\n"<< std::endl;
+                  }
+                  else 
+                  {
+                    //set restart_run_number to 1 if it's not a restart simulation
+                    restart_run_number = 1;
+                  }
 
                   Box3D inlet(inlet_x1-1, inlet_x2-1, inlet_y1-1, inlet_y2-1, inlet_z1-1, inlet_z2-1);
                   Box3D outlet(outlet_x1-1, outlet_x2-1, outlet_y1-1, outlet_y2-1, outlet_z1-1, outlet_z2-1);
                   // Loop simulations with varying saturation
-                  for (plint runs = 1; runs <= runnum; ++runs) {
+                  for (plint runs = restart_run_number; runs <= runnum; ++runs) {
 
                     // turn off stats for efficency
                     lattice_fluid1.toggleInternalStatistics(false);
@@ -570,7 +583,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                     pcout << "Run number = " << runs << endl;
 
                     // re-use the final state of the previous run
-                    if (runs > 1)
+                    // if it is a restart run it should setup the domain first
+                    if (runs > 1 && restart_sim == false)
                     {
                       pcout << "Using previous simulation state  " << endl;
                       if (!bulidin_pressure_bc){
@@ -588,6 +602,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                         nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
                         nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, runs,
                         load_state, print_geom);
+                        // PorousMediaSetup is done for a restart sim
+                        restart_sim = false;
                       }
 
                       T new_avg_f1, new_avg_f2, old_avg_f1, old_avg_f2;
@@ -599,7 +615,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                       << "Starting simulation with rho 2:  " << rho_fluid2[runs] << endl;
 
                       plint checkconv = 0;
-                      plint iT = 0;
 
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
@@ -718,7 +733,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             // saves a binary file (heavy) with the sim state
                             if (save_sim == true) {      
 
-                              save_name = save_name + "_converged_"
+                              save_name = save_name + "_converged_";
                               savestate(outDir,lattice_fluid1, lattice_fluid2,iT,save_name);
 
                             }
