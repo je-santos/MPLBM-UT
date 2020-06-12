@@ -67,13 +67,13 @@
     <inlet_position>
             <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
             <x1> 0 </x1> <y1> 0 </y1> <z1> 0 </z1>
-            <x2> 1 </x2> <y2> 138 </y2> <z2> 138 </z2>
+            <x2> 1 </x2> <y2> 200 </y2> <z2> 200 </z2>
     </inlet_position>
     <!-- position of outlet boundary-->
     <outlet_position>
             <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
-            <x1> 137 </x1> <y1> 0 </y1> <z1> 0 </z1>
-            <x2> 137 </x2> <y2> 138 </y2> <z2> 138 </z2>
+            <x1> 199 </x1> <y1> 0 </y1> <z1> 0 </z1>
+            <x2> 200 </x2> <y2> 200 </y2> <z2> 200 </z2>
     </outlet_position>
     <!-- Density of fluid 1 at the inlet (Constant)-->
     <rho_f1_i> 2 </rho_f1_i>

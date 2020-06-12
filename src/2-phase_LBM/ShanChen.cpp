@@ -552,8 +552,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                     pcout << "simulation restart at iT = " << iT <<"\n"<< std::endl;
                   }
 
-                  Box3D inlet(inlet_x1, inlet_x2, inlet_y1, inlet_y2, inlet_z1, inlet_z2);
-                  Box3D outlet(outlet_x1, outlet_x2, outlet_y1, outlet_y2, outlet_z1, outlet_z2);
+                  Box3D inlet(inlet_x1-1, inlet_x2-1, inlet_y1-1, inlet_y2-1, inlet_z1-1, inlet_z2-1);
+                  Box3D outlet(outlet_x1-1, outlet_x2-1, outlet_y1-1, outlet_y2-1, outlet_z1-1, outlet_z2-1);
                   // Loop simulations with varying saturation
                   for (plint runs = 1; runs <= runnum; ++runs) {
 
