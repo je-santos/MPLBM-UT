@@ -381,7 +381,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
               document["restart"]["load_savedstated"].read(load_state);
               document["restart"]["fluid1_savefile"].read(fluid1_savefile);
               document["restart"]["fluid2_savefile"].read(fluid2_savefile);
-              document["restart"]["restart_time"].read(restart_time);
+              // document["restart"]["restart_time"].read(restart_time);
 
               document["geometry"]["file_geom"].read(fNameIn);
               document["geometry"]["size"]["x"].read(nx);
@@ -546,11 +546,11 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                   MultiScalarField3D<int> geometry(nx, ny, nz);
                   readGeometry(fNameIn, fNameOut, geometry);
 
-                  plint iT = 0;
-                  if (load_state == true){
-                    iT = restart_time;
-                    pcout << "simulation restart at iT = " << iT <<"\n"<< std::endl;
-                  }
+                  //TODO RESTORE BOUNDARY VALUE WHEN LOADING A STATE
+                  // if (load_state == true){
+                  //   iT = restart_time;
+                  //   pcout << "simulation restart at iT = " << iT <<"\n"<< std::endl;
+                  // }
 
                   Box3D inlet(inlet_x1-1, inlet_x2-1, inlet_y1-1, inlet_y2-1, inlet_z1-1, inlet_z2-1);
                   Box3D outlet(outlet_x1-1, outlet_x2-1, outlet_y1-1, outlet_y2-1, outlet_z1-1, outlet_z2-1);
@@ -599,6 +599,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                       << "Starting simulation with rho 2:  " << rho_fluid2[runs] << endl;
 
                       plint checkconv = 0;
+                      plint iT = 0;
 
                       while (checkconv == 0) { // Main loop over time iterations.
                         iT = iT + 1;
@@ -713,6 +714,14 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
                             plb_ofstream ofile3( vel_name.c_str() );
                             ofile3 << setprecision(1) <<*computeVelocity(lattice_fluid1) << endl;
+                            
+                            // saves a binary file (heavy) with the sim state
+                            if (save_sim == true) {      
+
+                              save_name = save_name + "_converged_"
+                              savestate(outDir,lattice_fluid1, lattice_fluid2,iT,save_name);
+
+                            }
 
                             // Calculate velocity here for both fluids in x-direction
                             T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
