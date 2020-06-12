@@ -24,7 +24,7 @@ or manually by downloading it from:
 https://www.digitalrocksportal.org/projects/79/origin_data/312/
 
 You need to convert it from .tif to .raw.
-We provide a preconverted image with.
+We provide a preconverted image.
 
 2. Run 
 
