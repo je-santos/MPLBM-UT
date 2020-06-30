@@ -1,5 +1,5 @@
 ================================================================================
-Multiphase LBM Toolbox (MPLBM-UT): Permeable media analysis using the Palabos library and in-house codes
+MPLBM-UT: Multiphase LBM Toolbox for permeable media analysis 
 ================================================================================
 .. image:: https://zenodo.org/badge/174389090.svg
    :target: https://zenodo.org/badge/latestdoi/174389090
