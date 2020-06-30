@@ -8,6 +8,8 @@ MPLBM-UT supports the calculation of capillary pressure and relative permeabilit
 
 This repository was created by Javier E. Santos and Abhishek Bihani in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz at The University of Texas at Austin.
 
+We gratefully acknowledge the improvements made by Jia Haowei.
+
 The direct fluid flow simulation is performed using Palabos v2. We utilice the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
 
 ################################################################################
