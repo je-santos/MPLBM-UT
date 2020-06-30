@@ -45,6 +45,4 @@ to create a computationally efficient (and artifact free) domain for simulation
     run2-phase.sh
     
     
-To perform the simulation with the inputs specified in the .xml file. At several capillary pressure increments. For more information about this procedure, please refer to the validation_YoungLaplace in the examples folder.
-
-
+To perform the simulation with the inputs specified in the .xml file. At several capillary pressure increments. 
