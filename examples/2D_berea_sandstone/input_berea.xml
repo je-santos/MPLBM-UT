@@ -1,39 +1,40 @@
 <?xml version="1.0" ?>
 
-<!-- Load the state of a saved simulation -->
 <restart>
     <!-- Load the state of a saved simulation -->
     <load_savedstated> false </load_savedstated>
     <!-- Path of the fluid1 save state WITH PATH! -->
-    <fluid1_savefile> restart/flat_surface_lattice1.dat </fluid1_savefile>
+    <fluid1_savefile> restart/berea_1106_991_220000_lattice1.dat </fluid1_savefile>
     <!-- Path of the fluid2 save state WITH PATH!-->
-    <fluid2_savefile> restart/flat_surface_lattice2.dat </fluid2_savefile>
+    <fluid2_savefile> restart/berea_1106_991_220000_lattice2.dat </fluid2_savefile>
+    <!-- Restart form run number..  -->
+    <restart_run_number> 1 </restart_run_number>
     <!-- Restart time  -->
-    <!-- <restart_time> 130000 </restart_time> -->
+    <restart_time> 220000 </restart_time>
 </restart>
 
 <geometry>
     <!-- The name of the .dat file that with the geometry. -->
-    <file_geom> input/flat_surface.dat </file_geom>
+    <file_geom> input/Berea_1106_991_1.dat </file_geom>
     <!-- Size (in voxels) of the simulation domain. -->
-    <size> <x> 100 </x> <y> 100 </y> <z> 100 </z> </size>
+    <size> <x> 1106 </x> <y> 991 </y> <z> 1 </z> </size>
     <!-- Periodicity in the boundary conditions -->
     <per>
-          <fluid1> <x> true </x> <y> true </y> <z> true </z> </fluid1>
-          <fluid2> <x> true </x> <y> true </y> <z> true </z> </fluid2>
+          <fluid1> <x> false </x> <y> false </y> <z> true </z> </fluid1>
+          <fluid2> <x> false </x> <y> false </y> <z> true </z> </fluid2>
     </per>
 </geometry>
 
 <init>
   <!-- Initial position of fluid 1 -->
     <fluid1>
-          <x1> 040 </x1> <y1> 005 </y1> <z1> 040 </z1>
-          <x2> 050 </x2> <y2> 025 </y2> <z2> 050 </z2>
+            <x1> 1 </x1> <y1> 001 </y1> <z1> 001 </z1>
+            <x2> 4 </x2> <y2> 991 </y2> <z2> 001 </z2>
     </fluid1>
   <!-- Initial position of fluid 2  -->
     <fluid2>
-          <x1> 000 </x1> <y1> 000 </y1> <z1> 000 </z1>
-          <x2> 100 </x2> <y2> 100 </y2> <z2> 100 </z2>
+            <x1> 5 </x1> <y1> 001 </y1> <z1> 001 </z1>
+            <x2> 1106 </x2> <y2> 991 </y2> <z2> 001 </z2>
     </fluid2>
 </init>
 
@@ -42,20 +43,22 @@
     <Gc> 0.9 </Gc>
     <omega_f1> 1 </omega_f1>
     <omega_f2> 1 </omega_f2>
+    <force1_direction> y </force1_direction>
     <force_f1> 0 </force_f1>
+    <force2_direction> z </force2_direction>
     <force_f2> 0 </force_f2>
     <!-- Wetting forces Huang et al., 2007. -->
-    <G_ads_f1_s1> -0.4 </G_ads_f1_s1>
+    <G_ads_f1_s1>  0.0 </G_ads_f1_s1>
     <G_ads_f1_s2>  0.0 </G_ads_f1_s2>
     <G_ads_f1_s3>  0.0 </G_ads_f1_s3>
     <G_ads_f1_s4>  0.0 </G_ads_f1_s4>
 
-	  <!-- Intial density of fluid 1 -->
+	<!-- Intial density of fluid 1 -->
     <rho_f1> 2 </rho_f1>
     <!-- Initial density of fluid 2 -->
     <rho_f2> 2 </rho_f2>
     <!-- Include a pressure gradient bc (for flow), Use palabos bulidin boundary condition-->
-    <bulidin_pressure_bc> false </bulidin_pressure_bc>
+    <bulidin_pressure_bc> True </bulidin_pressure_bc>
     <!--manual_boundary and bulidin_pressure_bc can not both be True at the same time-->
     <manual_boundary>
         <!-- Achieve density boundary condition by change density at boundary-->
@@ -66,14 +69,14 @@
     <!-- position of inlet boundary-->
     <inlet_position>
             <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
-            <x1> 0 </x1> <y1> 0 </y1> <z1> 0 </z1>
-            <x2> 0 </x2> <y2> 199 </y2> <z2> 199 </z2>
+            <x1> 1 </x1> <y1> 1 </y1> <z1> 1 </z1>
+            <x2> 1 </x2> <y2> 991 </y2> <z2> 1 </z2>
     </inlet_position>
     <!-- position of outlet boundary-->
     <outlet_position>
             <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
-            <x1> 199 </x1> <y1> 0 </y1> <z1> 0 </z1>
-            <x2> 199 </x2> <y2> 199 </y2> <z2> 199 </z2>
+            <x1> 1105 </x1> <y1> 1 </y1> <z1> 1 </z1>
+            <x2> 1105 </x2> <y2> 991 </y2> <z2> 1 </z2>
     </outlet_position>
     <!-- Density change of fluid 2 at outlet per capillary increment -->
     <num_pc> 0.05 </num_pc>
@@ -82,39 +85,37 @@
     <!-- Initial Density of fluid 2 at the outlet -->
     <rho_f2_i> 2 </rho_f2_i>
     <!-- Final density of fluid 2 at the outlet (after n-steps) -->
-    <rho_f2_f> 2 </rho_f2_f>
+    <rho_f2_f> 1.5 </rho_f2_f>
     <!-- Dissolved density of one phase in the other (both f1 and f2) -->
     <rho_d> 0.06 </rho_d>
-    <!-- Decrement in outlet density (equivalent to pressure change) per cap increment -->
+    <!-- Decrement in outlet density -->
     <drho_f2> 0.1 </drho_f2>
 </fluids>
 
 
 <output>
     <!-- Output folder -->
-    <out_folder> tmp_25/ </out_folder>
-    <!-- Save the simulation state after every capillary increment (big files) -->
-    <save_sim> False </save_sim>
+    <out_folder> tmp/ </out_folder>
+    <!-- stop simulation when convergence achieve -->
+    <control_by_convergence> False </control_by_convergence>
 	  <!-- Convergence criteron (density change) -->
-    <convergence> 0.001 </convergence>
+    <convergence> 0.1 </convergence>
     <!-- Max iterations per Pc step -->
-    <it_max> 3000000 </it_max>
+    <it_max> 200000 </it_max>
     <!-- Check for convergence every -->
-    <it_conv> 1000 </it_conv>
+    <it_conv> 100 </it_conv>
     <!-- Print density gifs -->
-    <it_gif> 1000 </it_gif>
+    <it_gif> 100 </it_gif>
     <!-- Write f1 and f2 density vtks (True). Only f1 (False) -->
-    <rho_vtk> False </rho_vtk>
+    <rho_vtk> True </rho_vtk>
     <!-- print vtks every (big files) -->
-    <it_vtk> 1000 </it_vtk>
+    <it_vtk> 100 </it_vtk>
+    <!-- print geometry at the beginning -->
+    <print_geom> True </print_geom>
     <!-- Save the simulation state after every capillary increment (big files) -->
     <save_sim> True </save_sim>
     <!-- The name of the .dat file that Save the simulation state -->
-    <save_name> pheres4Palabos </save_name>
+    <save_name> berea_1106_991 </save_name>
     <!-- Save state every.. -->
-    <it_save> 1000000 </it_save>
-    <!-- print geometry at the beginning -->
-    <print_geom> True </print_geom>
-    <!-- print stl (for 3D printing and viewing)  -->
-    <print_stl> True </print_stl>
+    <it_save> 5000 </it_save>
 </output>

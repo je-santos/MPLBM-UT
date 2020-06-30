@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<geometry>
+    <!-- The name of the .dat file that contains the entire geometry-->
+    <file_geom> Berea_1106_991_1.dat </file_geom>
+    <!-- Size (in voxels) of the simulation domain. -->
+    <size> <x> 1106 </x> <y> 991 </y> <z> 1 </z> </size>
+    <!-- Turn periodicty TRUE or FALSE in x,y,z. -->
+    <per> <x> false </x> <y> true </y> <z> true </z> </per>
+</geometry>
+
+<folder>
+    <!-- Output folder -->
+    <out_f> tmp/ </out_f>
+    <!-- Input folder -->
+    <in_f> input/ </in_f>
+</folder>
+
+<simulations>
+	<!-- Total number of geometries / individual simulations -->
+	<num> 1 </num>
+	<!-- Pressure-->
+    <press> 0.0002 </press>
+	<!-- Max iterations-->
+    <iter> 500000 </iter>
+	<!-- Convergence-->
+    <conv> 0.002 </conv>
+  <!-- Save vtks for medium and velocity-->
+    <vtk_out> true </vtk_out>
+</simulations>

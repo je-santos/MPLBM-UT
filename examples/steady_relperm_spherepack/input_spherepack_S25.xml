@@ -1,7 +1,18 @@
 <?xml version="1.0" ?>
 
 <!-- Load the state of a saved simulation -->
-<load_savedstated> False </load_savedstated>
+<restart>
+    <!-- Load the state of a saved simulation -->
+    <load_savedstated> false </load_savedstated>
+    <!-- Path of the fluid1 save state WITH PATH! -->
+    <fluid1_savefile> restart/spheres4Palabos_130000_lattice1.dat </fluid1_savefile>
+    <!-- Path of the fluid2 save state WITH PATH!-->
+    <fluid2_savefile> restart/spheres4Palabos_130000_lattice2.dat </fluid2_savefile>
+    <!-- Restart form run number..  -->
+    <restart_run_number> 1 </restart_run_number>
+    <!-- Restart time  -->
+    <restart_time> 130000 </restart_time>
+</restart>
 
 <geometry>
     <!-- The name of the .dat file that with the geometry. -->
@@ -45,8 +56,27 @@
     <rho_f1> 2 </rho_f1>
     <!-- Initial density of fluid 2 -->
     <rho_f2> 2 </rho_f2>
-    <!-- Include a pressure gradient bc (for flow)-->
-    <pressure_bc> False </pressure_bc>
+    <!-- Include a pressure gradient bc (for flow), Use palabos bulidin boundary condition-->
+    <bulidin_pressure_bc> false </bulidin_pressure_bc>
+
+    <manual_boundary>
+        <!-- Achieve density boundary condition by change density at boundary-->
+        <use_manual_boundary> True </use_manual_boundary>
+        <!-- Frequence of update density at boundary-->
+        <update_frequence> 10 </update_frequence>
+    </manual_boundary>
+    <!-- position of inlet boundary-->
+    <inlet_position>
+            <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
+            <x1> 0 </x1> <y1> 0 </y1> <z1> 0 </z1>
+            <x2> 1 </x2> <y2> 200 </y2> <z2> 200 </z2>
+    </inlet_position>
+    <!-- position of outlet boundary-->
+    <outlet_position>
+            <!-- If bulidin_pressure_bc is chosen, the boundary should be 1 layer thick (x1=x2)-->
+            <x1> 199 </x1> <y1> 0 </y1> <z1> 0 </z1>
+            <x2> 200 </x2> <y2> 200 </y2> <z2> 200 </z2>
+    </outlet_position>
     <!-- Density of fluid 1 at the inlet (Constant)-->
     <rho_f1_i> 2 </rho_f1_i>
     <!-- Initial Density of fluid 2 at the outlet -->
@@ -63,8 +93,6 @@
 <output>
     <!-- Output folder -->
     <out_folder> tmp_25/ </out_folder>
-    <!-- Save the simulation state after every capillary increment (big files) -->
-    <save_sim> False </save_sim>
     <!-- Convergence criteron (density change) -->
     <convergence> 0.001 </convergence>
     <!-- Max iterations per Pc step -->
@@ -77,6 +105,12 @@
     <rho_vtk> False </rho_vtk>
     <!-- print vtks every (big files) -->
     <it_vtk> 1000 </it_vtk>
+    <!-- Save the simulation state after every capillary increment (big files) -->
+    <save_sim> True </save_sim>
+    <!-- The name of the .dat file that Save the simulation state -->
+    <save_name> pheres4Palabos </save_name>
+    <!-- Save state every.. -->
+    <it_save> 10000 </it_save>
     <!-- print geometry at the beginning -->
     <print_geom> True </print_geom>
     <!-- print stl (for 3D printing and viewing)  -->
