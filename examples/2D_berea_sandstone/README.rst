@@ -2,6 +2,7 @@
 Simulation using 2D image
 ================================================================================
 Author: JIA Haowei, South West Petroleum University
+
 E-mail contact: nv4dll@outlook.com
 
 
