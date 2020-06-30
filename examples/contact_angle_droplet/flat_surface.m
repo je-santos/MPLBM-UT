@@ -8,8 +8,10 @@ dom.size_x=100;
 dom.size_y=100;
 dom.size_z=100;
 
+mkdir('input')
+fid_domain1=fopen(['input/' dom.name '.dat'],'w');
 
-fid_domain1=fopen([dom.name '.dat'],'w');
+
 C=ones(dom.size_x,dom.size_y);  % floor
 B=C*0;                          % empty space
 
