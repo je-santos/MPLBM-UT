@@ -167,14 +167,28 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
         }
 
 
+        void setboundaryvalue(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
+	                      MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2,
+	                      Box3D inlet, Box3D outlet,
+	                      T rho_f1_inlet, T rho_f2_outlet, T rhoNoFluid) {
+
+	          setBoundaryDensity(lattice_fluid1, inlet, rho_f1_inlet);
+	          setBoundaryDensity(lattice_fluid2, inlet, rhoNoFluid);
+	          setBoundaryDensity(lattice_fluid1, outlet, rhoNoFluid);
+	          setBoundaryDensity(lattice_fluid2, outlet, rho_f2_outlet);
+
+	        }
+
         void PorousMediaSetup(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
           MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid2,
           MultiScalarField3D<int>& geometry,
+          OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition,
+          Box3D inlet, Box3D outlet,
           T rhoNoFluid, T rho_f1, T rho_f2, T Gads_f1_s1, T Gads_f1_s2,
           T Gads_f1_s3, T Gads_f1_s4, T force_f1, T force_f2,
           T nx1_f1, T nx2_f1, T ny1_f1, T ny2_f1, T nz1_f1, T nz2_f1, T nx1_f2,
           T nx2_f2, T ny1_f2, T ny2_f2, T nz1_f2, T nz2_f2, T runs,
-          bool load_state, bool print_geom)
+          bool load_state, bool print_geom, bool use_plb_bc)
           {
 
             plint nx = lattice_fluid2.getNx();
@@ -183,6 +197,21 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
 
             pcout << "Definition of the geometry." << endl;
+
+            Array<T, 3> zeroVelocity(0., 0., 0.);
+            if (use_plb_bc==true){
+              boundaryCondition->addPressureBoundary0N(inlet, lattice_fluid1);
+              boundaryCondition->addPressureBoundary0N(inlet, lattice_fluid2);
+              // I'll hard code the numbers for now
+              setBoundaryDensity(lattice_fluid1, inlet, 2.0);
+              setBoundaryDensity(lattice_fluid2, inlet, 0.6);
+
+              boundaryCondition->addPressureBoundary0P(outlet, lattice_fluid1);
+              boundaryCondition->addPressureBoundary0P(outlet, lattice_fluid2);
+              setBoundaryDensity(lattice_fluid1, outlet, 0.6);
+              setBoundaryDensity(lattice_fluid2, outlet, 2.0);
+              delete boundaryCondition;
+            }
 
 
             if (load_state == true) {
@@ -224,7 +253,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
               defineDynamics(lattice_fluid1, geometry, new BounceBack<T, DESCRIPTOR>( Gads_f1_s4), 6);
               defineDynamics(lattice_fluid2, geometry, new BounceBack<T, DESCRIPTOR>(-Gads_f1_s4), 6);
 
-              Array<T, 3> zeroVelocity(0., 0., 0.);
+              //Array<T, 3> zeroVelocity(0., 0., 0.);
 
               if (load_state == false) {
               pcout << "Initializing Fluids" << endl;
@@ -281,6 +310,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             std::string fNameIn  ;
             plint nx, ny, nz;
 
+            bool use_plb_bc;  //
             bool px_f1, py_f1, pz_f1, px_f2, py_f2, pz_f2; //periodicity
             bool pressure_bc;
             plint nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1; //fluid1 configuration
@@ -312,7 +342,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             plint it_gif ;
 
 
-            bool save_sim, rho_vtk, print_geom, print_stl ;
+            bool save_sim, save_it, rho_vtk, print_geom, print_stl ;
 
             T convergence ;
 
@@ -327,7 +357,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             }
 
             // 2. Read input parameters from the XML file.
-            cout << "Reading inputs from xml file \n";
+            pcout << "Reading inputs from xml file \n";
             try {
               XMLreader document(xmlFname);
 
@@ -384,6 +414,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
 
               document["output"]["out_folder"].read(fNameOut);
               document["output"]["save_sim"].read(save_sim);
+              //document["output"]["save_it"].read(save_it);
+              save_it = 10000000;
               document["output"]["convergence"].read(convergence);
 
               document["output"]["it_max"].read(it_max);
@@ -480,8 +512,22 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                   MultiScalarField3D<int> geometry(nx, ny, nz);
                   readGeometry(fNameIn, fNameOut, geometry);
 
+                  Box3D inlet( 1,    2,    1, ny-2, 1, nz-2);
+                  Box3D outlet(nx-2, nx-1, 1, ny-2, 1, nz-2);
+
+                  use_plb_bc = false; //testing this built-in BC
                   // Loop simulations with varying saturation
                   for (plint runs = 1; runs <= runnum; ++runs) {
+
+                    if (use_plb_bc==true && pressure_bc==true)
+                      {
+                      pcout << "Updating constant bc pressure" << endl;
+                      setboundaryvalue(lattice_fluid1,lattice_fluid2,
+                                       inlet,outlet,
+                                       rho_fluid1[runs],rho_fluid2[runs],
+                                       rhoNoFluid);
+                      }
+
 
                     // turn off stats for efficency
                     lattice_fluid1.toggleInternalStatistics(false);
@@ -504,11 +550,13 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                     else
                     {
                       PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry,
+                        createLocalBoundaryCondition3D<T,DESCRIPTOR>(),
+                        inlet, outlet,
                         rhoNoFluid, rho_f1, rho_f2, Gads_f1_s1, Gads_f1_s2,
                         Gads_f1_s3, Gads_f1_s4, force_f1, force_f2,
                         nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
                         nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, runs,
-                        load_state, print_geom);
+                        load_state, print_geom, use_plb_bc);
                       }
 
                       T new_avg_f1, new_avg_f2, old_avg_f1, old_avg_f2;
@@ -534,8 +582,17 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                         lattice_fluid1.collideAndStream();
                         lattice_fluid2.collideAndStream();
 
+                        // saves a binary file (heavy) with the sim state
+                        if (save_sim == true && iT % save_it==0 && iT>0)
+                          {
+                          pcout << "Saving restart files" << endl;
+                          saveBinaryBlock(lattice_fluid1, Lattice1);
+                          saveBinaryBlock(lattice_fluid2, Lattice2);
+                          }
+
                         // save gifs
-                        if (iT % it_gif == 0) {
+                        if (iT % it_gif == 0)
+                        {
                           writeGif_f1(  lattice_fluid1, lattice_fluid2, runs_str, iT);
                           writeGif_f1_y(lattice_fluid1, lattice_fluid2, runs_str, iT);
                         }
@@ -634,8 +691,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             // saves a binary file (heavy) with the sim state
                             if (save_sim == true)
                             {
-                            saveBinaryBlock(lattice_fluid1, Lattice1);
-                            saveBinaryBlock(lattice_fluid2, Lattice2);
+                              saveBinaryBlock(lattice_fluid1, Lattice1);
+                              saveBinaryBlock(lattice_fluid2, Lattice2);
                             }
 
 
@@ -659,6 +716,15 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                           initializeAtEquilibrium(lattice_fluid2, Box3D(1, 2, 1, ny-2, 1, nz-2), rhoNoFluid, zeroVelocity);
                           initializeAtEquilibrium(lattice_fluid1, Box3D(nx - 2, nx-1, 1, ny-2, 1, nz-2), rhoNoFluid, zeroVelocity);
                           initializeAtEquilibrium(lattice_fluid2, Box3D(nx - 2, nx-1, 1, ny-2, 1, nz-2), rho_fluid2[runs], zeroVelocity);
+
+
+
+                          //initializeAtEquilibrium(lattice_fluid1, inlet, rho_fluid1[runs], zeroVelocity);
+                          //initializeAtEquilibrium(lattice_fluid2, inlet, rhoNoFluid, zeroVelocity);
+                          //initializeAtEquilibrium(lattice_fluid1, outlet, rhoNoFluid, zeroVelocity);
+                          //initializeAtEquilibrium(lattice_fluid2, outlet, rho_fluid2[runs], zeroVelocity);
+
+
 
                           lattice_fluid1.initialize();
                           lattice_fluid2.initialize();
