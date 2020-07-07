@@ -107,11 +107,11 @@ C) Post-processing (Matlab/Octave):
 
 The results of the simulation need to be processed for creating capillary pressure curves, creating geometries for relative permeability calculations and other results. 
 
-   a) Read the generated files using `create_geoms_4_kr.m  <examples/unsteady_relperm_spherepack/create_geoms_4_kr.m>`_ 
-      (It will calculate the saturation for all files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation)
+   a) Read the generated files using `create_geoms_4_kr.m  <examples/unsteady_relperm_spherepack/create_geoms_4_kr.m>`_  
+|     (It will calculate the saturation for all files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation)
     
-   b) If interested in the percolation path of the fluid, run `percolation_path.m  <examples/unsteady_relperm_spherepack/percolation_path.m>`_  
-      (It will find the file where breakthrough occurs and will caculate the percolation path length/tortuosity. It will also visualize the percolation path at breakthrough)
+  b) If interested in the percolation path of the fluid, run `percolation_path.m  <examples/unsteady_relperm_spherepack/percolation_path.m>`_ 
+|     (It will find the file where breakthrough occurs and will caculate the percolation path length/tortuosity. It will also visualize the percolation path at breakthrough)
     
 D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
@@ -139,8 +139,9 @@ Example description
 FAQ
 ################################################################################
 
-Error like "HYDU_create_process (./utils/launch/launch.c:69): execvp error on file ../../src/2-phase_LBM/ShanChen (No such file or directory)":
-This is because the simulation code has not compiled correctly. To solve this, first try to again run
+*1. Why am I getting an error like "HYDU_create_process (./utils/launch/launch.c:69): execvp error on file ../../src/2-phase_LBM/ShanChen (No such file or directory)"?*
+
+| A- This is because the simulation code has not compiled correctly. To solve this, first try to again run
 
 .. code-block:: bash
 
@@ -158,15 +159,17 @@ If this does not work, you can open the bash terminal from the main folder and t
       cd 1-phase_LBM
       make
    
-   
 -------------------------------------------------------------------------------------
 
-Segmentation error: Image dimensions are not correct, try switching the dimensions.
+*2. I am getting a segmentation error. What to do?* 
 
+| A- Image dimensions are not correct, try switching the dimensions.
 
 -------------------------------------------------------------------------------------
 
-Image is loaded properly but it doesn't look right: This is likely because Palabos engine switches the X and Z coordinates. The inbuilt option to switch X and Z coordinates is available as 
+*3. My image is loaded properly but it doesn't look right. What happened?*
+
+| A- This is likely because Palabos engine switches the X and Z coordinates. The inbuilt option to switch X and Z coordinates is available as 
 
 .. code-block:: bash
 
@@ -174,17 +177,16 @@ Image is loaded properly but it doesn't look right: This is likely because Palab
 
 in all geometry creation files (`for example line 26 <examples/unsteady_relperm_spherepack/create_geom_4_2phase.m>`_.).
 
-
 ---------------------------------------------------------------------------------------------
 
+*4. I have aSCons compilation error. What to do?*
 
-SCons compilation error: create a conda enviroment with python2 (Palabos needs it):
+| A- Create a conda enviroment with python2 (Palabos needs it):
 
 .. code-block:: bash
 
   conda create --name py2 python=2.7
   ./Install.sh
-
 
 Another SCons compilation error: Because of the palabos source code.
 
@@ -192,7 +194,9 @@ Another SCons compilation error: Because of the palabos source code.
   
 -----------------------------------------------------------------------------------------------------------
 
-Why am I seeing the same line printed multiple times? / Why is the code so slow?: Probably MPI is not installed in your system, this could be solved by:
+*5. Why am I seeing the same line printed multiple times? / Why is the code so slow?*
+
+| A- Probably MPI is not installed in your system, this could be solved by:
 
 .. code-block:: bash
 
@@ -210,7 +214,9 @@ Note that this process takes a few hours.
 
 -----------------------------------------------------------------------------------------------------------
 
-- I am getting a Java Heap Memory error in Matlab?: You need to change the JavaHeapMemory setting in Matlab:
+*6. I am getting a Java Heap Memory error in Matlab. What to do?*
+
+| A- You need to change the JavaHeapMemory setting in Matlab:
 
 If you're working on a remote system/cluster or supercomputer, the easiest way to do this is to find and change your matlab.prf file diretly.
 
