@@ -92,28 +92,30 @@ An overview of the main steps is given below.
 
 
 
-A) Pre-processing (Matlab/Octave):
+**A) Pre-processing (Matlab/Octave):**
 
 This is necessary to create the geometry for simulating with Palabos (.dat file) from initial geometry file.
 
     a) If the geometry is a raw image file, use `create_geom_4_2phase.m  <examples/unsteady_relperm_spherepack/create_geom_4_2phase.m>`_ 
     b) If the geometry is of another type like .MAT file, multiple image slices (.tiff/.png/.jpg) or grain center coordinates use `create_geom_4_2phase_more_file_types.m  <examples/unsteady_relperm_spherepack/create_geom_4_2phase_more_file_types.m>`_ 
 
-B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
+**B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):**
 
 The multiphase flow simulation can be run after updating geometry and simulation parameters in `2-phase .xml-file <examples/unsteady_relperm_spherepack/input_spherepack.xml>`_. An explanation of every input (in english and chinese) is provided in `two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
 
-C) Post-processing (Matlab/Octave):
+**C) Post-processing (Matlab/Octave):**
 
 The results of the simulation need to be processed for creating capillary pressure curves, creating geometries for relative permeability calculations and other results. 
 
    a) Read the generated files using `create_geoms_4_kr.m  <examples/unsteady_relperm_spherepack/create_geoms_4_kr.m>`_  
-|     (It will calculate the saturation for all files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation)
+(It will calculate the saturation for all files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation)
+
+
     
-  b) If interested in the percolation path of the fluid, run `percolation_path.m  <examples/unsteady_relperm_spherepack/percolation_path.m>`_ 
-|     (It will find the file where breakthrough occurs and will caculate the percolation path length/tortuosity. It will also visualize the percolation path at breakthrough)
+   b) If interested in the percolation path of the fluid, run `percolation_path.m  <examples/unsteady_relperm_spherepack/percolation_path.m>`_ 
+(It will find the file where breakthrough occurs and will caculate the percolation path length/tortuosity. It will also visualize the percolation path at breakthrough)
     
-D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):
+**D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):**
 
 The single phase flow simulation is necessary for creating relative permeability curves. Update geometry and simulation parameters in `1-phase .xml-file <examples/unsteady_relperm_spherepack/input_rel_perm.xml>`_.
 
