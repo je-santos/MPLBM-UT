@@ -25,7 +25,9 @@ Instructions
 
   fetch_image.sh
 
-or manually by downloading it from here: https://www.digitalrocksportal.org/projects/47/origin_data/311/
+or manually by downloading it from here_ 
+
+.. _here: https://www.digitalrocksportal.org/projects/47/origin_data/311/
 
 2. *Pre-processing:* Run 
 
@@ -35,14 +37,14 @@ or manually by downloading it from here: https://www.digitalrocksportal.org/proj
    
 to create a computationally efficient (and artifact free) domain for simulation
 
-3. *2-Phase simulation:* Then, run
+3. *Two-Phase simulation:* Then, run
 
 .. code-block:: bash
 
     run2-phase.sh
  
     
-To perform the simulation with the inputs specified in the 2-phase .xml-file at several capillary pressure increments. For more information about this procedure, please refer to the validation_YoungLaplace in the examples folder.
+To perform the simulation with the inputs specified in the `2-phase .xml-file <examples/unsteady_relperm_spherepack/input_spherepack.xml>`_ at several capillary pressure increments. For more information about this procedure, please refer to the `validation_YoungLaplace example  <examples/validation_YoungLaplace/>`_.
 
     
 4. *Post-processing:* Then, run 
@@ -53,13 +55,13 @@ To perform the simulation with the inputs specified in the 2-phase .xml-file at 
    
 to calculate saturations for the pressure-saturation curve and create geometries for running the relative permeability simulations. The Pc-Saturation curve can then be plot with the generated saturations and the pressure inputs for the simulation.    
 
-5. *1-Phase simulation:* Finally, run
+5. *One-Phase simulation:* Finally, run
 
 .. code-block:: bash
 
     run1-phase.sh
 
-to run the simulation for generating the relative permeability values with the inputs specified in the 1-phase .xml-file.
+to run the simulation for generating the relative permeability values with the inputs specified in the `1-phase .xml-file <examples/unsteady_relperm_spherepack/input_rel_perm.xml>`_.
 
 The capillary Pc-Saturation curve looks like this:
 
@@ -73,22 +75,6 @@ The capillary Pc-Saturation curve looks like this:
 ################################################################################
 Additional Options
 ################################################################################
-
-- *Running the toolbox on supercomputing resources (eg. TACC)*
-
-1. Copy the toolbox and the created domain for simulation to your workspace on the supercomputer
-
-2. Update details in the example script batchjob_4TACC.sh
-
-3. Start the LBM simulation by running
-
-.. code-block:: bash
-
-    sbatch batchjob_4TACC.sh
-    
-*Note- Make sure to test smaller cases first before running a full-fledged simulation on the supercomputer*
-
------
 
 - *Handling different input file types*
 
@@ -111,6 +97,27 @@ Then, update your specific file type in the script and run
 .. code-block:: bash
 
     create_geom_4_2phase_more_file_types.m
+
+-----
+
+- *Running the toolbox on supercomputing resources (eg. TACC)*
+
+1. Copy the toolbox and the created domain for simulation to your workspace on the supercomputer
+
+2. Update details in the example script batchjob_4TACC.sh and make (compile) the (2-phase and 1-phase) codes.
+
+3. Start the LBM simulation by running
+
+.. code-block:: bash
+
+    sbatch batchjob_4TACC.sh
+        
+Notes-
+    
+ a) Make sure to test smaller cases first before running a full-fledged simulation on the supercomputer
+ b) Observe best practices of making/running jobs from `appropriate nodes`_ 
+      
+.. _appropriate nodes: https://portal.tacc.utexas.edu/user-guides/stampede2#citizenship-loginnodes
 
 -----
 
