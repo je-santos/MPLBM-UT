@@ -84,8 +84,9 @@ Installation
 Running a simulation
 ################################################################################
 
-Please refer to the unsteady state example for a complete workflow
+Please refer to the `unsteady state example  <examples/unsteady_relperm_spherepack>`__ for a complete end-to-end workflow 
 
+An overview of the main steps is given below.
 
 ----------------------------------------------------------------------------
 
@@ -93,25 +94,30 @@ Please refer to the unsteady state example for a complete workflow
 
 A) Pre-processing (Matlab/Octave):
 
-- To create the geometry for simulating with Palabos (.dat file),
+This is necessary to create the geometry for simulating with Palabos (.dat file) from initial geometry file.
 
-    a) If the geometry is a 3D array, use pre-processing/create_geom_edist.m
-    b) If the geometry is an image sequence, use pre-processing/createDAT.m
+    a) If the geometry is a raw image file, use examples/unsteady_relperm_spherepack/create_geom_4_2phase.m
+    b) If the geometry is of another type like .MAT file, multiple image slices (.tiff/.png/.jpg) or grain center coordinates use examples/unsteady_relperm_spherepack/create_geom_4_2phase_more_file_types.m
+
 
 B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
-    - Update geometry and simulation parameters in input xml file. An explanation of every input (in english and chinese) is provided in   `examples/1_two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
+The multiphase flow simulation can be run after updating geometry and simulation parameters in input xml file. An explanation of every input (in english and chinese) is provided in   `examples/1_two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
 
 C) Post-processing (Matlab/Octave):
 
-    - Read the generated  files using post-porcessing/domains_4_kr.m
-    (It will calculate the wetting saturation for all vtk files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation and will find the vtk file where breakthrough occurs and the percolation path/tortuosity. You can choose if you want to generate fluid geometries or calculate percolation path at breakthrough)
+The results of the simulation need to be processed for creating capillary pressure curves, creating geometries for relative permeability calculations and other results. 
 
+   a) Read the generated files using examples/unsteady_relperm_spherepack/create_geoms_4_kr.m
+      (It will calculate the saturation for all files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation)
+    
+   b) If interested in the percolation path of the fluid, run examples/unsteady_relperm_spherepack/percolation_path.m
+      (It will find the file where breakthrough occurs and will caculate the percolation path length/tortuosity. It will also visualize the percolation path at breakthrough)
+    
 D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):
 
-    - Update geometry and simulation parameters in input xml file
+The single phase flow simulation is necessary for creating relative permeability curves. Update geometry and simulation parameters in input xml file.
 
-Optional: Run porethroat_dist.m to calculate pore and throat size distribution of geometry from vtk file created during 2-phase LBM simulation
 
 ################################################################################
 Numerical validations
