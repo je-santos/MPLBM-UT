@@ -45,7 +45,7 @@ to create a computationally efficient (and artifact free) domain for simulation
 To perform the simulation with the inputs specified in the 2-phase .xml-file at several capillary pressure increments. For more information about this procedure, please refer to the validation_YoungLaplace in the examples folder.
 
     
- 4. *Post-processing:* Then, run 
+4. *Post-processing:* Then, run 
  
 .. code-block:: bash
  
