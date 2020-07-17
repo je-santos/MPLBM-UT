@@ -181,7 +181,7 @@ in all geometry creation files (`for example line 26 <examples/unsteady_relperm_
 
 ---------------------------------------------------------------------------------------------
 
-*4. I have aSCons compilation error. What to do?*
+*4. I have a SCons compilation error. What to do?*
 
 | A- Create a conda enviroment with python2 (Palabos needs it):
 
@@ -276,9 +276,9 @@ Code references
 Contributing
 ################################################################################
 
-We welcome contributions. Find some ideas bellow:
+We welcome contributions. Find some ideas below:
 
-- Moving boundary problem: propant transport or formation damage
+- Moving boundary problem: proppant transport or formation damage
 - Fluid with variable density
 - 3D grid refinement
 - better initialization for unsteady state sim
