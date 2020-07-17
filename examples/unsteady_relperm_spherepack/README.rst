@@ -44,7 +44,7 @@ to create a computationally efficient (and artifact free) domain for simulation
     run2-phase.sh
  
     
-To perform the simulation with the inputs specified in the `2-phase .xml-file <examples/unsteady_relperm_spherepack/input_spherepack.xml>`_ at several capillary pressure increments. For more information about this procedure, please refer to the `validation_YoungLaplace example  <examples/validation_YoungLaplace/>`_.
+To perform the simulation with the inputs specified in the `2-phase .xml-file <input_spherepack.xml>`_ at several capillary pressure increments. For more information about this procedure, please refer to the `validation_YoungLaplace example  <../validation_YoungLaplace/>`_.
 
     
 4. *Post-processing:* Then, run 
@@ -61,7 +61,7 @@ to calculate saturations for the pressure-saturation curve and create geometries
 
     run1-phase.sh
 
-to run the simulation for generating the relative permeability values with the inputs specified in the `1-phase .xml-file <examples/unsteady_relperm_spherepack/input_rel_perm.xml>`_.
+to run the simulation for generating the relative permeability values with the inputs specified in the `1-phase .xml-file <input_rel_perm.xml>`_.
 
 The capillary Pc-Saturation curve looks like this:
 
