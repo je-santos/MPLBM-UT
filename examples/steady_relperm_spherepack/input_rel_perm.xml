@@ -18,7 +18,7 @@
 
 <simulations>
 	<!-- Total number of geometries / individual simulations -->
-	<num> 11 </num>
+	<num> 2 </num>
 	<!-- Pressure-->
   <press> 0.0005 </press>
 	<!-- Max iterations-->
