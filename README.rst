@@ -268,7 +268,7 @@ Bibliographic references
 Code references
 ################################################################################
 
-1. Absolute permeability code modified from Degruyter et al. - http://www.palabos.org/documentation/tutorial/permeability.html
+1. Absolute permeability code modified from Degruyter et al. (p.31) - https://palabos.unige.ch/files/2515/9196/4302/palabos_tutorial.pdf
 2. Skeletonization code modified from Kollmannsberger Philip- https://www.mathworks.com/matlabcentral/profile/authors/4556277-philip-kollmannsberger
 3. Dijkstra's algorithm code modified from Kirk Joseph- https://www.mathworks.com/matlabcentral/fileexchange/12850-dijkstra-s-shortest-path-algorithm
 
