@@ -231,6 +231,7 @@ You will need to find the sepcific Java memory code that corresponds to the amou
 
 Or you can try this fix (If you are on a remote system, cluster, or supercomputer this may not work): https://www.mathworks.com/matlabcentral/answers/74296-change-java-heap-memory-settings-without-starting-matlab
 
+-------------------------------------------------------------------------------------
 
 *7. I am getting an error related to the class auto_ptr*
 
