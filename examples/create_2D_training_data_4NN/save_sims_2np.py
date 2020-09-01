@@ -15,7 +15,11 @@ for sim_dir in all_dirs:
         domain = glob.glob('input/')
         y.append(np.loadtxt(sim[0]).reshape(258,128,3,3)[1:-1,:,1,0].T) #Y,X,slice,vel
         domain_loc = glob.glob(f'input/{domain_num}_data*')[0]
-        X.append(((np.loadtxt(domain_loc).reshape(258,128,3)[1:-1,:,1].T)>0)*1)
+        try:
+            X.append(((np.loadtxt(domain_loc).reshape(258,128,3)[1:-1,:,1].T)>0)*1)
+        except:
+            X.append((y[-1]==0)*1)
+                
         
 
 X_np = np.array(X).astype(np.int8)
@@ -24,3 +28,10 @@ y_np = np.array(y).astype(np.float16)
 
 np.save('numpys/X',X_np)
 np.save('numpys/y',y_np)
+
+
+
+#import gdown
+#url='https://drive.google.com/file/d/16m_6dpebJSSi9MAGRno4xKKFwV-Kq9oK'
+#output = 'numpys/numpys.zip'
+#gdown.download(url, output)
