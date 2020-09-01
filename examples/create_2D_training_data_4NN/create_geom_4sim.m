@@ -106,10 +106,10 @@ end
 
 
 % create LBM domains
-geom.name = ['data_4NN'];
+%geom.name = ['data_4NN'];
 geom.print_size = true;
 geom.add_mesh   = false; % add a neutral-wet mesh at the end of the domain
-geom.num_slices = 0;     % add n empty slices at the beggining and end of domain 
+geom.num_slices = 1;     % add n empty slices at the beggining and end of domain 
                          % for pressure bcs
 geom.swapXZ = false;     % Swap x and z data if needed to ensure Palabos simulation in Z-direction              
 geom.scale_2 = false;    % Double the grain (pore) size if needed to prevent single pixel throats
@@ -119,11 +119,12 @@ sim_domains={};
 for im=1:size(for_sim,2)
     phi = sum(for_sim{im}>0,'all')/numel(for_sim{im})*100;
     if phi > 10 && phi<75
-        tmp_im = repmat(~for_sim{im},1,1,3);
+        geom.name = [num2str(im) '_data_4NN'];
+        tmp_im = repmat(~for_sim{im}',1,1,3);
         
-        blank_slice  = tmp_im(:,1:1,:)*0 ;
-        tmp_im = cat(2, blank_slice, tmp_im);
-        tmp_im = cat(2, tmp_im, blank_slice);
+        %blank_slice  = tmp_im(1:1,,:)*0 ;
+        %tmp_im = cat(2, blank_slice, tmp_im);
+        %tmp_im = cat(2, tmp_im, blank_slice);
         
         sim_domains{end+1} = create_geom_edist(tmp_im, geom); %provides a very  efficient geometry 4sim
         
