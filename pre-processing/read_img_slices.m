@@ -5,7 +5,14 @@ function [imageVol]=read_img_slices(address)
 files = dir(address);
 num_img = numel(files);
 infile1=files(1).name;
-foldername= extractBefore(address,'*.');
+
+try
+foldername= extractBefore(address,'*.'); %MATLAB
+catch
+index1 = index(address, '*','first'); %OCTAVE
+index2=index1-1;
+foldername= substr(address, 1,index2);
+end
 
 firstImage=uint8(imread([foldername infile1]));
 

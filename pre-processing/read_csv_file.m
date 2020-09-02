@@ -4,8 +4,21 @@ function [imageVol]=read_csv_file(address, res)
 % read csv file
 files = dir(address);
 infile1=files(1).name;
-foldername= extractBefore(address,'*.');
+
+try
+foldername= extractBefore(address,'*.'); %MATLAB
+catch
+index1 = index(address, '*','first'); %OCTAVE
+index2=index1-1;
+foldername= substr(address, 1,index2);
+end
+
+try
 data = readmatrix([foldername infile1]);
+catch
+data = dlmread([foldername infile1]);
+end
+
 x_all = data(:,1);  % x-coordinate
 y_all = data(:,2);  % y-coordinate
 z_all = data(:,3);  % z-coordinate

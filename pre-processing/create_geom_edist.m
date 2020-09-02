@@ -4,6 +4,8 @@ function [geom4palabos]=create_geom_edist(data,struct)
 % data: image, where the pore-space is represented with zeros
 % struct: structure with different fields
 
+pause(1) %Pause 1 second to remove Octave structure error
+
 tic
 
 % Swap x and z data if needed to ensure Palabos simulation in Z-direction
@@ -19,7 +21,14 @@ if struct.scale_2 == true
 end
 
 %creates the computationally efficent geometry
-edist = bwdist(~data);
+%dim3 = size(data,1);
+
+%for i=1:dim3
+%  data2d =data(i,:,:);
+%  edist = bwdist(~data2d);
+%end
+
+edist = bwdistsc(~data);
 geom4palabos = edist;
 geom4palabos([1,end],:,:)=1; %makes sure that the outer box boundaries have
 geom4palabos(:,[1,end],:)=1; %a wetting BC to avoid problems
