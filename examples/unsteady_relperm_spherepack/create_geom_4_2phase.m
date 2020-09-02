@@ -37,7 +37,7 @@ palabos_3Dmat   = create_geom_edist(fp_printing,geom);
                                     
 
 %% Mixed Wettability (the user could experiment with this)                                
-rng(123)                                    
+%rng(123)                                    
 rnd_array = rand(size(palabos_3Dmat) );
 
 palabos_3Dmat_mixedWet = palabos_3Dmat;
