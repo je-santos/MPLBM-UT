@@ -139,6 +139,8 @@ This can create 3D visualizations like the one shown below.
     :figclass: align-right
 
     Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
+    
+Note: This function may not work in OCTAVE
 
 ################################################################################
 References
