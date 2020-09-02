@@ -7,7 +7,7 @@
 addpath ('../../pre-processing') %pre-procesing libraries
 
 %% Define file type (1/2/3/4)
-file_type = 1;
+file_type = 4;
 d_size = 500; % voxels each side (specify for raw file)
 
 %% opening the file
@@ -65,7 +65,7 @@ palabos_3Dmat   = create_geom_edist(fp_printing,geom);
                                     
 
 %% Mixed Wettability (the user could experiment with this)                                
-rng(123)                                    
+%rng(123)                                    
 rnd_array = rand(size(palabos_3Dmat) );
 
 palabos_3Dmat_mixedWet = palabos_3Dmat;

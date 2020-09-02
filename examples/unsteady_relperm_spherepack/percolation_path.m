@@ -1,4 +1,7 @@
 addpath ('../../post-processing') %post-procesing libraries
+% Calculates first percolation path of invading fluid
+% This function works in MATLAB but may not work in OCTAVE
+
 
 %% Input for the function
 kr.domain_size  = [200,200,200];
