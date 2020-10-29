@@ -120,6 +120,10 @@ The results of the simulation need to be processed for creating capillary pressu
 The single phase flow simulation is necessary for creating relative permeability curves. Update geometry and simulation parameters in `1-phase .xml-file <examples/unsteady_relperm_spherepack/input_rel_perm.xml>`_.
 
 
+**E) Visualization**
+The produced .vti files can be opened with paraview to perform 2-3-4D visulization. 
+
+
 ################################################################################
 Numerical validations
 ################################################################################
