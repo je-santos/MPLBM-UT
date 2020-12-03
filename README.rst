@@ -121,7 +121,7 @@ The single phase flow simulation is necessary for creating relative permeability
 
 
 **E) Visualization**
-The produced .vti files can be opened with paraview to perform 2-3-4D visulization. 
+The produced .vti files can be opened with `Paraview <https://www.paraview.org/>`_ to perform 2-3-4D visualization. 
 
 
 ################################################################################
