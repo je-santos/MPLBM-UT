@@ -34,7 +34,7 @@ to build the geometry for simulation. In this example, this geometry is a sphere
 
 .. code-block:: bash
 
-  run_rel_perm.sh
+  run_2-phase.sh
   
 to run the two-phase simulation. When this is done: 
 
