@@ -21,6 +21,8 @@ Figure 1- Geometry setup for 2-phase flow simulations
 1) PALABOS conducts simulations in X-direction, so please double-check X and Z directions of the geometry.
 2) If the blank slices and a mesh are added in the pre-proccesing step, the original size in the X-direction would be larger.
 
+**per:** These inputs control the periodicity for fluid 1 and fluid 2 at the boundaries in the X, Y, and Z directions.
+
 **init:** There are multiple inputs required under this heading.
 
 **fluid1:** This input requires the initial positions of fluid 1 (usually invading fluid). As shown in Figure 1, these inputs are x1 to x2, y1 to y2, and z1 to z2 given in orange color. Fluid 1 has one edge as the YZ plane at x=x1 at inlet side of the geometry and the second edge at x=x2 (which is also the left edge of fluid interface at t=0). As the entire fluid in the Y-Z space is filled with fluid 1 between x=x1 and x=x2, the Y and Z direction limits are the geometry limits.
