@@ -27,3 +27,7 @@ pip-delete-this-directory.txt
 # compiled files
 *.o
 *.dblite
+
+# Cmake folders
+src/1-phase_LBM/build/*
+src/2-phase_LBM/build/*

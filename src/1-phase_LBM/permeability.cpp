@@ -85,7 +85,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
 
   pcout  << "The geometry name is  "<< fNameIn_temp << std::endl;
 
-  std::auto_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
+  std::unique_ptr<plb::MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
   plb_ifstream geometryFile(fNameIn_temp.c_str());
 
   for (plint iX=3; iX<nx-4; ++iX) {
