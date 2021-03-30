@@ -67,13 +67,12 @@ camera = [(638.3648346692544, 638.1479077135746, 529.3073566909535),
           (-0.34745354867374556, -0.3818154900807505, 0.8564420371796433)]
 
 cpos = p.show(cpos=camera, screenshot='gif_images/image_0' + str(i) + '.png')
-# print(cpos)  # If you want to change the camera position, uncomment this and copy paste the output into 'camera'
+# print(cpos)  # If you want to change the camera position, uncomment this and copy paste the output into 'camera' after visualization
 
 elapsed_image_time = time.time() - image_time
 progress = 'Image frame ' + str(counter) + ' of ' + str(total_images) + ' processed in ' + str(np.around(elapsed_image_time,3)) + ' s.'
-counter = counter + 1
 print(progress) 
 
-elapsed_time = time.time() - t
+# elapsed_time = time.time() - t
 # time_message = "Everything took " + str(np.around(elapsed_time, 3)) + ' s'
 # print(time_message)
