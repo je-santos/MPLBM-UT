@@ -1,27 +1,16 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 17 15:11:39 2020
-
-@author: alexgigliotti
-"""
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 # Input saturations
-Snw = np.array([0.006194, 0.006363, 0.006530, 0.006679, 0.300658, 0.301136, 
-                0.431331, 0.500419, 0.508805, 0.513808, 0.514832, 0.514835, 
-                0.514289])
-
 Snw = np.array([0.006194, 0.006363, 0.006530, 0.006679, 0.300658, 0.301136,
                 0.431331, 0.500419, 0.508805, 0.513808, 0.514832, 0.514835,
                 0.514289])
 Sw = 1 - Snw
 no_perc_index = np.where(Sw>0.99)[0]
-print(Sw)
+#print(Sw)
 Sw[no_perc_index] = 1
-print(Sw)
+#print(Sw)
 
 # Input permeabilities
 k = 0.410636;
@@ -31,9 +20,9 @@ krw =  np.array([1, 0.547822, 0.537374, 0.531291, 0.527665, 0.0212693, 0.0212781
 krnw = np.array([0, 5.92137e-16, 6.05393e-16, 6.31209e-16, 6.505e-16, 6.10992e-16,
                  6.17531e-16, 0.291641, 0.459982, 0.492054, 0.496082, 0.500978, 
                  0.502009])
-print(krw)
+#print(krw)
 krw[no_perc_index] = 1
-print(krw)
+#print(krw)
 
 # Calculate Capillary Pressure, Pc
 rho2_start = 2
@@ -83,7 +72,6 @@ title_font_size = 18
 f1 = plt.figure()  # dpi=200, figsize=[6,5]
 plot_rel_perm()
 f1.savefig('rel_perm_graph.png', dpi=300)
-
 
 # Plot Pc
 f2 = plt.figure()  # dpi=200, figsize=[6,5]
