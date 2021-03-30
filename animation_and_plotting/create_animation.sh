@@ -9,9 +9,9 @@ run_pyvista_animation() {
 }
 
 
-num_proc=4 #$(ulimit -u) this command get max number of processes, but limiting at 4 because memory 
+num_proc=4 #$(ulimit -u) this command get max number of processes, but limiting at 4 because of memory limitations 
 
-for i in {0..18}
+for i in {0..18} # Edit the start and end to loop through the images needed for the animation **Note that it is 0 indexed!
 do
     j=$i #keep track of the for loop with j so i can be used for limiting processes
     
