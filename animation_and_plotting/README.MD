@@ -5,7 +5,7 @@ The Python code in this folder was designed for two main tasks:
 
 The idea is that you can copy this whole folder into your simulation directory when you want to visualize something. In order for the code to work, you need the following dependencies:
 - Python 3.7.x in a venv or Anaconda environment with the following modules:
-  - PyVista (and related dependencies)
+  - [PyVista](https://github.com/pyvista/pyvista) (and related dependencies)
   - Matplotlib
   - Numpy
   - Imageio
