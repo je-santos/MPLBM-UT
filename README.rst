@@ -6,7 +6,7 @@ MPLBM-UT: Multiphase LBM Toolbox for permeable media analysis
    
 MPLBM-UT supports the calculation of capillary pressure and relative permeability curves, single phase permeability, 3D tortuosity, contact angles, and  percolation pathway of 3D images or tiff slices. 
 
-This repository was created by Javier E. Santos and Abhishek Bihani in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz at The University of Texas at Austin.
+This repository was created by Javier E. Santos, Abhishek Bihani and Alex Gigliotti in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz at The University of Texas at Austin.
 
 We gratefully acknowledge the improvements made by Jia Haowei.
 
