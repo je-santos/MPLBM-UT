@@ -10,7 +10,7 @@ This repository was created by Javier E. Santos and Abhishek Bihani in collabora
 
 We gratefully acknowledge the improvements made by Jia Haowei.
 
-The direct fluid flow simulation is performed using Palabos v2. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
+The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
 
 ################################################################################
 Illustrations
@@ -69,8 +69,6 @@ Requirements
 
 - GCC 7.2
 - OpenMPI 2.1.1 or MPICH2
-- Python 2.7.x (to compile Palabos)
-
 
 ################################################################################
 Installation
@@ -158,12 +156,14 @@ If this does not work, you can open the bash terminal from the main folder and t
 
 .. code-block:: bash
 
-      cd src
-      cd 2-phase_LBM
-      make
-      cd ..
-      cd 1-phase_LBM
-      make
+   cd src
+   unzip palabos-v2.2.1.zip
+   cd 2-phase_LBM/build
+   cmake ..
+   make
+   cd ../../1-phase_LBM/build
+   cmake ..
+   make
    
 -------------------------------------------------------------------------------------
 
@@ -187,14 +187,7 @@ in all geometry creation files (`for example line 26 <examples/unsteady_relperm_
 
 *4. I have a SCons compilation error. What to do?*
 
-| A- Create a conda enviroment with python2 (Palabos needs it):
-
-.. code-block:: bash
-
-  conda create --name py2 python=2.7
-  ./Install.sh
-
-Another SCons compilation error: Because of the palabos source code.
+| A- SCons compilation error: Because of the palabos source code.
 
   "../MultiphasePorousMediaPalabos-0.1.0/src/palabos-v2.0r0/src/gridRefinement/couplingInterfaceGenerator3D.h" line 145,    "return dataProcessors;" should be "return *dataProcessors;".
   

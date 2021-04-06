@@ -134,7 +134,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
           const plint nz = geometry.getNz();
 
           Box3D sliceBox(0,0, 0,ny-1, 0,nz-1);
-          std::auto_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
+          std::unique_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
           plb_ifstream geometryFile(fNameIn.c_str());
           for (plint iX=0; iX<nx-1; ++iX) {
             if (!geometryFile.is_open()) {
@@ -151,7 +151,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
           }
 
           {
-            std::auto_ptr<MultiScalarField3D<T> > floatTags = copyConvert<int,T>(geometry, geometry.getBoundingBox());
+            std::unique_ptr<MultiScalarField3D<T> > floatTags = copyConvert<int,T>(geometry, geometry.getBoundingBox());
             std::vector<T> isoLevels;
             isoLevels.push_back(0.5);
             typedef TriangleSet<T>::Triangle Triangle;
