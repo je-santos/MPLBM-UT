@@ -1,5 +1,5 @@
 ================================================================================
-MPLBM-UT: Multiphase LBM Toolbox for permeable media analysis 
+MPLBM-UT: Multiphase LBM library for permeable media analysis 
 ================================================================================
 .. image:: https://zenodo.org/badge/174389090.svg
    :target: https://zenodo.org/badge/latestdoi/174389090
