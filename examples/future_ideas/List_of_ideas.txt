@@ -1,0 +1,24 @@
+Common pitfalls:
+
+- Size mismatches. It would be nice to create the geometry and have a file that can't be edited by the user.
+
+- unit tests of the xml. Make sure that everything looks right and that the BCs are set appropiately. 
+
+Room for improvement:
+
+- remove matlab dependency (should be able to code everything easily in python)
+-> with this in mind we can add multithreading support for big geometries
+
+- check if it is really more efficient to have the solid nodes (2s) instead of only bounce backs (1s)
+
+-> if this is the case, we can add support for big volumes by subsampling the domain in parallel with a certain degree of overlap and then stiching it back.
+
+- palabos will support GPUs soon with a minimum ammount of syntax changes. Might be worth it to look into that.
+
+- try the constant density boundary condition. This might help speeding up the un-steady state simulation.
+
+- more viz tools. Vedo, perhaps?
+
+- Improve the contanct angle calculation. Masa has good ideas.
+
+
