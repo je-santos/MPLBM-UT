@@ -29,7 +29,7 @@ https://www.digitalrocksportal.org/projects/57/origin_data/287/
     run1-phase.sh
 
 
-To perform the simulation with the inputs specified in the .xml file
+To perform a single-phase flow simulation with the inputs specified in the .xml file
 
 
 4. Run 
