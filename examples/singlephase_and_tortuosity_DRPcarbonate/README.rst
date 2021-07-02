@@ -1,5 +1,5 @@
 ================================================================================
-Tortuosity calculation in a carbonate rock
+Single-phase Flow and Tortuosity Calculation in a Carbonate Rock
 ================================================================================
 
 In this example, the method to calculate the tortuosity of the flow paths in a carbonate is presented.
