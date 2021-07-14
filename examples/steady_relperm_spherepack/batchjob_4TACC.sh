@@ -8,7 +8,7 @@
 #SBATCH -t 48:00:00         # run time (hh:mm:ss) - 1.5 hours
 
 # Slurm email notifications are now working on Lonestar 5
-#SBATCH --mail-user=jesantos@utexas.edu
+#SBATCH --mail-user=xx@utexas.edu
 #SBATCH --mail-type=end     # email me when the job finishes
 #SBATCH -A pge-fracture     # allocation
 # run the executable
