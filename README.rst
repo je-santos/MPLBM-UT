@@ -280,11 +280,11 @@ Contributing
 
 We welcome contributions. Find some ideas below:
 
-[ ] Moving boundary problem: proppant transport or formation damage
-[ ] Fluid with variable density
-[ ] 3D grid refinement
-[ ] better initialization for unsteady state sim
-[ ] matlab to python translation: geometry creation
-[ ] Testing `GPU <https://palabos-forum.unige.ch/t/from-cpu-to-gpu-in-80-days-project-complete/3301>`_ capabilities
+- [ ] Moving boundary problem: proppant transport or formation damage
+- [ ] Fluid with variable density
+- [ ] 3D grid refinement
+- [ ] better initialization for unsteady state sim
+- [ ] matlab to python translation: geometry creation
+- [ ] Testing `GPU <https://palabos-forum.unige.ch/t/from-cpu-to-gpu-in-80-days-project-complete/3301>`_ capabilities
 
 
