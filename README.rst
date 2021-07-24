@@ -280,7 +280,7 @@ Contributing
 
 We welcome contributions. Find some ideas below:
 
-- [ ] Moving boundary problem: proppant transport or formation damage
+:black_square_button: Moving boundary problem: proppant transport or formation damage
 - [ ] Fluid with variable density
 - [ ] 3D grid refinement
 - [ ] better initialization for unsteady state sim
