@@ -1,8 +1,8 @@
 ================================================================================
 MPLBM-UT: Multiphase LBM library for permeable media analysis 
 ================================================================================
-.. image:: https://zenodo.org/badge/174389090.svg
-   :target: https://zenodo.org/badge/latestdoi/174389090
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5203295.svg
+   :target: https://doi.org/10.5281/zenodo.5203295
    
 MPLBM-UT supports the calculation of capillary pressure and relative permeability curves, single phase permeability, 3D tortuosity, contact angles, and  percolation pathway of 3D images or tiff slices. 
 
