@@ -255,7 +255,17 @@ Author's Publications
 
 
 ################################################################################
-Bibliographic references
+External Publications
+################################################################################
+
+1.  Xu, R. et al (2020). Pore-scale study of water adsorption and subsequent methane transport in clay in the presence of wettability heterogeneity. Water Resources Research, 56, e2020WR027568. https://doi.org/10.1029/2020WR027568 
+
+2. Jonathan B. Grunewald et al 2021 J. Electrochem. Soc. 168 024521
+
+
+
+################################################################################
+Bibliographic References
 ################################################################################
 
 1. Unsteady state simulation set-up: Pan, C., Hilpert, M., and Miller, C. T. ( 2004), Lattice‐Boltzmann simulation of two‐phase flow in porous media, Water Resour. Res., 40, W01501, https://doi.org/10.1029/2003WR002120.
