@@ -36,13 +36,14 @@ to build the geometry for simulation. In this example, this geometry is a sphere
 
   run2-phase.sh
   
-to run the two-phase simulation. When this is done: 
+to run the two-phase simulation. Once this simulation converges, it will output the position of both fluids (wetting and non-wetting) in the pore-space. We now would like to calculate the permeability of these fluid configurations to obtain one point of the relative permeability curve. This method assumes  very low capillary numbers. To create these new domains we run:
+
 
 .. code-block:: bash
 
   create_geoms_4_kr.m
   
-builds geometries to calculate the relative permeability of the sample. These simulations are carried out with:
+which builds the geometries to calculate the relative permeability points at the given saturation (in this case, 25%). These simulations are then carried out with:
 
 .. code-block:: bash
 
