@@ -10,8 +10,8 @@
     <size> <x> 200 </x> <y> 200 </y> <z> 200 </z> </size>
     <!-- Periodicity in the boundary conditions -->
     <per>
-          <fluid1> <x> true </x> <y> true </y> <z> true </z> </fluid1>
-          <fluid2> <x> true </x> <y> true </y> <z> true </z> </fluid2>
+          <fluid1> <x> true </x> <y> false </y> <z> false </z> </fluid1>
+          <fluid2> <x> true </x> <y> false </y> <z> false </z> </fluid2>
     </per>
 </geometry>
 
