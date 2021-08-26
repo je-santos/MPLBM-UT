@@ -253,7 +253,7 @@ Author's Publications
 
 4. Santos, J. E., Xu, D., Jo, H., Landry, C. J., Prodanović, M., & Pyrcz, M. J. (2020). PoreFlow-Net: A 3D convolutional neural network to predict fluid flow through porous media. Advances in Water Resources, 138, 103539.
 
-5. A. Gigliotti,  M.  A.  Hesse,  M.  Prodanovi c,  Pore-Scale  Simulation  of Two-Phase  Melt  Percolation  During  Core  Formation  in  Planetesimals (Mar. 2021). URLhttps://www.hou.usra.edu/meetings/lpsc2021/pdf/2328.265pdf
+5. Gigliotti A., Hesse M., Prodanovic M., Pore-Scale Simulation of Two-Phase Melt Percolation During Core Formation in Planetesimals (Mar. 2021). LPSC, https://www.hou.usra.edu/meetings/lpsc2021/pdf/2328.pdf
 
 
 ################################################################################
