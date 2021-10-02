@@ -36,18 +36,3 @@ to create a computationally efficient (and artifact free) domain for simulation.
 
 To perform the simulation with the inputs specified in the .xml file
 
-
-4. Run 
-
-.. code-block:: bash
-
-    calculate_tau.m
-    
-To load the resulting velocity field (from the single-phase simulation) and use this to calculate the time of flight (tortuosity). 
-
-.. figure:: /illustrations/tau.png
-    :align: center
-    :alt: alternate text
-    :figclass: align-center
-
-    Single-phase fluid velocity (as outputted by LBM) and time of flight (tortuosity)
