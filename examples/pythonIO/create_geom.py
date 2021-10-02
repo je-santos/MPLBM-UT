@@ -42,11 +42,16 @@ def create_geom_edist(rock, args):
     
     if args.print_size:
         size = erock.shape
-        geom_name = f'{args.name}_{size[0]}_{size[1]}_{size[2]}.dat'
+        geom_name = f'{args.name}_{size[0]}_{size[1]}_{size[2]}'
     else:
         geom_name = args.name
         
-    np.savetxt(f'input/{geom_name}.dat', erock.flatten())
+    #np.savetxt(f'input/{geom_name}.dat', erock.flatten())
+    #with open(f'input/{geom_name}.dat', 'w') as file:
+    #    for i in range(erock.shape[0]):
+    #        file.write(erock[i,:,:])
+    #erock.astype('int8').tofile(f'input/{geom_name}.dat')
+    np.savetxt(f'input/{geom_name}.dat', erock.reshape([252,-1]), fmt='%i', newline='/n', delimiter=' ')
     return erock
 
 
