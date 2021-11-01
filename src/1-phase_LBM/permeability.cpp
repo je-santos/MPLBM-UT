@@ -334,6 +334,10 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
       std::string vel_name = outDir + GeometryName + "_vel.dat";
       plb_ofstream ofile3( vel_name.c_str() );
       ofile3 << setprecision(1) <<*computeVelocity(lattice) << endl;
+        
+      //std::string rho_name = outDir + GeometryName + "_rho.dat";
+      //plb_ofstream ofile4( rho_name.c_str() );
+      //ofile4 << setprecision(10) <<*computeDensity(lattice) << endl;
 
       perm[run]=Perm;
       meanU[run]=Vel;
