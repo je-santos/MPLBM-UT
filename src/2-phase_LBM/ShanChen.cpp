@@ -101,7 +101,7 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
     T computeVelocity_f1(MultiBlockLattice3D<T,DESCRIPTOR>& lattice_fluid1, T nu_f1)
     {
       plint xComponent = 0;
-      const plint nx = lattice_fluid1.getNx();
+      // const plint nx = lattice_fluid1.getNx();
       const plint ny = lattice_fluid1.getNy();
       const plint nz = lattice_fluid1.getNz();
 
@@ -189,11 +189,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
           bool load_state, bool print_geom, bool use_plb_bc)
           {
 
-            plint nx = lattice_fluid2.getNx();
-            plint ny = lattice_fluid2.getNy();
-            plint nz = lattice_fluid2.getNz();
-
-
             pcout << "Definition of the geometry." << endl;
 
             Array<T, 3> zeroVelocity(0., 0., 0.);
@@ -211,12 +206,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
               setBoundaryDensity(lattice_fluid2, outlet, rho_f2_outlet); // rho_f2_outlet
               // delete boundaryCondition;
             }
-            
-// initializeAtEquilibrium(lattice_fluid1, Box3D(1, 2, 1, ny-2, 1, nz-2), rho_fluid1[runs], zeroVelocity);
-// initializeAtEquilibrium(lattice_fluid2, Box3D(1, 2, 1, ny-2, 1, nz-2), rhoNoFluid, zeroVelocity);
-// initializeAtEquilibrium(lattice_fluid1, Box3D(nx - 2, nx-1, 1, ny-2, 1, nz-2), rhoNoFluid, zeroVelocity);
-// initializeAtEquilibrium(lattice_fluid2, Box3D(nx - 2, nx-1, 1, ny-2, 1, nz-2), rho_fluid2[runs], zeroVelocity);
-
 
             if (load_state == true) {
 
@@ -336,12 +325,12 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             T rho_f1_inlet ;
             T rho_f2_outlet_initial, rho_f2_outlet_final;
             T rhoNoFluid;
-            T rho_f2_step;
+            // T rho_f2_step;
             T drho_f2;
 
             plint it_max ;
             plint it_conv ;
-            plint it_info ;
+            // plint it_info ;
             plint it_vtk ;
             plint it_gif ;
 
@@ -445,18 +434,24 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
             T rho_fluid1[runnum] ;
             T rho_fluid2[runnum] ;
             T deltaP[runnum];
-            T k1_high;
-            T k2_high;
-            T meanRho1;
-            T meanRho2;
-            T mu1;
-            T mu2;
-            T rho_F1;
-            T rho_F2;
-            T mean_U1[runnum];
-            T mean_U2[runnum];
-            T mean_rho1[runnum];
-            T mean_rho2[runnum];
+            T new_avg_f1;
+            T new_avg_f2;
+            T old_avg_f1 = 1.0;
+            T old_avg_f2 = 1.0;
+            T relE_f1;
+            T relE_f2;
+            // T k1_high;
+            // T k2_high;
+            // T meanRho1;
+            // T meanRho2;
+            // T mu1;
+            // T mu2;
+            // T rho_F1;
+            // T rho_F2;
+            // T mean_U1[runnum];
+            // T mean_U2[runnum];
+            // T mean_rho1[runnum];
+            // T mean_rho2[runnum];
 
             std::string outDir   =   fNameOut;
             std::string Lattice1 =   fNameOut + "lattice1.dat";
@@ -570,9 +565,6 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                         load_state, print_geom, use_plb_bc);
                       }
 
-                      T new_avg_f1, new_avg_f2, old_avg_f1, old_avg_f2;
-                      T relE_f1, relE_f2;
-
                       pcout << endl
                       << "Starting simulation with rho 1:  " << rho_fluid1[runs] << endl;
                       pcout << endl
@@ -635,8 +627,8 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                           lattice_fluid2.toggleInternalStatistics(false);
 
                           // calculate relative difference
-                          relE_f1 = std::fabs(old_avg_f1-new_avg_f1)*100/old_avg_f1;
-                          relE_f2 = std::fabs(old_avg_f2-new_avg_f2)*100/old_avg_f2;
+                          relE_f1 = std::fabs(old_avg_f1-new_avg_f1)*100/old_avg_f1; // /it_conv;
+                          relE_f2 = std::fabs(old_avg_f2-new_avg_f2)*100/old_avg_f2; // /it_conv;
 
                           pcout << "Run num " << runs;
                           pcout << ", Iteration " << iT << std::endl;
@@ -707,14 +699,14 @@ void writeGif_f1(MultiBlockLattice3D<T, DESCRIPTOR>& lattice_fluid1,
                             }
 
 
-                            // Calculate velocity here for both fluids in x-direction
-                            T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
-                            T meanU2 = computeVelocity_f2(lattice_fluid2, nu_f2);
-                            mean_U1[runs] = meanU1;
-                            mean_U2[runs] = meanU2;
+                            // Calculate and print velocity here for both fluids in x-direction
+                            computeVelocity_f1(lattice_fluid1, nu_f1);
+                            computeVelocity_f2(lattice_fluid2, nu_f2);
+                            // mean_U1[runs] = meanU1;
+                            // mean_U2[runs] = meanU2;
 
-                            T rho_F1=rho_fluid1[runs];
-                            T rho_F2=rho_fluid2[runs];
+                            // T rho_F1=rho_fluid1[runs];
+                            // T rho_F2=rho_fluid2[runs];
 
                           }
 
