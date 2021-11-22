@@ -1,5 +1,4 @@
 import yaml
-from argparse import Namespace
 
 
 def parse_input_file(input_file):
@@ -163,7 +162,158 @@ def parse_input_file(input_file):
                 raise KeyError("Please add 'save vtks' to 'simulation' entry.")
 
         elif inputs['simulation type'] == '2-phase':
-            raise NotImplementedError('2-phase coming soon!')
+
+            if 'restart sim' in inputs['simulation']:
+                print("Restart Simulation: " + str(inputs['simulation']['restart sim']))
+            else:
+                raise KeyError("Please add 'restart sim' to 'simulation' entry.")
+
+            if 'rho_f1' in inputs['simulation']:
+                print("Fluid 1 Equilibrium Density: " + str(inputs['simulation']['rho_f1']))
+            else:
+                raise KeyError("Please add 'rho_f1' to 'simulation' entry.")
+
+            if 'rho_f2' in inputs['simulation']:
+                print("Fluid 2 Equilibrium Density: " + str(inputs['simulation']['rho_f2']))
+            else:
+                raise KeyError("Please add 'rho_f2' to 'simulation' entry.")
+
+            if 'force_f1' in inputs['simulation']:
+                print("Fluid 1 Force: " + str(inputs['simulation']['force_f1']))
+            else:
+                raise KeyError("Please add 'force_f1' to 'simulation' entry.")
+
+            if 'force_f2' in inputs['simulation']:
+                print("Fluid 2 Force: " + str(inputs['simulation']['force_f2']))
+            else:
+                raise KeyError("Please add 'force_f2' to 'simulation' entry.")
+
+            if 'pressure bc' in inputs['simulation']:
+                print("Using Pressure Boundary Conditions: " + str(inputs['simulation']['pressure bc']))
+            else:
+                raise KeyError("Please add 'force_f2' to 'simulation' entry.")
+
+            if inputs['simulation']['pressure bc'] == True:
+
+                if 'minimum radius' in inputs['simulation']:
+                    print("Minimum radius of invasion (voxels): " + str(inputs['simulation']['minimum radius']))
+                else:
+                    raise KeyError("Please add 'minimum radius' to 'simulation' entry if using pressure boundary conditions.")
+
+                if 'num pressure steps' in inputs['simulation']:
+                    print("Number of capillary pressure steps: " + str(inputs['simulation']['num pressure steps']))
+                else:
+                    raise KeyError("Please add 'num pressure steps' to 'simulation' entry if using pressure boundary conditions.")
+
+            if 'fluid init' in inputs['simulation']:
+                if inputs['simulation']['fluid init'] == 'drainage':
+                    print("Initial fluid configuration setup for drainage simulation.")
+                    inputs['simulation']['fluid 1 init']['x1'] = 1
+                    inputs['simulation']['fluid 1 init']['x2'] = 2
+                    inputs['simulation']['fluid 1 init']['y1'] = 1
+                    inputs['simulation']['fluid 1 init']['y2'] = ny
+                    inputs['simulation']['fluid 1 init']['z1'] = 1
+                    inputs['simulation']['fluid 1 init']['z2'] = nz
+
+                    inputs['simulation']['fluid 2 init']['x1'] = 3
+                    inputs['simulation']['fluid 2 init']['x2'] = nx + 2*inputs['domain']['inlet and outlet layers']
+                    inputs['simulation']['fluid 2 init']['y1'] = 1
+                    inputs['simulation']['fluid 2 init']['y2'] = ny
+                    inputs['simulation']['fluid 2 init']['z1'] = 1
+                    inputs['simulation']['fluid 2 init']['z2'] = nz
+
+                elif inputs['simulation']['fluid init'] == 'custom':
+                    print("Initial fluid configuration setup with custom settings.")
+                else:
+                    raise KeyError("Please set 'fluid init' in 'simulation' entry to 'drainage' or 'custom'.")
+            else:
+                raise KeyError("Please add 'fluid init' to 'simulation' entry.")
+
+            if 'Gc' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'Gc' to 'fluid data' under 'simulation' entry.")
+
+            if 'omega_f1' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'omega_f1' to 'fluid data' under 'simulation' entry.")
+
+            if 'omega_f2' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'omega_f2' to 'fluid data' under 'simulation' entry.")
+
+            if 'G_ads_f1_s1' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'G_ads_f1_s1' to 'fluid data' under 'simulation' entry.")
+
+            if 'G_ads_f1_s2' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'G_ads_f1_s2' to 'fluid data' under 'simulation' entry.")
+
+            if 'G_ads_f1_s3' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'G_ads_f1_s3' to 'fluid data' under 'simulation' entry.")
+
+            if 'G_ads_f1_s4' in inputs['simulation']['fluid data']:
+                pass
+            else:
+                raise KeyError("Please add 'G_ads_f1_s4' to 'fluid data' under 'simulation' entry.")
+
+            if 'convergence' in inputs['simulation']:
+                pass
+            else:
+                raise KeyError("Please add 'convergence' to 'simulation' entry.")
+
+            if 'convergence iter' in inputs['simulation']:
+                pass
+            else:
+                raise KeyError("Please add 'convergence iter' to 'simulation' entry.")
+
+            if 'max iterations' in inputs['simulation']:
+                pass
+            else:
+                raise KeyError("Please add 'max iterations' to 'simulation' entry.")
+
+            if 'save sim' in inputs['simulation']:
+                print("Save simulation state: " + str(inputs['simulation']['save sim']))
+            else:
+                raise KeyError("Please add 'max iterations' to 'simulation' entry.")
+
+            if 'save iter' in inputs['simulation']:
+                if inputs['simulation']['save sim']==True:
+                    print("Saving simulation state every " + str(inputs['simulation']['save iter']) + " iterations.")
+            else:
+                raise KeyError("Please add 'save iter' to 'simulation' entry if saving simulation state.")
+
+            if 'gif iter' in inputs['simulation']:
+                pass
+            else:
+                raise KeyError("Please add 'gif iter' to 'simulation' entry.")
+
+            if 'vtk iter' in inputs['simulation']:
+                print("Saving density vtks every " + str(inputs['simulation']['vtk iter']) + " iterations.")
+            else:
+                raise KeyError("Please add 'vtk iter' to 'simulation' entry.")
+
+            if 'rho_f2_vtk' in inputs['simulation']:
+                print("Saving density fluid 1 and fluid 2 vtks: " + str(inputs['simulation']['rho_f2_vtk']))
+            else:
+                raise KeyError("Please add 'rho_f2_vtk' to 'simulation' entry.")
+
+            if 'print geom' in inputs['simulation']:
+                pass
+            else:
+                inputs['simulation']['print geom'] = True
+
+            if 'print stl' in inputs['simulation']:
+                pass
+            else:
+                inputs['simulation']['print stl'] = False
 
     else:
         raise KeyError("Please add 'simulation' entry to input file.")
@@ -184,6 +334,6 @@ def parse_input_file(input_file):
     return inputs
 
 
-# input_file = '../examples/python_1_phase_workflow/input.yml'
+# input_file = '../examples/python_2_phase_workflow/input.yml'
 # inputs = parse_input_file(input_file)
 

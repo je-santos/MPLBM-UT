@@ -23,7 +23,7 @@ def create_geom_for_palabos(inputs):
     rock = np.fromfile(geom_file, dtype=data_type).reshape([Nx, Ny, Nz])/3
 
     # select a subset for simulation
-    rock = rock[0:nx, 0:ny, 0:nz]
+    rock = rock[0:nz, 0:ny, 0:nx]
 
     # geom inputs
     geom            = Namespace()

@@ -1,7 +1,7 @@
 import parse_input_file
 import pore_utils
 import create_geom_for_palabos
-import create_single_phase_input_file
+import create_palabos_input_file
 import yaml
 
 
