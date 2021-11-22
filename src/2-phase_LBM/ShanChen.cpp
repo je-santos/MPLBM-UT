@@ -304,10 +304,13 @@ int main(int argc, char * argv[]) {
   T rho_f2;
 
   T rho_f1_inlet;
-  T rho_f2_outlet_initial, rho_f2_outlet_final;
+  T rho_f2_outlet_initial;
+  // T rho_f2_outlet_final;
   T rhoNoFluid;
   // T rho_f2_step;
-  T drho_f2;
+  // T drho_f2;
+  T num_pc_steps;
+  T min_radius;
 
   plint it_max;
   plint it_conv;
@@ -380,9 +383,11 @@ int main(int argc, char * argv[]) {
 
     document["fluids"]["rho_f1_i"].read(rho_f1_inlet);
     document["fluids"]["rho_f2_i"].read(rho_f2_outlet_initial);
-    document["fluids"]["rho_f2_f"].read(rho_f2_outlet_final);
+    // document["fluids"]["rho_f2_f"].read(rho_f2_outlet_final);
     document["fluids"]["rho_d"].read(rhoNoFluid);
-    document["fluids"]["drho_f2"].read(drho_f2);
+    // document["fluids"]["drho_f2"].read(drho_f2);
+    document["fluids"]["num_pc_steps"].read(num_pc_steps);
+    document["fluids"]["min_radius"].read(min_radius);
 
     document["output"]["out_folder"].read(fNameOut);
     document["output"]["save_sim"].read(save_sim);
@@ -405,8 +410,17 @@ int main(int argc, char * argv[]) {
     pcout << exception.what() << std::endl;
     return -1;
   }
+  
+  plint runnum = 0; // If not using pressure bc, set to 0 so no Pc steps are calculated
+  if (pressure_bc == true){
+    // If running using pressure BCs, use the number of pressure steps specified
+    runnum = num_pc_steps;
+    
+    // Old method
+    // runnum = ((rho_f2_outlet_initial - rho_f2_outlet_final) / drho_f2) + 1;
+  }
 
-  plint runnum = ((rho_f2_outlet_initial - rho_f2_outlet_final) / drho_f2) + 1;
+  
   global::directories().setOutputDir(fNameOut);
 
   T rho_fluid1[runnum];
@@ -434,10 +448,17 @@ int main(int argc, char * argv[]) {
   std::string outDir = fNameOut;
   std::string Lattice1 = fNameOut + "lattice1.dat";
   std::string Lattice2 = fNameOut + "lattice2.dat";
-
-  for (plint readnum = 1; readnum <= runnum; ++readnum) {
-    rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum - 1) * drho_f2;
-    pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
+  
+  // Calculating capillary pressure steps
+  T cos_theta = abs(4*Gads_f1_s1/(G*(rho_f1_inlet - rhoNoFluid))); // Taking absolute value so that the difference in density is always positive
+  T sigma = 0.15; // tuning parameter from docs
+  T delta_rho = 6*sigma*cos_theta/min_radius;
+  T step_size = (rho_f2_outlet_initial - (rho_f2_outlet_initial-delta_rho))/num_pc_steps; // To calculate densities in the for loop
+  
+  for (plint readnum = 0; readnum <= runnum; ++readnum) {
+    rho_fluid2[readnum] = rho_f2_outlet_initial - readnum*step_size;
+    //rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum - 1) * drho_f2;
+    // pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
     rho_fluid1[readnum] = rho_f1_inlet;
   }
 
@@ -475,7 +496,7 @@ int main(int argc, char * argv[]) {
 
   if (pressure_bc == true) {
     pcout << "The boundary conditions per run are:" << endl;
-    for (plint readnum = 1; readnum <= runnum; ++readnum) {
+    for (plint readnum = 0; readnum <= runnum; ++readnum) {
       deltaP[readnum] = (rho_fluid1[readnum] - rho_fluid2[readnum]) / 3;
       pcout << "Run number = " << readnum << endl;
       pcout << "Rho_no_1 = " << rho_fluid1[readnum] << endl;
@@ -491,7 +512,7 @@ int main(int argc, char * argv[]) {
   Box3D outlet(nx - 2, nx - 1, 1, ny - 2, 1, nz - 2);
 
   // Setup or load fluid lattices
-  plint current_run_num = 1;
+  plint current_run_num = 0;
   if (load_state == true) {
 
     pcout << "Check run_num.dat for restart info" << endl;
@@ -642,9 +663,6 @@ int main(int argc, char * argv[]) {
         string iter_name = outDir + "/iter_num.dat";
         plb_ofstream ofile_iter(iter_name.c_str());
         ofile_iter << iT << endl;
-        // Need to save iteration number, save_it, in a file called current_iteration.dat
-        // This way we can load stuff in the middle of a pressure step or during steady state.
-        // Uncomment save_it from inputs above
       }
 
       if (iT % it_conv == 0) {
@@ -767,7 +785,7 @@ int main(int argc, char * argv[]) {
   ofile << "Inlet density = " << rho_f1_inlet << "\n" << endl;
   ofile << "Geometry flow length = " << nx << "\n" << endl;
 
-  for (plint runs = 1; runs <= runnum; ++runs) {
+  for (plint runs = 0; runs <= runnum; ++runs) {
 
     pcout << "Run    = " << runs << std::endl;
     pcout << "Pressure difference =  " << deltaP[runs] << std::endl;
