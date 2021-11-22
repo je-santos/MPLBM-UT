@@ -1,0 +1,41 @@
+simulation type: "1-phase"  # "1-phase" or "2-phase" ("2-phase" not yet implemented)
+
+input output:
+  # Full path to simulation directory (run pwd command in simulation directory and paste output here)
+  simulation directory: "/home/alexgigliotti/Documents/ut/research/mplbm-ut/MPLBM-UT/examples/python_1_phase_workflow"
+  input folder: "input/"
+  output folder: "tmp/"
+
+geometry:
+  file name: "rg_theta60_phi10.raw" # Name of the input geometry file
+  data type: int8
+  geometry size:
+    Nx: 501
+    Ny: 501
+    Nz: 501
+
+domain:
+  geom name: "rg_theta60_phi10"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
+  domain size:
+    nx: 100
+    ny: 100
+    nz: 100
+  periodic boundary:
+    x: True
+    y: False
+    z: False
+  inlet and outlet layers: 1
+  add mesh: False  # Add neutral mesh, by default False
+  swap xz: False  # False by default
+  double geom resolution: False  # False by default
+
+simulation:
+  num procs: 2
+  num geoms: 1  # Total number of geometries / individual simulations
+  pressure: 0.0005
+  max iterations: 500000
+  convergence: 0.002
+  save vtks: True
+
+visualization:  # coming soon, mainly will be for 2-phase
+  # For velocity or density viz, need to have logic checking if save vtks is true
