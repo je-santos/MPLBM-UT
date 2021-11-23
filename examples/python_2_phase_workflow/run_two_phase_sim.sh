@@ -7,4 +7,4 @@ wget www.digitalrocksportal.org/projects/65/images/71108/download/ -O input/rg_t
 python ../../python_utils/workflow_run_2_phase_sim.py input.yml
 
 # Run two-phase simulation
-bash input/run_shanchen_sim.sh
+bash input/run_shanchen_sim.sh > sim_log.txt
