@@ -13,8 +13,6 @@ from parse_input_file import *
 
 input_file = sys.argv[1]
 
-# CHANGE WORKING DIR TO SIM FOLDER! DO SAME IN 1 PHASE TOO
-
 # 1) Process input file
 inputs = parse_input_file(input_file)
 
@@ -33,7 +31,6 @@ create_palabos_input_file(inputs)
 # 4) Run 1-phase simulation
 print('Running 1-phase simulation...')
 num_procs = inputs['simulation']['num procs']
-print(num_procs)
 input_dir = inputs['input output']['input folder']
 simulation_command = f"mpirun -np {num_procs} ../../src/1-phase_LBM/permeability {input_dir}1_phase_sim_input.xml > sim_log.txt"
 file = open(f'{sim_directory}/{input_dir}run_single_phase_sim.sh', 'w')
