@@ -32,7 +32,7 @@ create_palabos_input_file(inputs)
 print('Running 1-phase simulation...')
 num_procs = inputs['simulation']['num procs']
 input_dir = inputs['input output']['input folder']
-simulation_command = f"mpirun -np {num_procs} ../../src/1-phase_LBM/permeability {input_dir}1_phase_sim_input.xml > sim_log.txt"
+simulation_command = f"mpirun -np {num_procs} ../../src/1-phase_LBM/permeability {input_dir}1_phase_sim_input.xml"
 file = open(f'{sim_directory}/{input_dir}run_single_phase_sim.sh', 'w')
 file.write(f'{simulation_command}')
 file.close()
