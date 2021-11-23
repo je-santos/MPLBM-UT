@@ -13,7 +13,7 @@ The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize t
 We are currently undergoing a series of major updates! \
    1) We are translating all pre- and post-processing code over to Python so that the repo is fully open source :). Check out the python_utils folder!
    2) We are adding very easy to use workflows written in Python for 1 and 2 phase simulations. Check out the python workflow examples!
-   3) A wide variety of bugs fixes and performance enhancements are being implemented.
+   3) A wide variety of bugs fixes and performance enhancements have been implemented.
 Please let us know if there is anything not working quite right!
 
 ################################################################################
