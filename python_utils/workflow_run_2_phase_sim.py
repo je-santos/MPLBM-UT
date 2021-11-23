@@ -34,7 +34,7 @@ create_palabos_input_file(inputs)
 print('Running 2-phase simulation...')
 num_procs = inputs['simulation']['num procs']
 input_dir = inputs['input output']['input folder']
-simulation_command = f"mpirun -np {num_procs} ../../src/2-phase_LBM/ShanChen {input_dir}2_phase_sim_input.xml > sim_log.txt"
+simulation_command = f"mpirun -np {num_procs} ../../src/2-phase_LBM/ShanChen {input_dir}2_phase_sim_input.xml"
 file = open(f'{sim_directory}/{input_dir}run_shanchen_sim.sh', 'w')
 file.write(f'{simulation_command}')
 file.close()
