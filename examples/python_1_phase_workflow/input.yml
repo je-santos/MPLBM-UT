@@ -1,4 +1,4 @@
-simulation type: "1-phase"  # "1-phase" or "2-phase" ("2-phase" not yet implemented)
+simulation type: "1-phase"  # "1-phase" or "2-phase"
 
 input output:
   # Full path to simulation directory (run pwd command in simulation directory and paste output here)
@@ -25,17 +25,16 @@ domain:
     y: False
     z: False
   inlet and outlet layers: 1
-  add mesh: False  # Add neutral mesh, by default False
+  add mesh: False  # Add neutral mesh, by default False --> Not yet implemented
   swap xz: False  # False by default
   double geom resolution: False  # False by default
 
 simulation:
-  num procs: 2
-  num geoms: 1  # Total number of geometries / individual simulations
+  num procs: 2  # Number of processors to run on
+  num geoms: 1  # Total number of geometries / individual simulations (this will be used once two-phase rel perm python code is done)
   pressure: 0.0005
   max iterations: 500000
   convergence: 0.002
   save vtks: True
 
-visualization:  # coming soon, mainly will be for 2-phase
-  # For velocity or density viz, need to have logic checking if save vtks is true
+visualization:  # coming soon

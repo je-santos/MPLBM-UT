@@ -10,6 +10,12 @@ This repository was created by Javier E. Santos, Abhishek Bihani and Alex Giglio
 
 The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
 
+We are currently undergoing a series of major updates! \
+   1) We are translating all pre- and post-processing code over to Python so that the repo is fully open source :). Check out the python_utils folder!
+   2) We have added easy-to-use workflows written in Python for 1 and 2 phase simulations. Check out the python workflow examples!
+   3) A wide variety of bugs fixes and performance enhancements have been implemented.
+We have tested all the above on a laptop and a supercomputer, but please let us know if there is anything not working quite right!
+
 ################################################################################
 Illustrations
 ################################################################################
@@ -60,13 +66,11 @@ This library provides tools to interact with the palabos simulation engine. Its 
 ################################################################################
 Requirements
 ################################################################################
-
-- Matlab or Octave (Python alternative coming soon)
-
-- Unix system (the Windows bash or the terminal in Mac)
-
-- GCC 7.2
-- OpenMPI 2.1.1 or MPICH2
+- Unix system (the Windows bash or the terminal in Mac also work)
+- Matlab or Octave (Python alternative in progress, Python 3.6+ is required)
+- GCC 7.2, 7.5
+- OpenMPI 2.1.1, MPICH2
+Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us.
 
 ################################################################################
 Installation
