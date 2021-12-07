@@ -44,9 +44,9 @@ def create_geom_edist(rock, args):
 
     # I don't understand why this works, but it does
     erock = erock.astype(np.int16)
-    erock[erock==0] = 2608
-    erock[erock==1] = 2609
-    erock[erock==2] = 2610
+    erock[erock==0] = 2608  # pore space
+    erock[erock==1] = 2609  # boundary
+    erock[erock==2] = 2610  # grains
     
     return erock, geom_name
 
