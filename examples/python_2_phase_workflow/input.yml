@@ -51,7 +51,7 @@ simulation:
   num pressure steps: 5
   
   # Initial Conditions
-  fluid init: drainage  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
+  fluid init: drainage  # If drainage, traditional drainage setup used. Fluid 2 fully saturates pore space and fluid 1 invades. If custom, use fluid 1/2 init to do custom fluid setup
   fluid 1 init:
     x1: 1
     x2: 2
