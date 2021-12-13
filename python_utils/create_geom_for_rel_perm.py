@@ -30,8 +30,8 @@ def create_geom_for_rel_perm(inputs):
     Ny = inputs['geometry']['geometry size']['Ny']
     Nz = inputs['geometry']['geometry size']['Nz']
     nx = inputs['domain']['domain size']['nx']
-    ny = inputs['domain']['domain size']['nx']
-    nz = inputs['domain']['domain size']['nx']
+    ny = inputs['domain']['domain size']['ny']
+    nz = inputs['domain']['domain size']['nz']
     geom_file_name = inputs['geometry']['file name']
     geom_name = inputs['domain']['geom name']
     geom_file = fr'{sim_dir}' + "/" + f'{input_dir + geom_file_name}'

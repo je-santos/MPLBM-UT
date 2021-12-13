@@ -269,7 +269,7 @@ def create_relperm_input_file(inputs, input_file_name):
 
     # Parse i/o inputs
     input_folder = io_folders[0]
-    output_folder = io_folders[1]
+    output_folder = io_folders[1] + '4relperm/'
 
     # Create/open input file
     file = open(f'{input_folder}{input_file_name}', 'w')
