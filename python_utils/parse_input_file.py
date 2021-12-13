@@ -326,14 +326,5 @@ def parse_input_file(input_file):
     else:
         pass
 
-    # import argparse
-    # input_file = argparse.Namespace()
-    # input_file.simulation_type = inputs['simulation type']
-    # print(input_file.simulation_type)
-
     return inputs
-
-
-# input_file = '../examples/python_2_phase_workflow/input.yml'
-# inputs = parse_input_file(input_file)
 

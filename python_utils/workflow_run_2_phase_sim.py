@@ -9,8 +9,6 @@ from parse_input_file import *
 # 2) create geom for palabos
 # 3) create palabos input file
 # 4) run 2-phase sim
-# 5) process 2-phase sim outputs for rel perms
-# 6) run 1-phase sim to get rel perms
 # Please see python_2_phase_workflow in examples directory on how to use this
 
 input_file = sys.argv[1]
@@ -30,7 +28,7 @@ create_geom_for_palabos(inputs)
 print('Creating input file...')
 create_palabos_input_file(inputs)
 
-# 4) Run 1-phase simulation
+# 4) Run 2-phase simulation
 print('Running 2-phase simulation...')
 num_procs = inputs['simulation']['num procs']
 input_dir = inputs['input output']['input folder']
@@ -40,9 +38,6 @@ file.write(f'{simulation_command}')
 file.close()
 # simulation_command_subproc = simulation_command.split(' ')
 # subprocess.run(simulation_command_subproc)
-
-# 5) Prep for rel perms
-inputs['domain']['inlet and outlet layers'] = 1
 
 # print("Done!")
 

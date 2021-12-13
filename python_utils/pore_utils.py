@@ -13,7 +13,7 @@ def create_geom_edist(rock, args):
         NotImplementedError('Feature not yet implemented')
 
     erock = edist(rock)
-    
+
     # make sure all the BCs have BB nodes
     erock[0,:,:] = 1
     erock[:,0,:] = 1
@@ -25,7 +25,7 @@ def create_geom_edist(rock, args):
     
     # re open the pores
     erock[rock==0] = 0
-    
+
     # Get the final matrix [0,1,2]
     erock[(erock>0)*(erock<2)] = 1
     erock[erock>1] = 2
@@ -44,9 +44,9 @@ def create_geom_edist(rock, args):
 
     # I don't understand why this works, but it does
     erock = erock.astype(np.int16)
-    erock[erock==0] = 2608  # pore space
-    erock[erock==1] = 2609  # boundary
-    erock[erock==2] = 2610  # grains
+    erock[erock==0] = 2608
+    erock[erock==1] = 2609
+    erock[erock==2] = 2610
     
     return erock, geom_name
 
