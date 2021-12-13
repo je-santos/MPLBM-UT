@@ -11,6 +11,14 @@ from parse_palabos_output import *
 from create_plots import *
 
 
+def download_geometry(filename, url):
+
+    download_command = f'wget {url} -O {filename}'
+    subprocess.run(download_command.split(' '))
+
+    return
+
+
 def run_2_phase_sim(inputs):
     # Steps
     # 1) create geom for palabos
@@ -113,6 +121,10 @@ def process_and_plot_results(inputs):
 
     return
 
+
+drp_url = 'www.digitalrocksportal.org/projects/65/images/71108/download/'
+file_name = 'input/rg_theta60_phi10.raw'
+download_geometry(file_name, drp_url)
 
 input_file = 'input.yml'
 inputs = parse_input_file(input_file)  # Parse inputs
