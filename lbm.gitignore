@@ -31,3 +31,6 @@ pip-delete-this-directory.txt
 # Cmake folders
 src/1-phase_LBM/build/*
 src/2-phase_LBM/build/*
+
+# Mac 
+.DS_Store
