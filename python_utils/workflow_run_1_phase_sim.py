@@ -38,9 +38,3 @@ file.write(f'{simulation_command}')
 file.close()
 # simulation_command_subproc = simulation_command.split(' ')
 # subprocess.run(simulation_command_subproc)
-
-# 5) Prep for rel perms
-inputs['domain']['inlet and outlet layers'] = 1
-
-print("Done!")
-
