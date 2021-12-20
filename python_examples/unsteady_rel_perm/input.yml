@@ -1,8 +1,8 @@
 simulation type: "2-phase"  # "1-phase" or "2-phase"
 
 input output:
-  # Full path to simulation directory (run pwd command in simulation directory and paste output here)
-  simulation directory: "/home/alexgigliotti/Documents/ut/research/mplbm-ut/MPLBM-UT/examples/python_2_phase_workflow"
+  # Full path to simulation directory 
+  simulation directory: ""
   input folder: "input/"
   output folder: "tmp/"
 

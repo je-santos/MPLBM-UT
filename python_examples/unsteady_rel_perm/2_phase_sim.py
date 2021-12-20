@@ -1,7 +1,7 @@
 import os
 import subprocess
 import sys
-sys.path.append('../../python_utils')  # It would be nice to make this a proper package...
+sys.path.append('../../python_utils/')  # It would be nice to make this a proper package...
 
 import numpy as np
 import matplotlib.pyplot as plt

@@ -1,9 +1,14 @@
 import subprocess
 import os
 import sys
+
+sys.path.append('../../python_utils/')
+
 from create_geom_for_rel_perm import *
 from create_palabos_input_file import *
 from parse_input_file import *
+
+
 
 # Steps
 # 1) parse 2-phase input file
@@ -11,7 +16,11 @@ from parse_input_file import *
 # 3) create geoms for rel perm
 # 4) run 1-phase sim to get rel perms
 
-input_file = sys.argv[1]
+try:
+    input_file = sys.argv[1]
+except IndexError: 
+     raise NameError('MP-LBM input file not provided')
+    
 
 # 1) Process input file
 inputs = parse_input_file(input_file)
