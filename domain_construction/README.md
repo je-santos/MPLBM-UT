@@ -4,11 +4,13 @@ The folders include scripts to create domains to perform simulations
 
 
 <p align="center">
-<img src="./illustrations/Gumbin.png" width="500px"></img>
+<img src="../illustrations/Gumbin.png" width="500px"></img>
 </p>
 
 
 ## 3D Plotting
+
+The plots shown above can be reproduce using the following code:
 
 ```python
 import urllib, hdf5storage, scipy.ndimage, vedo # import libs
@@ -37,4 +39,4 @@ vedo.plotter(plot)
 
 
 ## HDF5 Files
-A collection of these images and more can be find in [our project](https://www.digitalrocksportal.org/projects/374) at the Digital Rocks Portal
+A collection of these images and more can be find in [our project](https://www.digitalrocksportal.org/projects/374) at the [Digital Rocks Portal](https://www.digitalrocksportal.org/projects/).
