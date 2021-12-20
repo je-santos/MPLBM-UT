@@ -5,19 +5,10 @@ All you have to do is the following:
 
 More details are to come on all the inputs. For now, there are some comments in ```input.yml``` explaining some of the new things.
 
+<img src=./lbm_animation.gif width="500" height="400">
 
-.. figure:: lbm_animation.gif
-    :align: right
-    :alt: alternate text
-    :figclass: align-right
-
-    Non-wetting fluid shown in orange traveling through a texturally equilibrated pore. Wetting fluid is shown in blue.
+Non-wetting fluid shown in orange traveling through a texturally equilibrated pore. Wetting fluid is shown in blue.
 
 ----------------------------------------------------------------------------
 
-.. figure:: pc_and_relperm_curve.png 
-    :align: right
-    :alt: alternate text
-    :figclass: align-right
-
-    Capillary pressure and relative permeability curves.
+<img src=./pc_and_relperm_curve.png width="300" height="500">
