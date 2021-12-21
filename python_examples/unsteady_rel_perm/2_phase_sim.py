@@ -129,7 +129,7 @@ def process_and_plot_results(inputs):
 
 drp_url = 'www.digitalrocksportal.org/projects/65/images/71108/download/'
 file_name = 'input/rg_theta60_phi10.raw'
-#download_geometry(file_name, drp_url)
+download_geometry(file_name, drp_url)
 
 input_file = 'input.yml'
 inputs = parse_input_file(input_file)  # Parse inputs
