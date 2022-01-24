@@ -88,7 +88,8 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
   std::unique_ptr<plb::MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
   plb_ifstream geometryFile(fNameIn_temp.c_str());
 
-  for (plint iX=3; iX<nx-4; ++iX) {
+  // for (plint iX=3; iX<nx-4; ++iX) {  // if it has a mesh
+for (plint iX=0; iX<nx-1; ++iX) {  // if it has a mesh
     if (!geometryFile.is_open()) {
       pcout << "Error: could not open the geometry file " << fNameIn_temp << std::endl;
       exit(EXIT_FAILURE);
