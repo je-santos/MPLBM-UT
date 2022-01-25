@@ -9,15 +9,15 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 ### General Inputs 
 - **simulation type:** String, "1-phase" or "2-phase" choose which type of simulation you want to run
-#### **input output**
-- **simulation directory:** String specifying the absolute path the the simulation directory (where you are running the simulation from). Please run the command `pwd` in your simulation directory and copy the output into the input file (the path should be inside quotation marks and not have a '/' at the end).
+#### **input output:** (no user inputs here, just a key to organize input and output information)
+- **simulation directory:** String specifying the absolute path the the simulation directory (where you are running the simulation from). Please run the command `pwd` in your simulation directory and copy the output into the input file (the path should be inside quotation marks and not have a '/' at the end). We are working on adding a simpler way of getting this info to Python!
 - **input folder:** String specifying the path to where the input geometry is stored. In the examples, we provide "input/" as the input folder. 
 - **output folder:** String specifying the path to where the simulation output should be saved. In the examples, we provide "tmp/" as the output folder.
-#### **geometry:**
+#### **geometry:** (no user inputs here, just a key to organize geometry information)
 - **file name:** String specifying the name of the name of the input geometry file
 - **data type:** Datatype of the input geometry file (eg int8)
 - **geometry size:** Please provide the x, y, and z dimensions (Nx, Ny, and Nz) of the input geometry as integers
-#### domain:
+#### domain: (no user inputs here, just a key to organize domain information)
 - **geom name:** "rg_theta60_phi10"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
 - **domain size:** Please provide the x, y, and z dimensions (nx, ny, and nz) of the input simulation domain
 - **periodic boundary:** True or False, whether the boundaries are periodic in the x, y, and z directions
