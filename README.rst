@@ -68,9 +68,19 @@ Requirements
 ################################################################################
 - Unix system (the Windows bash or the terminal in Mac also work)
 - Matlab or Octave (Python alternative in progress, Python 3.6+ is required)
+- If using Python, the following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
 - GCC 7.2, 7.5
 - OpenMPI 2.1.1, MPICH2
 Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us.
+
+################################################################################
+Some Prerequisites
+################################################################################
+Some familiarity with the terminal, unix operating systems, and bash will be very useful. Here are a few things to keep in mind when running simulations:
+
+- You can check the number of CPUs available on your system with the command :code:`nproc`. It is highly recommended to check how many processors are used in the examples (Python examples use the keyword :code:`num procs` in the .yml input files, and check any of the .sh files for the :code:`-np` keyword) before running them becuase it may not be ideal or compatable with your system. If you are running on a supercomputer/cluster, please check your system's documentation for how processors are allocated to users.
+- Having a dedicated `Python virtual environment<https://docs.python.org/3/library/venv.html>`__ or `Anaconda<https://www.anaconda.com/>`__ environment is recommended to avoid compatability issues.
+- Seeing "nan" appear in simulation or terminal output indicates that something is not quite right. Please check that your simulation parameters are correct. If you still can not resolve the problem, please submit an issue and we can do our best to help or fix the bug!
 
 ################################################################################
 Installation
