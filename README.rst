@@ -79,7 +79,7 @@ Some Prerequisites
 Some familiarity with the terminal, unix operating systems, and bash will be very useful. Here are a few things to keep in mind when running simulations:
 
 - You can check the number of CPUs available on your system with the command :code:`nproc`. It is highly recommended to check how many processors are used in the examples (Python examples use the keyword :code:`num procs` in the .yml input files, and check any of the .sh files for the :code:`-np` keyword) before running them becuase it may not be ideal or compatable with your system. If you are running on a supercomputer/cluster, please check your system's documentation for how processors are allocated to users.
-- Having a dedicated `Python virtual environment<https://docs.python.org/3/library/venv.html>`__ or `Anaconda<https://www.anaconda.com/>`__ environment is recommended to avoid compatability issues.
+- Having a dedicated `Python virtual environment <https://docs.python.org/3/library/venv.html>`__ or `Anaconda <https://www.anaconda.com/>`__ environment is recommended to avoid compatability issues.
 - Seeing "nan" appear in simulation or terminal output indicates that something is not quite right. Please check that your simulation parameters are correct. If you still can not resolve the problem, please submit an issue and we can do our best to help or fix the bug!
 
 ################################################################################
