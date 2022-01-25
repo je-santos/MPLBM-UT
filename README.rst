@@ -86,6 +86,7 @@ Some familiarity with the terminal, unix operating systems, and bash will be ver
 Installation
 ################################################################################
 In the parent directory of the repo, run the installation script with the following command:
+
 .. code-block:: bash
 
   ./Install.sh
@@ -94,7 +95,7 @@ In the parent directory of the repo, run the installation script with the follow
 Running a simulation
 ################################################################################
 
-Please refer to the `unsteady state example  <examples/unsteady_relperm_spherepack>`__ for a complete end-to-end workflow 
+Please refer to the `unsteady state example  <matlab_examples/unsteady_relperm_spherepack>`__ for a complete end-to-end workflow 
 
 An overview of the main steps is given below.
 
