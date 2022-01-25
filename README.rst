@@ -85,7 +85,7 @@ Some familiarity with the terminal, unix operating systems, and bash will be ver
 ################################################################################
 Installation
 ################################################################################
-
+In the parent directory of the repo, run the installation script with the following command:
 .. code-block:: bash
 
   ./Install.sh
