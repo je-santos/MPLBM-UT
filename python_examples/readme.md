@@ -8,29 +8,88 @@ Figure 1- Geometry setup for 2-phase flow simulations
 **The inputs are explained in the same sequence as the .yml file. First, the general inputs common between 1 and 2 phase, and then specific inputs for 1 phase and 2 phase simulations**
 
 ### General Inputs 
-- **simulation type:** String, "1-phase" or "2-phase" choose which type of simulation you want to run
-#### **input output:** (no user inputs here, just a key to organize input and output information)
-- **simulation directory:** String specifying the absolute path the the simulation directory (where you are running the simulation from). Please run the command `pwd` in your simulation directory and copy the output into the input file (the path should be inside quotation marks and not have a '/' at the end). We are working on adding a simpler way of getting this info to Python!
-- **input folder:** String specifying the path to where the input geometry is stored. In the examples, we provide "input/" as the input folder. 
-- **output folder:** String specifying the path to where the simulation output should be saved. In the examples, we provide "tmp/" as the output folder.
-#### **geometry:** (no user inputs here, just a key to organize geometry information)
-- **file name:** String specifying the name of the name of the input geometry file
-- **data type:** Datatype of the input geometry file (eg int8)
-- **geometry size:** Please provide the x, y, and z dimensions (Nx, Ny, and Nz) of the input geometry as integers
-#### domain: (no user inputs here, just a key to organize domain information)
-- **geom name:** "rg_theta60_phi10"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
-- **domain size:** Please provide the x, y, and z dimensions (nx, ny, and nz) of the input simulation domain
-- **periodic boundary:** True or False, whether the boundaries are periodic in the x, y, and z directions
-- **inlet and outlet layers:** Integer number of layers added to the ends of the simulation domain (in x direction). For 1-phase simulations, 1 should work fine. For 2-phase simulations, 4 should work fine.
-- **add mesh:** NOT YET IMPLEMENTED, True or False, Add A neutral mesh
-- **swap xz:** True or False  # False by default
-- **double geom resolution:** NOT YET IMPLEMENTED, True or False, this will double the domain resolution
+- `simulation type:` String, "1-phase" or "2-phase" choose which type of simulation you want to run
+#### `input output:` (no user inputs here, just a key to organize input and output information)
+- `simulation directory:` String specifying the absolute path the the simulation directory (where you are running the simulation from). Please run the command `pwd` in your simulation directory and copy the output into the input file (the path should be inside quotation marks and not have a '/' at the end). We are working on adding a simpler way of getting this info to Python!
+- `input folder:` String specifying the path to where the input geometry is stored. In the examples, we provide "input/" as the input folder. 
+- `output folder:` String specifying the path to where the simulation output should be saved. In the examples, we provide "tmp/" as the output folder.
+#### `geometry:` (no user inputs here, just a key to organize geometry information)
+- `file name:` String specifying the name of the name of the input geometry file
+- `data type:` Datatype of the input geometry file (eg int8)
+- `geometry size:` Please provide the x, y, and z dimensions (`Nx`, `Ny`, and `Nz` subkeys in the examples) of the input geometry as integers
+#### `domain:` (no user inputs here, just a key to organize domain information)
+- `geom name:` "rg_theta60_phi10"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
+- `domain size:` Please provide the x, y, and z dimensions (`nx`, `ny`, and `nz` subkeys in the examples) of the input simulation domain
+- `periodic boundary:` True or False, whether the boundaries are periodic in the x, y, and z directions
+- `inlet and outlet layers:` Integer number of layers added to the ends of the simulation domain (in x direction). For 1-phase simulations, 1 or greater should work well. For 2-phase simulations, 4 should work well and at least 3 are highly recommended.
+- `add mesh:` NOT YET IMPLEMENTED, True or False, Add A neutral mesh
+- `swap xz:` True or False  # False by default
+- `double geom resolution:` NOT YET IMPLEMENTED, True or False, this will double the domain resolution
 
 ### 1-Phase Simulation Inputs (1-phase inputs for `simulation` key)
-- ****
+- `num procs:` Integer number of processors to run on (please make sure this is compatible with your system!)
+- `num geoms:` Integer total number of geometries / individual simulations, set to 1 for a single-phase simulation
+- `pressure:` Pressure difference across the core, numbers on the order of 1e-4 should work well
+- `max iterations:` Integer of the maximum number of iterations the simulation should run for. 
+- `convergence:` Energy difference convergence criterion for the simulation. We recommend figuring out the order accuracy you need and trying that. In addition, the lower the convergence threshold the higher you should set `max iterations`. From testing, `convergence = 1e-6` and `max iterations = 1e7` will yield good, consistent results, but it could take a long time (order of hours) depending on how large the geometry is.
+- `save vtks:` True or False, whether to save vtk files with velocity field
 
 ### 2-Phase Simulation Inputs (2-phase inputs for `simulation` key)
-- ****
+- `num procs:` Integer number of processors to run on (please make sure this is compatible with your system!)
+- `restart sim:` True or False, set to False if starting a simulation. Set to True if you would like to continue from a previous saved state. 
+- `rho_f1:` Initial/equilibrium density of Fluid 1
+- `rho_f2:` Initial/equilibrium density of Fluid 2
+- *A note on fluid densities:* The Shan-Chen method is sensitive to the density ratio of the two fluids. We have not done much testing with fluids of different density, but it is a possiblility with our model. 
+- `force_f1:` Applied force to Fluid 1
+- `force_f2:` Applied force to Fluid 2
+- *A note on forces:* For no applied forces, set both entries to 0. If you do want to use forces, depending on your geometry and applications, this should be around 1e-3 to 1e-6. For porous media applications where capillary number is important, a smaller force should be used. There is currently no built-in function to calculate capillary number, but it can be calculated from velocity output. That being said, it may take some trial and error to get the force right for you application. 
+- `pressure bc:` True or False, to use a pressure boundary condition or not
+- `minimum radius:` This number is correlated to delta rho in the docs (see below). This acts as entry capillary pressure, so set 1-3 voxels lower than inscribed sphere radius to reach residual saturations
+- `num pressure steps:` Integer number of pressure values the simulation should use. Set to 1 if you only want a constant pressure difference across the sample. Setting this larger than 1 will create an array of pressure differences to simulate; this is how to obtain a capillary pressure curve via drainage. The pressure difference will start at zero, and the pressure found from `minimum radius` will be the largest pressure difference across the sample. The code will create an array of pressure values from 0 to the maximum pressure with `num pressure steps` steps in between.
+  
+  # Initial Conditions
+  fluid init: drainage  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
+  fluid 1 init:
+    x1: 1
+    x2: 2
+    y1: 1
+    y2: 100
+    z1: 1
+    z2: 100
+  fluid 2 init:
+    x1: 3
+    x2: 100
+    y1: 1
+    y2: 100
+    z1: 1
+    z2: 100
+    
+  fluid data:    
+    Gc: 0.9
+    omega_f1: 1
+    omega_f2: 1
+    # Wetting forces from Huang et al. 2007
+    G_ads_f1_s1: -0.4
+    G_ads_f1_s2: 0
+    G_ads_f1_s3: 0
+    G_ads_f1_s4: 0
+  
+  convergence: 0.01  # Convergence threshold
+  convergence iter: 100  # How often to check for convergence
+  max iterations: 500000  # max iterations per Pc step
+  save sim: True  # Save restart files
+  save iter: 5000  # How often to save restart files
+  gif iter: 5000  # How often to save gifs
+  vtk iter: 5000  # How often to save vtk files
+  rho_f2_vtk: True  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
+  print geom: True  # Create vtk of geometry at beginning
+  print stl: False  # Create stl of geometry at beginning
+  
+rel perm:  # Parameters for 1-phase sims for rel perms
+  pressure: 0.0005
+  max iterations: 1000000
+  convergence: 1e-6
+  save vtks: True  # save velocity vtks
 
 ****
 
