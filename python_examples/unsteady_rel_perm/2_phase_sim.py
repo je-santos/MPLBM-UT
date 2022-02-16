@@ -83,13 +83,14 @@ def run_rel_perm_sim(inputs):
     print('Running rel perm simulation...')
     num_procs = inputs['simulation']['num procs']
     input_dir = inputs['input output']['input folder']
+    output_dir = inputs['input output']['output folder']
     simulation_command = f"mpirun -np {num_procs} ../../src/1-phase_LBM/permeability {input_dir}relperm_input.xml"
     file = open(f'{sim_directory}/{input_dir}run_relperm_sim.sh', 'w')
     file.write(f'{simulation_command}')
     file.close()
 
     simulation_command_subproc = f'bash {sim_directory}/{input_dir}run_relperm_sim.sh'
-    make_4relperm_folder = 'mkdir tmp/4relperm'
+    make_4relperm_folder = f'mkdir {sim_directory}/{output_dir}/4relperm'
     subprocess.run(make_4relperm_folder.split(' '))
     subprocess.run(simulation_command_subproc.split(' '))
 
