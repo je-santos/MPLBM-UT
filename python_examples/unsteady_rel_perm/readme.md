@@ -14,8 +14,6 @@ A couple notes:
   2) Run ```run_two_phase_sim.sh``` to start a two-phase Shan-Chen LBM simulation.
   3) Run ```run_rel_perm.sh``` to start the relative permeability simulation.
 
-More details are to come on all the inputs. For now, there are some comments in ```input.yml``` explaining some of the new things.
-
 <img src=./lbm_animation.gif width="500" height="400">
 
 Non-wetting fluid shown in orange traveling through a [texturally equilibrated pore](https://www.digitalrocksportal.org/projects/65). Wetting fluid is shown in blue.
