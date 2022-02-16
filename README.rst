@@ -71,7 +71,7 @@ Requirements
 - If using Python, the following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
 - gcc 7.2, 7.5
 - OpenMPI 2.1.1, MPICH2
-Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us. As of now, it seems that gcc 7.X works reliably: here are instructions on how to install and switch between _`different gcc and g++ versions<https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa>`_. If you are on a cluster/supercomputer you may need to ask your system admins about installing a different version of gcc.
+Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us. As of now, it seems that gcc 7.X works reliably: click this link for instructions on `how to install and switch between different gcc and g++ versions <https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa>`_. If you are on a cluster/supercomputer you may need to ask your system admins about installing a different version of gcc.
 
 ################################################################################
 Some Prerequisites
