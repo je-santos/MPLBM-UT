@@ -1,0 +1,88 @@
+simulation type: "2-phase"  # "1-phase" or "2-phase"
+
+input output:
+  # Full path to simulation directory 
+  simulation directory: ""
+  input folder: "input/"
+  output folder: "tmp_p0.4/"
+
+geometry:
+  file name: "flat_surface.raw" # Name of the input geometry file
+  data type: int8
+  geometry size:
+    Nx: 75
+    Ny: 75
+    Nz: 75
+
+domain:
+  geom name: "flat_surface"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
+  domain size:
+    nx: 75
+    ny: 75
+    nz: 35
+  periodic boundary:
+    x: True
+    y: True
+    z: True
+  inlet and outlet layers: 0  # 3-4 recommended for 2-phase sim
+  add mesh: False  # Add neutral mesh, by default False --> Not yet implemented
+  swap xz: True  # False by default
+  double geom resolution: False  # False by default
+
+simulation:
+  
+  num procs: 2
+  
+  restart sim: False  # Set to true if you would like to continue from a previous saved state
+  
+  # Fluid densities
+  rho_f1: 2
+  rho_f2: 2
+  
+  # For constant forces boundary condition
+  force_f1: 0
+  force_f2: 0
+  
+  # For pressure difference boundary conditions
+  pressure bc: False
+  minimum radius: 3  # Correlated to delta rho in docs. This acts as entry pressure, so set 1-3 voxels lower than inscribed sphere radius
+  num pressure steps: 1
+  
+  # Initial Conditions
+  fluid init: custom  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
+  fluid 1 init:
+    x1: 28
+    x2: 48
+    y1: 28
+    y2: 48
+    z1: 4
+    z2: 24
+  fluid 2 init:
+    x1: 0
+    x2: 75
+    y1: 0
+    y2: 75
+    z1: 0
+    z2: 35
+    
+  fluid data:    
+    Gc: 0.9
+    omega_f1: 1
+    omega_f2: 1
+    # Wetting forces from Huang et al. 2007
+    G_ads_f1_s1: 0.4
+    G_ads_f1_s2: 0
+    G_ads_f1_s3: 0
+    G_ads_f1_s4: 0
+  
+  convergence: 0.01  # Convergence threshold
+  convergence iter: 100  # How often to check for convergence
+  max iterations: 500000  # max iterations per Pc step
+  save sim: True  # Save restart files
+  save iter: 5000  # How often to save restart files
+  gif iter: 100  # How often to save gifs
+  vtk iter: 100  # How often to save vtk files
+  rho_f2_vtk: False  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
+  print geom: False  # Create vtk of geometry at beginning
+  print stl: False  # Create stl of geometry at beginning
+
