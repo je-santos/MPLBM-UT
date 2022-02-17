@@ -411,13 +411,17 @@ int main(int argc, char * argv[]) {
     return -1;
   }
   
-  plint runnum = 0; // If not using pressure bc, set to 0 so no Pc steps are calculated
+  plint runnum = 0;
   if (pressure_bc == true){
     // If running using pressure BCs, use the number of pressure steps specified
     runnum = num_pc_steps;
     
     // Old method
     // runnum = ((rho_f2_outlet_initial - rho_f2_outlet_final) / drho_f2) + 1;
+  } else {
+  
+    plint runnum = 1; // If not using pressure bc, set to 1 so no Pc steps are calculated
+ 
   }
 
   
@@ -449,18 +453,30 @@ int main(int argc, char * argv[]) {
   std::string Lattice1 = fNameOut + "lattice1.dat";
   std::string Lattice2 = fNameOut + "lattice2.dat";
   
-  // Calculating capillary pressure steps
-  T cos_theta = abs(4*Gads_f1_s1/(G*(rho_f1_inlet - rhoNoFluid))); // Taking absolute value so that the difference in density is always positive
-  T sigma = 0.15; // tuning parameter from docs
-  T delta_rho = 6*sigma*cos_theta/min_radius;
-  T step_size = (rho_f2_outlet_initial - (rho_f2_outlet_initial-delta_rho))/num_pc_steps; // To calculate densities in the for loop
-  
-  for (plint readnum = 0; readnum <= runnum; ++readnum) {
-    rho_fluid2[readnum] = rho_f2_outlet_initial - readnum*step_size;
-    //rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum - 1) * drho_f2;
-    // pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
-    rho_fluid1[readnum] = rho_f1_inlet;
+
+
+  if (pressure_bc == true){
+    
+    // Calculating capillary pressure steps
+    T cos_theta = abs(4*Gads_f1_s1/(G*(rho_f1_inlet - rhoNoFluid))); // Taking absolute value so that the difference in density is always positive
+    T sigma = 0.15; // tuning parameter from docs
+    T delta_rho = 6*sigma*cos_theta/min_radius;
+    T step_size = (rho_f2_outlet_initial - (rho_f2_outlet_initial-delta_rho))/num_pc_steps; // To calculate densities in the for loop
+    
+    for (plint readnum = 0; readnum <= runnum; ++readnum) {
+      rho_fluid2[readnum] = rho_f2_outlet_initial - readnum*step_size;
+      //rho_fluid2[readnum] = rho_f2_outlet_initial - (readnum - 1) * drho_f2;
+      // pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
+      rho_fluid1[readnum] = rho_f1_inlet;
+    }
+
+  } else {
+    runnum = 0; // If not using pressure bc, set to 1 so no Pc steps are calculated
+    rho_fluid1[runnum] = rho_f1_inlet;
+    rho_fluid2[runnum] = rho_f2_outlet_initial;
+    
   }
+
 
   const T nu_f1 = ((T) 1 / omega_f1 - 0.5) / DESCRIPTOR < T > ::invCs2;
   const T nu_f2 = ((T) 1 / omega_f2 - 0.5) / DESCRIPTOR < T > ::invCs2;
