@@ -420,7 +420,7 @@ int main(int argc, char * argv[]) {
     // runnum = ((rho_f2_outlet_initial - rho_f2_outlet_final) / drho_f2) + 1;
   } else {
   
-    plint runnum = 1; // If not using pressure bc, set to 1 so no Pc steps are calculated
+    runnum = 1; // If not using pressure bc, set to 1 to save a one set of fluid densities and a pressure value
  
   }
 
@@ -471,7 +471,7 @@ int main(int argc, char * argv[]) {
     }
 
   } else {
-    runnum = 0; // If not using pressure bc, set to 1 so no Pc steps are calculated
+    runnum = 0; // If not using pressure bc, set to 0 to fill in correct density values
     rho_fluid1[runnum] = rho_f1_inlet;
     rho_fluid2[runnum] = rho_f2_outlet_initial;
     
