@@ -4,4 +4,6 @@ This is a test and verification of the contact angle model. The code uses the mo
 To run the test, enter the following line in your terminal:\
 ```python contact_angle_droplet_test.py```
 
-More detials and images coming soon!
+<img src=./droplet_viz_m0.4.png width="320"> <img src=./droplet_viz_0.png width="320"> <img src=./droplet_viz_p0.4.png width="320">
+
+
