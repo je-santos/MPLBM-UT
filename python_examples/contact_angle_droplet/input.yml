@@ -4,21 +4,21 @@ input output:
   # Full path to simulation directory 
   simulation directory: ""
   input folder: "input/"
-  output folder: "tmp_p0.4/"
+  output folder: "tmp_m0.4/"
 
 geometry:
   file name: "flat_surface.raw" # Name of the input geometry file
   data type: int8
   geometry size:
-    Nx: 75
-    Ny: 75
-    Nz: 75
+    Nx: 80
+    Ny: 80
+    Nz: 80
 
 domain:
   geom name: "flat_surface"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
   domain size:
-    nx: 75
-    ny: 75
+    nx: 80
+    ny: 80
     nz: 35
   periodic boundary:
     x: True
@@ -31,7 +31,7 @@ domain:
 
 simulation:
   
-  num procs: 2
+  num procs: 6
   
   restart sim: False  # Set to true if you would like to continue from a previous saved state
   
@@ -51,18 +51,18 @@ simulation:
   # Initial Conditions
   fluid init: custom  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
   fluid 1 init:
-    x1: 28
-    x2: 48
-    y1: 28
-    y2: 48
-    z1: 4
-    z2: 24
+    x1: 30
+    x2: 50
+    y1: 30
+    y2: 50
+    z1: 7
+    z2: 27
   fluid 2 init:
-    x1: 0
-    x2: 75
-    y1: 0
-    y2: 75
-    z1: 0
+    x1: 1
+    x2: 80
+    y1: 1
+    y2: 80
+    z1: 1
     z2: 35
     
   fluid data:    
@@ -80,8 +80,8 @@ simulation:
   max iterations: 500000  # max iterations per Pc step
   save sim: True  # Save restart files
   save iter: 5000  # How often to save restart files
-  gif iter: 100  # How often to save gifs
-  vtk iter: 100  # How often to save vtk files
+  gif iter: 1000  # How often to save gifs
+  vtk iter: 1000  # How often to save vtk files
   rho_f2_vtk: False  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
   print geom: False  # Create vtk of geometry at beginning
   print stl: False  # Create stl of geometry at beginning
