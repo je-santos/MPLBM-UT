@@ -75,7 +75,7 @@ simulation:
     G_ads_f1_s3: 0
     G_ads_f1_s4: 0
   
-  convergence: 0.01  # Convergence threshold
+  convergence: 1e-4  # Convergence threshold
   convergence iter: 100  # How often to check for convergence
   max iterations: 500000  # max iterations per Pc step
   save sim: True  # Save restart files
