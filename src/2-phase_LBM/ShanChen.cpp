@@ -699,15 +699,15 @@ int main(int argc, char * argv[]) {
         lattice_fluid2.toggleInternalStatistics(false);
 
         // calculate relative difference
-        relE_f1 = std::fabs(old_avg_f1 - new_avg_f1) * 100 / old_avg_f1; // /it_conv;
-        relE_f2 = std::fabs(old_avg_f2 - new_avg_f2) * 100 / old_avg_f2; // /it_conv;
+        relE_f1 = std::fabs(old_avg_f1 - new_avg_f1) * 100 / old_avg_f1 / it_conv;
+        relE_f2 = std::fabs(old_avg_f2 - new_avg_f2) * 100 / old_avg_f2 / it_conv;
 
         pcout << "Run num " << runs;
         pcout << ", Iteration " << iT << std::endl;
         pcout << "-----------------" << std::endl;
-        pcout << "Relative difference fluid1: " << setprecision(3) <<
+        pcout << "Relative difference average per iter fluid1: " << setprecision(3) <<
           relE_f1 << " %" << std::endl;
-        pcout << "Relative difference fluid2: " << setprecision(3) <<
+        pcout << "Relative difference average per iter fluid2: " << setprecision(3) <<
           relE_f2 << " %" << std::endl;
         pcout << "Has fluid 1 converged?: " << ((relE_f1 < convergence) ? "TRUE" : "FALSE") << std::endl;
         pcout << "Has fluid 2 converged?: " << ((relE_f2 < convergence) ? "TRUE" : "FALSE") << std::endl;
