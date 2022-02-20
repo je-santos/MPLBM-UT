@@ -8,7 +8,7 @@ input output:
 
 geometry:
   file name: "rg_theta60_phi10.raw" # Name of the input geometry file
-  data type: int8
+  data type: uint8
   geometry size:
     Nx: 501
     Ny: 501
