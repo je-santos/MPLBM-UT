@@ -185,7 +185,7 @@ input_file = 'input.yml'
 inputs = parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
 inputs = create_micromodel(inputs, slice_index=100, x_offset=0, y_offset=25, rescale=0.5)
-# run_2_phase_sim(inputs)  # Run 2 phase sim
+run_2_phase_sim(inputs)  # Run 2 phase sim
 # run_rel_perm_sim(inputs)  # Run rel perm
 # process_and_plot_results(inputs)  # Plot results
 
