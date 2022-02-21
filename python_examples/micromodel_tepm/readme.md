@@ -9,6 +9,6 @@ To create the animation, run the following two commands:\
   
 ----------------------------------------------------------------------------
 
-<img src=micromodel_tepm/rg_theta30_phi30_lbm_animation.gif width="500" height="400">
+<img src=./rg_theta30_phi30_lbm_animation.gif width="500" height="400">
 
 Non-wetting fluid shown in red traveling through a [TEPM](https://www.digitalrocksportal.org/projects/65) micromodel. Wetting fluid is shown in blue.
