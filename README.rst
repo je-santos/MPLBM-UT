@@ -270,6 +270,8 @@ Author's Publications
 
 5. Gigliotti A., Hesse M., Prodanovic M., Pore-Scale Simulation of Two-Phase Melt Percolation During Core Formation in Planetesimals (Mar. 2021). LPSC, https://www.hou.usra.edu/meetings/lpsc2021/pdf/2328.pdf
 
+6. Gigliotti A. (2021, August 13), Two-phase percolation in texturally equilibrated porous media, http://dx.doi.org/10.26153/tsw/21533
+
 
 ################################################################################
 External Publications
