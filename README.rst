@@ -6,7 +6,7 @@ MPLBM-UT: Multiphase LBM library for permeable media analysis
    
 MPLBM-UT supports the calculation of capillary pressure and relative permeability curves, single phase permeability, 3D tortuosity, contact angles, and  percolation pathway of 3D images or tiff slices. 
 
-This repository was created by Javier E. Santos, Abhishek Bihani and Alex Gigliotti in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz at The University of Texas at Austin.
+This repository was created by Javier E. Santos, Abhishek Bihani, and Alex Gigliotti in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz at The University of Texas at Austin.
 
 The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
 
@@ -66,12 +66,12 @@ This library provides tools to interact with the palabos simulation engine. Its 
 ################################################################################
 Requirements
 ################################################################################
-- Unix system (the Windows bash or the terminal in Mac also work)
-- Matlab or Octave (Python alternative in progress, Python 3.6+ is required)
-- If using Python, the following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
-- gcc 7.2, 7.5
+- Unix system (`Windows Linux Subsystem <https://docs.microsoft.com/en-us/windows/wsl/>`__ or the terminal in Mac also work)
+- Python 3.6+ (there is also Matlab/Octave code available but it is being phased out. We'll save it as legacy code though.)
+- The following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
+- gcc 7.X (*Please read the note below!*)
 - OpenMPI 2.1.1, MPICH2
-Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us. As of now, it seems that gcc 7.X works reliably: click this link for instructions on `how to install and switch between different gcc and g++ versions <https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa>`_. If you are on a cluster/supercomputer you may need to ask your system admins about installing a different version of gcc.
+Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us. ***As of now, it seems that gcc 7.X works reliably***: click this link for instructions on `how to install and switch between different gcc and g++ versions <https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa>`_. If you are on a cluster/supercomputer you may need to ask your system admins about installing a different version of gcc.
 
 ################################################################################
 Some Prerequisites
@@ -79,6 +79,13 @@ Some Prerequisites
 Some familiarity with the terminal, unix operating systems, and bash will be very useful. Here are a few things to keep in mind when running simulations:
 
 - You can check the number of CPUs available on your system with the command :code:`nproc`. It is highly recommended to check how many processors are used in the examples (Python examples use the keyword :code:`num procs` in the .yml input files, and check any of the .sh files for the :code:`-np` keyword) before running them becuase it may not be ideal or compatable with your system. If you are running on a supercomputer/cluster, please check your system's documentation for how processors are allocated to users.
+- In relation to the above and for those new to LBM, please note that LBM simulations can take quite some time to run. The main factors in simulaiton time are the number of cores used, domain size, and convergence tolerance. In general:
+
+   - The more cores, the faster the simulation (till a point when too much communication between cores slows things down a bit); 
+   - The larger to domain, the longer the simulation; 
+   - The smaller the convergence tolerance, the longer the simulation. 
+  It is a good idea to do some system performance testing (ie find the optimum number of cores for your domain size). Generally on CPUs, each processor will optimally handle a 20^3-50^3 section of a domain, but you will need to adjust accordingly to your system. Please see the `Young-Laplace validation example <python_examples/young_laplace_validation>`__ to get an idea of how tolerance affects run time. In that example, we used 40 cores on a 50x52x175 domain (~76^3) which gives each processor a ~22^3 section to process.
+  
 - Having a dedicated `Python virtual environment <https://docs.python.org/3/library/venv.html>`__ or `Anaconda <https://www.anaconda.com/>`__ environment is recommended to avoid compatability issues.
 - Seeing "nan" appear in simulation or terminal output indicates that something is not quite right. Please check that your simulation parameters are correct. If you still can not resolve the problem, please submit an issue and we can do our best to help or fix the bug!
 
@@ -94,45 +101,40 @@ In the parent directory of the repo, run the installation script with the follow
 ################################################################################
 Running a simulation
 ################################################################################
+The examples are a great place to see different ways the code can be used. In general, each example has a Python script, input file, an input folder, and an output folder(s):
 
-Please refer to the `unsteady state example  <matlab_examples/unsteady_relperm_spherepack>`__ for a complete end-to-end workflow 
+- The Python script contains everything needed to run the example; this means that running a simulation is as easy as running ``python 2_phase_sim.py`` or ``python 1_phase_sim.py`` in the terminal. 
+- We use YAML format for our input files. Please refer to the `readme <python_examples/readme.md>`__ in the python_examples folder to see a description of all the inputs.
+- The input folder is where simulation geometries are stored. The output folder(s) are there to store simulation results.  
 
-An overview of the main steps is given below.
+Please refer to the `unsteady state example  <python_examples/unsteady_rel_perm>`__ for a complete end-to-end workflow.
+
+An general overview of the main steps of a simulation is given below. These processes are automated by functions in the `python_utils <python_utils>`__ folder.
 
 ----------------------------------------------------------------------------
 
+**1) Parsing inputs**
 
+The input.yml files in each example contain all the input options for a simulation. `parse_input_file.py <python_utils/parse_input_file.py>`__ parses the input file and stores the entries as a Python dicationary.
 
-**A) Pre-processing (Matlab/Octave):**
+**2) Pre-processing**
 
-This is necessary to create the geometry for simulating with Palabos (.dat file) from initial geometry file.
+This is necessary to create an efficient geometry for simulating with Palabos (.dat file) from the initial geometry file. `create_geom_for_palabos.py <python_utils/create_geom_for_palabos.py>`__ uses the utilities found in `pore_utils.py <python_utils/pore_utils.py >`__ to create the .dat file.  
 
-    a) If the geometry is a raw image file, use `create_geom_4_2phase.m  <examples/unsteady_relperm_spherepack/create_geom_4_2phase.m>`_ 
-    b) If the geometry is of another type like .MAT file, multiple image slices (.tiff/.png/.jpg) or grain center coordinates use `create_geom_4_2phase_more_file_types.m  <examples/unsteady_relperm_spherepack/create_geom_4_2phase_more_file_types.m>`_ 
+**3) Run a simulation**
 
-**B) Two-Phase LBM Simulation (cpp w/MPI using PALABOS):**
+The examples provide either a python file (``2_phase_sim.py`` or ``1_phase_sim.py``) that provides the details of running a simualtion. Based on the user inputs, `create_palabos_input_file.py <python_utils/create_palabos_input_file.py>`__ creates an XML file compatible with palabos, and then a bash file is created that contains all the necessary information to run either `ShanChen <src/2-phase_LBM/>`__ for 2-phase or one of the `1-phase permeability options <src/1-phase_LBM>`_.
 
-The multiphase flow simulation can be run after updating geometry and simulation parameters in `2-phase .xml-file <examples/unsteady_relperm_spherepack/input_spherepack.xml>`_. An explanation of every input (in english and chinese) is provided in `two_phase_template_explanation <examples/1_two_phase_template_explanation/readme.md>`__
+A relative permeability simulation is also possible after a 2-phase simulation. `create_geom_for_rel_perm.py <python_utils/create_geom_for_rel_perm.py>`__ processes the resulting 2-phase geometries so realtive permeability can be calculated based on individual single phase simulations.
 
-**C) Post-processing (Matlab/Octave):**
+**4) Post-processing**
 
-The results of the simulation need to be processed for creating capillary pressure curves, creating geometries for relative permeability calculations and other results. 
+`parse_palabos_output.py <python_utils/parse_palabos_output.py>`__ contains the functions necessary to parse and save palabos outputs as easy-to-use text files. 
+`create_geom_for_rel_perm.py <python_utils/create_geom_for_rel_perm.py>`__ also contains the methods to calculate fluid saturation after a 2-phase simulation. 
 
-   a) Read the generated files using `create_geoms_4_kr.m  <examples/unsteady_relperm_spherepack/create_geoms_4_kr.m>`_  
-(It will calculate the saturation for all files, will convert the fluid configurations (1 and 2) to .dat files for 1-phase LBM simulation)
+**5) Plotting and visualization**
 
-
-    
-   b) If interested in the percolation path of the fluid, run `percolation_path.m  <examples/unsteady_relperm_spherepack/percolation_path.m>`_ 
-(It will find the file where breakthrough occurs and will caculate the percolation path length/tortuosity. It will also visualize the percolation path at breakthrough)
-    
-**D) Single-Phase LBM Simulation (cpp w/MPI using PALABOS):**
-
-The single phase flow simulation is necessary for creating relative permeability curves. Update geometry and simulation parameters in `1-phase .xml-file <examples/unsteady_relperm_spherepack/input_rel_perm.xml>`_.
-
-
-**E) Visualization**
-The produced .vti files can be opened with `Paraview <https://www.paraview.org/>`_ to perform 2-3-4D visualization. 
+Plotting and visualization can be done using the various utilities provided in the `python_examples <python_examples>`__ folder, `python_utils <python_utils>`__ folder, and the `animation_and_plotting <animation_and_plotting>`__ folder. The 3D visualization tools create iso-surfaces of the fluid density from the .vti files to visualize fluid interfaces. General plotting utilities are also available to create capillary pressure and realtive permeability curves. You can also view .vti files with `Paraview <https://www.paraview.org/>`_ and perform 2-3-4D visualization of fluid interfaces. 
 
 
 ################################################################################
