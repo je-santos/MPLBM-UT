@@ -101,7 +101,7 @@ In the parent directory of the repo, run the installation script with the follow
 ################################################################################
 Running a simulation
 ################################################################################
-The examples are a great place to see different ways the code can be used. In general, each example has a Python script, input file, an input folder, and an output folder(s):
+The `examples <python_examples>`__ are a great place to see how the code can be used in different ways. In general, each example has a Python script, input file, an input folder, and an output folder(s):
 
 - The Python script contains everything needed to run the example; this means that running a simulation is as easy as running ``python 2_phase_sim.py`` or ``python 1_phase_sim.py`` in the terminal. 
 - We use YAML format for our input files. Please refer to the `readme <python_examples/readme.md>`__ in the python_examples folder to see a description of all the inputs.
