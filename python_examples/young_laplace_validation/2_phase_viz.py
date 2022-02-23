@@ -63,7 +63,7 @@ inputs = parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
 
 # Choose simulation to visualize
-which_sim = 1
+which_sim = 2
 tmp_folders = np.array(['1e-2/', '1e-3/', '1e-4/', '1e-5/'])
 inputs['input output']['output folder'] = tmp_folders[which_sim]
 
@@ -71,7 +71,7 @@ inputs['input output']['output folder'] = tmp_folders[which_sim]
 rho_files_list = get_rho_files(inputs)
 
 # Calculate mean curvature
-index = 10  # Choose last simulation output
+index = 5  # Choose last simulation output
 
 # Setup plotter
 vp = vd.Plotter(axes=0, bg='w', bg2='w', size=(1200,900), offscreen=False)
@@ -90,5 +90,5 @@ cam = dict(pos=(98.27, 216.1, 190.2),
            viewup=(0.9352, -0.3368, -0.1095),
            distance=228.7,
            clippingRange=(108.5, 380.3))
-vp.show(camera=cam).screenshot(f'capillary_tube_viz.png', scale=1)
+vp.show(camera=cam).screenshot(f'capillary_tube_viz.png', scale=2)
 

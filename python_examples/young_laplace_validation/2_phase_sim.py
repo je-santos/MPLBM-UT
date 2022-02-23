@@ -4,6 +4,7 @@ import sys
 sys.path.append('../../python_utils/')  # It would be nice to make this a proper package...
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import cm
 from create_geom_for_palabos import *
 from create_palabos_input_file import *
 from parse_input_file import *
@@ -18,6 +19,21 @@ def replace_line_in_file(file_to_edit, line_to_find_and_replace, replacement_lin
     os.system(search_and_replace_command)
 
     return
+
+
+def find_line_in_file(file_name, line_to_match, data_to_add_line_index):
+
+    file = open(file_name)
+    data = np.array([])
+
+    for line in file:
+        if line_to_match in line:
+            line_split = line.split()
+            data = np.append(data, float(line_split[data_to_add_line_index]))
+
+    file.close()
+
+    return data
 
 
 def create_capillary_tubes(inputs):
@@ -60,7 +76,6 @@ def create_capillary_tubes(inputs):
     # vp.show()
 
     tubes.tofile(f"{inputs['input output']['input folder']}/capillary_tubes.raw")
-    print(tubes.shape)
     nx = tubes.shape[2]
     ny = tubes.shape[1]
     nz = tubes.shape[0]
@@ -115,7 +130,7 @@ def run_2_phase_sim(inputs):
     return
 
 
-def process_and_plot_results(inputs, run_name):
+def process_and_plot_results(inputs, run_name, line_color):
 
     # Process data
     create_pressure_data_file(inputs)
@@ -128,7 +143,7 @@ def process_and_plot_results(inputs, run_name):
     # krw = np.loadtxt(f'{sim_dir + output_dir}data_krw.txt')
     # krnw = np.loadtxt(f'{sim_dir + output_dir}data_krnw.txt')
 
-    plot_capillary_pressure_data(Sw, Pc, Pc_label=f'{run_name}')
+    plot_capillary_pressure_data(Sw, Pc, Pc_label=f'{run_name}', line_color=line_color, line_style='--')
 
     return
 
@@ -152,26 +167,38 @@ input_file = 'input.yml'
 inputs = parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
 
-
-output_folders = np.array(['1e-2', '1e-3'])  #, '1e-4', '1e-5'])
+output_folders = np.array(['1e-2', '1e-3', '1e-4', '1e-5'])
 
 sigma = 0.15
-theta_w = np.radians(180 - 156)
+theta_w = np.radians(180 - 156.4)
 tube_height = 1
 tube_radii = np.array([3, 4, 5, 6, 11, 16, 21])
 Pc_yl, Sw_yl = young_laplace_equation(tube_radii, sigma, theta_w, tube_height)
 plt.figure()
 
+color = iter(cm.turbo(np.linspace(0, 1, len(output_folders)+1)))
 for i in range(len(output_folders)):
     inputs['input output']['output folder'] = output_folders[i] + '/'
 
     inputs = create_capillary_tubes(inputs)
     inputs['simulation']['convergence'] = float(output_folders[i])
-    # run_2_phase_sim(inputs)  # Run 2 phase sim
-    # create_geom_for_rel_perm(inputs)  # In order to get saturation files
-    process_and_plot_results(inputs, run_name=output_folders[i])  # Plot results
+    run_2_phase_sim(inputs)  # Run 2 phase sim
+    create_geom_for_rel_perm(inputs)  # In order to get saturation files
+    process_and_plot_results(inputs, run_name=output_folders[i], line_color=next(color))  # Plot results
 
-plot_capillary_pressure_data(Sw_yl, Pc_yl, Pc_label='Young-Laplace', line_color='b')
-
+plot_capillary_pressure_data(Sw_yl, Pc_yl, Pc_label='Young-Laplace', line_color=next(color))
 plt.legend()
+plt.savefig('young_laplace_validation.png', dpi=400)
+
+# Plot performance data
+sim_times = np.array([360.532, 1316.74, 4736.49, 12388.5])/60  # in minutes
+plt.figure()
+plot_capillary_pressure_data(output_folders.astype('float'), sim_times)  # Repurposing for formatting
+plt.xlabel('Tolerance')
+plt.ylabel('Simulation Time [min]')
+plt.title(f"Young-Laplace Validation Performance:\n {inputs['simulation']['num procs']} cores", fontsize=18)
+plt.xscale('log')
+plt.xlim([np.min(output_folders.astype('float')),np.max(output_folders.astype('float'))])
+plt.savefig('young_laplace_validation_performance.png', dpi=400)
+
 plt.show()

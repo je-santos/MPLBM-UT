@@ -31,7 +31,7 @@ domain:
 
 simulation:
   
-  num procs: 7
+  num procs: 40
   
   restart sim: False  # Set to true if you would like to continue from a previous saved state
   
@@ -46,7 +46,7 @@ simulation:
   # For pressure difference boundary conditions
   pressure bc: True
   minimum radius: 3  # Correlated to delta rho in docs. This acts as entry pressure, so set 1-3 voxels lower than inscribed sphere radius
-  num pressure steps: 10
+  num pressure steps: 20
   
   # Initial Conditions
   fluid init: drainage  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
@@ -79,9 +79,9 @@ simulation:
   convergence iter: 100  # How often to check for convergence
   max iterations: 500000  # max iterations per Pc step
   save sim: True  # Save restart files
-  save iter: 5000  # How often to save restart files
-  gif iter: 500  # How often to save gifs
-  vtk iter: 500  # How often to save vtk files
+  save iter: 10000  # How often to save restart files
+  gif iter: 500000  # How often to save gifs
+  vtk iter: 500000  # How often to save vtk files
   rho_f2_vtk: False  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
   print geom: True  # Create vtk of geometry at beginning
   print stl: False  # Create stl of geometry at beginning
