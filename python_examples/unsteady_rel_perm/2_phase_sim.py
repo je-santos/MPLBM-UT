@@ -20,7 +20,7 @@ def download_geometry(filename, url):
     try:
         subprocess.run(download_command.split(' '))
     except FileNotFoundError:
-        raise InterruptedError(f'wget was not found. Try running this in the terminal: \n {download_command}')
+        raise InterruptedError(f'wget was not found. Please make sure it is installed on your system.')
     return
 
 
