@@ -5,6 +5,8 @@ There are currently two options to run this example:
 Run the following line in your terminal:\
 ```python 2_phase_sim.py```
 
+You can run ```python 2_phase_viz.py``` followed by ```python create_gif_and_mp4.py``` to visualize outputs and create an animation.
+
 A couple notes:
   1) Depending on your system configuration, you may need to use ```python3``` instead of just ```python```
   2) We test on as many systems as we can, but sometimes Python and bash do not always play well together. If you can't run this using Python, please try option 2.
