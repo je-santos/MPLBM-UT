@@ -1,6 +1,10 @@
 # Young-Laplace Validation
 <img src=./capillary_tube_viz.png width="600"> 
-This example has three different purposes: (1) it is an additional validaiton of MPLBM-UT, (2) it provides a tolerance test, (3) it provides some performance data. 
+This example has three different purposes:
+  1. It is an additional validaiton of MPLBM-UT
+  2. It provides a tolerance test
+  3. It provides some performance data. 
+
 
 To run the test, enter the following line in your terminal:\
 ```python 2_phase_sim.py.py```
