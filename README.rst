@@ -238,15 +238,6 @@ Or you can try this fix (If you are on a remote system, cluster, or supercompute
 
 | A- This is because you are using a newer cpp compiler. Subsitute the auto_ptr with unique_ptr in the .cpp files
 
-################################################################################
-Citing the workflow
-################################################################################
-
-If you use our workflow, please cite as:
-
-Santos J., Bihani A., Landry C., Multi-Phase Porous Media for Palabos. Git code (2019). 
-10.5281/zenodo.3842279
-
 
 ################################################################################
 Author's Publications
@@ -262,6 +253,8 @@ Author's Publications
 5. Gigliotti A., Hesse M., Prodanovic M., Pore-Scale Simulation of Two-Phase Melt Percolation During Core Formation in Planetesimals (Mar. 2021). LPSC, https://www.hou.usra.edu/meetings/lpsc2021/pdf/2328.pdf
 
 6. Gigliotti A. (2021, August 13), Two-phase percolation in texturally equilibrated porous media, http://dx.doi.org/10.26153/tsw/21533
+
+7. Santos, J. E., Pyrcz, M. J., & Prodanović, M. (2022). 3D Dataset of binary images: A collection of synthetically created digital rock images of complex media. Data in Brief, 107797.
 
 
 ################################################################################
