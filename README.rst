@@ -4,17 +4,15 @@ MPLBM-UT: Multiphase LBM library for permeable media analysis
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5203295.svg
    :target: https://doi.org/10.5281/zenodo.5203295
    
-MPLBM-UT supports the calculation of capillary pressure and relative permeability curves, single phase permeability, 3D tortuosity, contact angles, and  percolation pathway of 3D images or tiff slices. 
-
-This repository was created by Javier E. Santos, Abhishek Bihani, and Alex Gigliotti in collaboration with Christopher Landry, Hugh Daigle, Masa Prodanovic, Wenhui Song, and Michael Pyrcz at The University of Texas at Austin.
-
-The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
+MPLBM-UT supports the calculation of capillary pressure and relative permeability curves, single phase permeability, 3D tortuosity, contact angles, and  percolation pathway of 3D images or tiff slices. The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
 
 We are currently undergoing a series of major updates! \
    1) We are translating all pre- and post-processing code over to Python so that the repo is fully open source :). Check out the python_utils folder!
    2) We have added easy-to-use workflows written in Python for 1 and 2 phase simulations. Check out the python workflow examples!
    3) A wide variety of bugs fixes and performance enhancements have been implemented.
-We have tested all the above on a laptop and a supercomputer, but please let us know if there is anything not working quite right!
+
+We have tested all the above on a laptop and a supercomputer. If you have any issues, drop by our FAQ section and if you cannot find what you are looking for, open an issue.
+
 
 ################################################################################
 Illustrations
@@ -38,15 +36,6 @@ Illustrations
 
 ----------------------------------------------------------------------------
 
-
-.. figure:: /illustrations/percolation.png
-    :align: right
-    :alt: alternate text
-    :figclass: align-right
-
-    Percolating path of a non-wetting fluid (rock and wetting fluid not shown).
-
-----------------------------------------------------------------------------
 
 .. figure:: /illustrations/single_phase.png
     :align: right
