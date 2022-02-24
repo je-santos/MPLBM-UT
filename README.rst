@@ -11,7 +11,7 @@ We are currently undergoing a series of major updates! \
    2) We have added easy-to-use workflows written in Python for 1 and 2 phase simulations. Check out the python workflow examples!
    3) A wide variety of bugs fixes and performance enhancements have been implemented.
 
-We have tested all the above on a laptop and a supercomputer. If you have any issues, drop by our FAQ section and if you cannot find what you are looking for, open an issue.
+We have tested all the above on a laptop and a supercomputer. If you have any issues, drop by our `FAQ section <https://github.com/je-santos/MPLBM-UT/blob/master/README.rst#faq/>`_ . If you cannot find what you are looking for, open an issue.
 
 
 ################################################################################
