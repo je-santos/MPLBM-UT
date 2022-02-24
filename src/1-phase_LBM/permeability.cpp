@@ -89,7 +89,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
   plb_ifstream geometryFile(fNameIn_temp.c_str());
 
   // for (plint iX=3; iX<nx-4; ++iX) {  // if it has a mesh
-for (plint iX=0; iX<nx-1; ++iX) {  // if it has a mesh
+for (plint iX=3; iX<nx-4; ++iX) {  // if it has a mesh
     if (!geometryFile.is_open()) {
       pcout << "Error: could not open the geometry file " << fNameIn_temp << std::endl;
       exit(EXIT_FAILURE);
@@ -312,7 +312,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
           lattice.collideAndStream();
           new_avg_f = getStoredAverageEnergy(lattice);
           lattice.toggleInternalStatistics(false);
-          relE_f1 = std::fabs(old_avg_f-new_avg_f)*100/old_avg_f;
+          relE_f1 = std::fabs(old_avg_f-new_avg_f)*100/old_avg_f / 250; // Divide by iterations to normailze relative difference
           pcout << "Relative difference of Energy: " << setprecision(3)
           << relE_f1 <<" %"<<std::endl;
           pcout << "The preliminary permeability is: " <<std::endl;
