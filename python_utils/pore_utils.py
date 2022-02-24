@@ -62,3 +62,13 @@ def erase_regions(rock):
     rock[blobs_labels>1] = 0
     
     return rock
+
+
+def scale_geometry(geom, rescale_factor, data_type):
+
+    geom = skit.rescale(geom, rescale_factor, anti_aliasing=False,
+                         order=0)  # order=0 means nearest neighbor interpolation (keeps image binary)
+
+    geom = geom.astype(data_type)
+
+    return geom
