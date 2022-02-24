@@ -1,10 +1,10 @@
 ================================================================================
-MPLBM-UT: Multiphase LBM library for permeable media analysis 
+MPLBM-UT: MultiPhase and singlephase LBM library for permeable media analysis 
 ================================================================================
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.5203295.svg
    :target: https://doi.org/10.5281/zenodo.5203295
    
-MPLBM-UT supports the calculation of capillary pressure and relative permeability curves, single phase permeability, 3D tortuosity, contact angles, and  percolation pathway of 3D images or tiff slices. The direct fluid flow simulation is performed using Palabos v2.2.1. We utilize the Shan-Chen model for the multiphase simulation and the BGK and MRT for the single phase simulation.
+MPLBM-UT supports the calculation of capillary pressure and relative permeability curves and single phase permeability of 3D binary images. The direct fluid flow simulation is performed using Palabos v2.2.1. We use the Shan-Chen model for the multiphase simulation and the BGK and MRT for the singlephase simulation.
 
 We are currently undergoing a series of major updates! \
    1) We are translating all pre- and post-processing code over to Python so that the repo is fully open source :). Check out the python_utils folder!
