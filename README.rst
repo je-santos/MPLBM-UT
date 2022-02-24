@@ -23,7 +23,7 @@ Illustrations
     :alt: alternate text
     :figclass: align-right
 
-    Non-wetting fluid (purple) traveling through a spherepack.
+    Steady-state simulation: Non-wetting fluid (purple) traveling through a spherepack.
 
 ----------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ Illustrations
     :alt: alternate text
     :figclass: align-right
 
-    Unsteady flow simulation showing a capillary pressure increment with different colors.
+    Unsteady-state flow simulation: Showing capillary pressure increments with different colors.
 
 ----------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ Illustrations
     :figclass: align-right
    
 
-    Velocity magnitude of a single phase flow simulation.
+    Single-phase simulation: Velocity magnitude in log scale.
 
 
 ################################################################################
