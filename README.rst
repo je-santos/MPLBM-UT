@@ -50,7 +50,7 @@ Illustrations
 Overview
 ################################################################################
 
-This library provides tools to interact with the palabos simulation engine. Its aim is to provide ready-to-go tools to compute relevant properties for permeable media. It includes scripts for creating efficient geometries for simulation, single and multiphase models with various boundary conditions, and extensive postprocesing tools. The Palabos backend makes the simulation engine flexible enought to be run on a single core of a personal computer or in hundreds of nodes of a supercomputer.
+This library provides tools to interact with the powerful palabos simulation engine. Its aim is to provide ready-to-go tools to compute relevant properties for permeable media. It includes scripts for creating efficient geometries for simulation, single and multiphase models with various boundary conditions, and extensive postprocesing tools. The Palabos backend makes the simulation engine flexible enought to be run on a single core of a personal computer or in hundreds of nodes of a supercomputer.
 
 ################################################################################
 Requirements
