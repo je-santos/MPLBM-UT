@@ -307,17 +307,21 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
         if (iT % 250 == 0 && iT > 0) {
 
           lattice.toggleInternalStatistics(true);
-          pcout << "Iteration " << iT   << std::endl;
-          pcout << "-----------------"  << std::endl;
           lattice.collideAndStream();
           new_avg_f = getStoredAverageEnergy(lattice);
           lattice.toggleInternalStatistics(false);
-          relE_f1 = std::fabs(old_avg_f-new_avg_f)*100/old_avg_f / 250; // Divide by iterations to normailze relative difference
-          pcout << "Relative difference of Energy: " << setprecision(3)
-          << relE_f1 <<" %"<<std::endl;
-          pcout << "The preliminary permeability is: " <<std::endl;
-          computePermeability(lattice, nu, deltaP, lattice.getBoundingBox(), Perm, Vel);
-          pcout << "**********************************************" <<std::endl;
+          relE_f1 = std::fabs(old_avg_f-new_avg_f)*100/old_avg_f / 250;  // Divide by number of iterations to normalize
+          
+          if (iT % 10000 == 0) {
+            pcout << "Iteration " << iT   << std::endl;
+            pcout << "-----------------"  << std::endl;
+            pcout << "Relative difference of Energy: " << setprecision(3)
+            << relE_f1 <<" %"<<std::endl;
+            pcout << "The preliminary permeability is: " <<std::endl;
+            computePermeability(lattice, nu, deltaP, lattice.getBoundingBox(), Perm, Vel);
+            pcout << "**********************************************" <<std::endl;
+          }
+		
           if ( relE_f1<conv ){
             break;
           }
