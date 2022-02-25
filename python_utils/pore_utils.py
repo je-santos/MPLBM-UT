@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import measure
+import skimage.transform as skit
 
 
 def create_geom_edist(rock, args):
@@ -14,22 +15,13 @@ def create_geom_edist(rock, args):
 
     erock = edist(rock)
 
-    # make sure all the BCs have BB nodes
-    erock[0,:,:] = 1
-    erock[:,0,:] = 1
-    erock[:,:,0] = 1
-    
-    erock[-1,:,:] = 1
-    erock[:,-1,:] = 1
-    erock[:,:,-1] = 1
-    
     # re open the pores
     erock[rock==0] = 0
 
     # Get the final matrix [0,1,2]
     erock[(erock>0)*(erock<2)] = 1
     erock[erock>1] = 2
-    
+
     if args.add_mesh:
         NotImplementedError('Feature not yet implemented')
         
@@ -42,12 +34,21 @@ def create_geom_edist(rock, args):
     else:
         geom_name = args.name
 
+    # make sure all the BCs have bounce back nodes
+    erock[0, :, :] = 1
+    erock[:, 0, :] = 1
+    erock[:, :, 0] = 1
+
+    erock[-1, :, :] = 1
+    erock[:, -1, :] = 1
+    erock[:, :, -1] = 1
+
     # I don't understand why this works, but it does
     erock = erock.astype(np.int16)
     erock[erock==0] = 2608  # pore space
-    erock[erock==1] = 2609  # boundary
+    erock[erock == 1] = 2609  # boundary
     erock[erock==2] = 2610  # grains
-    
+
     return erock, geom_name
 
 
