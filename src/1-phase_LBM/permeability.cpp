@@ -132,7 +132,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
     pcout << "Definition of inlet/outlet." << std::endl;
 
-    Box3D inlet (0,0, 1,ny-2, 1,nz-2);
+    Box3D inlet (1,1, 1,ny-2, 1,nz-2);
     boundaryCondition->addPressureBoundary0N(inlet, lattice);
     setBoundaryDensity(lattice, inlet, (T) 1.);
 
