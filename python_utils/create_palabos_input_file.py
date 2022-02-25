@@ -28,6 +28,7 @@ def create_one_phase_input_file(inputs, input_file_name):
     per_z = inputs['domain']['periodic boundary']['z']
     periodic = [per_x, per_y, per_z]
     io_folders = [inputs['input output']['input folder'], inputs['input output']['output folder']]
+    # perm_model = inputs['simulation']['perm model']
     num_geoms_or_sims = inputs['simulation']['num geoms']
     pressure = inputs['simulation']['pressure']
     max_iter = inputs['simulation']['max iterations']
@@ -70,6 +71,8 @@ def create_one_phase_input_file(inputs, input_file_name):
 
     # Write simulation section
     file.write('<simulations>\n')
+    # # Permeability model
+    # file.write(f'\t<perm_model> {perm_model} </perm_model>\n')
     # Number of sims/geometries
     file.write(f'\t<num> {num_geoms_or_sims} </num>\n')
     # Pressure
@@ -253,6 +256,7 @@ def create_relperm_input_file(inputs, input_file_name):
     per_z = inputs['domain']['periodic boundary']['z']
     periodic = [per_x, per_y, per_z]
     io_folders = [inputs['input output']['input folder'], inputs['input output']['output folder']]
+    # perm_model = inputs['simulation']['perm model']
     num_geoms_or_sims = inputs['simulation']['num pressure steps']*2 + 1
     pressure = inputs['rel perm']['pressure']
     max_iter = inputs['rel perm']['max iterations']
@@ -295,6 +299,8 @@ def create_relperm_input_file(inputs, input_file_name):
 
     # Write simulation section
     file.write('<simulations>\n')
+    # # Permeability model
+    # file.write(f'\t<perm_model> {perm_model} </perm_model>\n')
     # Number of sims/geometries
     file.write(f'\t<num> {num_geoms_or_sims} </num>\n')
     # Pressure

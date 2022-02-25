@@ -136,6 +136,14 @@ def parse_input_file(input_file):
     if 'simulation' in inputs:
 
         if inputs['simulation type'] == '1-phase':
+
+            # if 'perm model' in inputs['simulation']:
+            #     if inputs['simulation']['perm model'] != "BGK" or "MRT":
+            #         raise KeyError("Please make sure 'perm model' is set to 'BGK' or 'MRT'.")
+            #     print("Permeability model: " + str(inputs['simulation']['perm model']))
+            # else:
+            #     raise KeyError("Please add 'perm model' to 'simulation' entry.")
+
             if 'num geoms' in inputs['simulation']:
                 print("Number of Geometries: " + str(inputs['simulation']['num geoms']))
             else:
