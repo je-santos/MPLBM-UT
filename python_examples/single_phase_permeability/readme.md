@@ -1,5 +1,7 @@
 # Sinlge-Phase Simulation Python Workflow
 
+<img src=./velocity_viz.png width="600"> 
+
 ### Option 1: Using python
 Run the following line in your terminal:\
 ```python 1_phase_sim.py```
