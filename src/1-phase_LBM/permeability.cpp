@@ -88,8 +88,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
   std::unique_ptr<plb::MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
   plb_ifstream geometryFile(fNameIn_temp.c_str());
 
-  // for (plint iX=3; iX<nx-4; ++iX) {  // if it has a mesh
-for (plint iX=0; iX<nx-1; ++iX) {  // if it has a mesh
+  for (plint iX=0; iX<nx-1; ++iX) { 
     if (!geometryFile.is_open()) {
       pcout << "Error: could not open the geometry file " << fNameIn_temp << std::endl;
       exit(EXIT_FAILURE);
@@ -132,7 +131,7 @@ void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 
     pcout << "Definition of inlet/outlet." << std::endl;
 
-    Box3D inlet (1,1, 1,ny-2, 1,nz-2);
+    Box3D inlet (0,0, 1,ny-2, 1,nz-2);
     boundaryCondition->addPressureBoundary0N(inlet, lattice);
     setBoundaryDensity(lattice, inlet, (T) 1.);
 
