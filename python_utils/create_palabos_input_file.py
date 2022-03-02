@@ -249,7 +249,7 @@ def create_relperm_input_file(inputs, input_file_name):
     nx = inputs['domain']['domain size']['nx']
     ny = inputs['domain']['domain size']['ny']
     nz = inputs['domain']['domain size']['nz']
-    num_layers = 1
+    num_layers = 2
     domain_size = [nx+(2*num_layers), ny, nz]
     per_x = inputs['domain']['periodic boundary']['x']
     per_y = inputs['domain']['periodic boundary']['y']
@@ -257,7 +257,7 @@ def create_relperm_input_file(inputs, input_file_name):
     periodic = [per_x, per_y, per_z]
     io_folders = [inputs['input output']['input folder'], inputs['input output']['output folder']]
     # perm_model = inputs['simulation']['perm model']
-    num_geoms_or_sims = inputs['simulation']['num pressure steps']*2 + 1
+    num_geoms_or_sims = inputs['rel perm']['num_geoms']
     pressure = inputs['rel perm']['pressure']
     max_iter = inputs['rel perm']['max iterations']
     convergence = inputs['rel perm']['convergence']

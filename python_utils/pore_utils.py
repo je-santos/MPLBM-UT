@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage import measure
 import skimage.transform as skit
+from scipy.ndimage.morphology import distance_transform_edt as edist
 
 
 def create_geom_edist(rock, args):
-    from scipy.ndimage.morphology import distance_transform_edt as edist
+
     
     if args.swapXZ:
         rock = rock.transpose([2, 1, 0])
@@ -15,12 +16,22 @@ def create_geom_edist(rock, args):
 
     erock = edist(rock)
 
+    # make sure all the BCs have bounce back nodes
+    erock[0, :, :] = 1
+    erock[:, 0, :] = 1
+    erock[:, :, 0] = 1
+
+    erock[-1, :, :] = 1
+    erock[:, -1, :] = 1
+    erock[:, :, -1] = 1
+
     # re open the pores
     erock[rock==0] = 0
 
     # Get the final matrix [0,1,2]
     erock[(erock>0)*(erock<2)] = 1
     erock[erock>1] = 2
+
 
     if args.add_mesh:
         NotImplementedError('Feature not yet implemented')
@@ -33,15 +44,6 @@ def create_geom_edist(rock, args):
         geom_name = f'{args.name}_{size[0]}_{size[1]}_{size[2]}'
     else:
         geom_name = args.name
-
-    # make sure all the BCs have bounce back nodes
-    erock[0, :, :] = 1
-    erock[:, 0, :] = 1
-    erock[:, :, 0] = 1
-
-    erock[-1, :, :] = 1
-    erock[:, -1, :] = 1
-    erock[:, :, -1] = 1
 
     # I don't understand why this works, but it does
     erock = erock.astype(np.int16)
@@ -67,9 +69,16 @@ def erase_regions(rock):
 
 def scale_geometry(geom, rescale_factor, data_type):
 
+    # Rescale geometry
     geom = skit.rescale(geom, rescale_factor, anti_aliasing=False,
                          order=0)  # order=0 means nearest neighbor interpolation (keeps image binary)
 
+    # Ensure image has 0 as pore space and 1 as grains
+    geom = edist(geom)
+    geom[geom==0] = 0
+    geom[geom>0] = 1
+
+    # Change to specified data type
     geom = geom.astype(data_type)
 
     return geom

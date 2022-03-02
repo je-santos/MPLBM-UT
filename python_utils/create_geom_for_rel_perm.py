@@ -43,7 +43,7 @@ def create_geom_for_rel_perm(inputs):
     geom.name = geom_name
     geom.print_size = True
     geom.add_mesh = False
-    geom.num_slices = 1
+    geom.num_slices = 2
     geom.swapXZ = inputs['domain']['swap xz']  # THIS NEEDS TO BE SAME AS ORIGINAL USER INPUT FOUND IN INPUT.YML
     geom.scale_2 = False
 
@@ -76,7 +76,7 @@ def create_geom_for_rel_perm(inputs):
 
     for i in range(len(rho_files)):
         # i = 15
-        print(f'Preparing geometry {i} of {len(rho_files)-1} for rel perm...')
+        print(f'Preparing geometry {i+1} of {len(rho_files)} for rel perm...')
 
         # 1) read the file #
         ####################
@@ -105,13 +105,14 @@ def create_geom_for_rel_perm(inputs):
         geom.name = geom_name
         geom.print_size = False
         geom.add_mesh = False
-        geom.num_slices = 1
+        geom.num_slices = 2
         geom.swapXZ = False  # THIS NEEDS TO BE FALSE so user specified orientation remains the same
         geom.scale_2 = False
 
         rock = rho1_data
         rock4sim, geom_name = create_geom_edist(rock, geom)
-        rock4sim.flatten().tofile(sim_dir + '/' + input_dir + f'{geom_name}_{i}.dat')  # Save geometry
+
+        rock4sim.flatten().tofile(sim_dir + '/' + input_dir + f'{geom_name}_{i+1}.dat')  # Save geometry
 
         # 4) Separate fluid 2 #
         #######################
@@ -130,18 +131,23 @@ def create_geom_for_rel_perm(inputs):
         geom.name = geom_name
         geom.print_size = False
         geom.add_mesh = False  # add a neutral-wet mesh at the end of the domain
-        geom.num_slices = 1
+        geom.num_slices = 2
         geom.swapXZ = False  # THIS NEEDS TO BE FALSE so user specified orientation remains the same
         geom.scale_2 = False
 
         rock = rho2_data
         rock4sim, geom_name = create_geom_edist(rock, geom)
-        rock4sim.flatten().tofile(sim_dir + '/' + input_dir + f'{geom_name}_{i}.dat')  # Save geometry
+        rock4sim.flatten().tofile(sim_dir + '/' + input_dir + f'{geom_name}_{i+1}.dat')  # Save geometry
 
     # Save Sw array (Don't save very first Sw because that is an equilibration step, not used)
-    if inputs['simulation']['num pressure steps'] > 0:
-        Sw_array[0] = 1  # If using pressure bcs, set very first pressure to 1. It's a test without pressure difference
+    # if inputs['simulation']['num pressure steps'] > 0:
+    #     Sw_array[0] = 1  # If using pressure bcs, set very first pressure to 1. It's a test without pressure difference
+
+    Sw_array = np.insert(Sw_array, 0, 1)
 
     np.savetxt(sim_dir + '/' + output_dir + 'data_Sw.txt', Sw_array)
+
+    # Update inputs
+    inputs['rel perm']['num_geoms'] = len(rho_files)*2 + 1
 
     return inputs
