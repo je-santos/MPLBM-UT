@@ -24,7 +24,7 @@ domain:
     x: True
     y: False
     z: False
-  inlet and outlet layers: 1
+  inlet and outlet layers: 2
   add mesh: False  # Add neutral mesh, by default False --> Not yet implemented
   swap xz: False  # False by default
   double geom resolution: False  # False by default
@@ -33,8 +33,8 @@ simulation:
   num procs: 2  # Number of processors to run on
   num geoms: 1  # Total number of geometries / individual simulations (this will be used once two-phase rel perm python code is done)
   pressure: 0.0005
-  max iterations: 500000
-  convergence: 0.002
+  max iterations: 2000000
+  convergence: 1e-6
   save vtks: True
 
 visualization:  # coming soon
