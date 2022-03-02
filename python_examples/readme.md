@@ -22,7 +22,7 @@ Figure 1- Geometry setup for 2-phase flow simulations
   - `geom name:` String, name of .dat file, rename from original if you'd like. Do not include the file extension.
   - `domain size:` Please provide the x, y, and z dimensions (`nx`, `ny`, and `nz` subkeys in the examples) of the input simulation domain
   - `periodic boundary:` True or False, whether the boundaries are periodic in the x, y, and z directions
-  - `inlet and outlet layers:` Integer number of layers added to the ends of the simulation domain (in x direction). For 1-phase simulations, 1 or greater should work well. For 2-phase simulations, 4 should work well and at least 3 are highly recommended.
+  - `inlet and outlet layers:` Integer number of layers added to the ends of the simulation domain (in x direction). For 1-phase simulations, a minimum of 2 or more layers should work well. For 2-phase simulations, 4 should work well and at least 3 are highly recommended.
   - `add mesh:` NOT YET IMPLEMENTED, True or False, Add A neutral mesh
   - `swap xz:` True or False, swap x and z axes, False by default
   - `double geom resolution:` NOT YET IMPLEMENTED, True or False, this will double the domain resolution
