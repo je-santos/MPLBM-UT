@@ -165,8 +165,7 @@ inputs['input output']['simulation directory'] = os.getcwd()  # Store current wo
 ######################
 # Note: this is just going off of domain size since we do not have a morphological drainage algorithm in place.
 # Another option that we may implement is using a morphological drainage from PoreSpy to get initial conditions.
-# Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
-Snw_str = np.array(['95'])
+Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
 Snw_num = Snw_str.astype('float') / 100
 sim_dir = inputs['input output']["simulation directory"]
 
@@ -190,7 +189,7 @@ for i in range(len(Snw_str)):
     inputs["simulation"]["fluid 2 init"]["x1"] = int(nx * (Snw_num[i])) + 1
     inputs["simulation"]["fluid 2 init"]["x2"] = nx + slices*2
 
-    # run_2_phase_sim(inputs)  # Run 2 phase sim
+    run_2_phase_sim(inputs)  # Run 2 phase sim
 
 Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
 
