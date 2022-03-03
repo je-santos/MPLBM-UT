@@ -6,6 +6,7 @@ import glob
 import sys
 sys.path.append('../../python_utils/')
 from parse_input_file import *
+from create_gif_and_mp4 import *
 
 
 def get_rho_files(inputs):
@@ -87,10 +88,8 @@ def create_animation(inputs, rho_files_list, resolution_scale, restart):
 
         # visualize fluids
         f1, f2 = visualize_fluid(inputs, rho_file=rho_files_list[i])
-        vp += f1.c([191, 84, 0]).opacity(
-            1).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
-        vp += f2.c('lightblue').opacity(
-            0.05).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
+        vp += f1.c([191, 84, 0]).opacity(0.8).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
+        vp += f2.c('lightblue').opacity(0.05).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
 
         cam = dict(pos=(245.1, -145.1, 139.7),
                    focalPoint=(58.32, 30.99, 36.04),
@@ -110,14 +109,18 @@ inputs = parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
 
 # update output directory
-which_sim = 0
-Sw_str = np.array(['10', '30', '50', '70', '90'])
-inputs['input output']['output folder'] = f"tmp_{Sw_str[which_sim]}/"
+which_sim = 1
+Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
+inputs['input output']['output folder'] = f"tmp_{Snw_str[which_sim]}/"
 
 # Get density files
 rho_files_list = get_rho_files(inputs)
 
-create_animation(inputs, rho_files_list, resolution_scale=1, restart=False)
+# create_animation(inputs, rho_files_list, resolution_scale=1, restart=True)
+anim_dir = inputs['input output']['output folder'] + 'animation/'
+save_name = inputs['domain']['geom name']
+create_gif(anim_dir, save_name)
+create_mp4(anim_dir, save_name, speed_factor=0.5)  # speed_factor = 1 means no slow down or speed up
 
 exit()
 
@@ -132,7 +135,7 @@ vp += grains.smooth().lighting('glossy').c('seashell').opacity(0.1)
 
 # visualize fluids
 f1, f2 = visualize_fluid(inputs, rho_file=rho_files_list[index])
-vp += f1.c([191, 84, 0]).opacity(1).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
+vp += f1.c([191, 84, 0]).opacity(0.8).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
 vp += f2.c('lightblue').opacity(0.05).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
 
 cam = dict(pos=(245.1, -145.1, 139.7),

@@ -165,17 +165,17 @@ inputs['input output']['simulation directory'] = os.getcwd()  # Store current wo
 ######################
 # Note: this is just going off of domain size since we do not have a morphological drainage algorithm in place.
 # Another option that we may implement is using a morphological drainage from PoreSpy to get initial conditions.
-Sw_str = np.array(['10', '30', '50', '70', '90'])
-# Sw_str = np.array(['15', '25', '45', '65', '85'])
-Sw_num = Sw_str.astype('float')/100
+# Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
+Snw_str = np.array(['95'])
+Snw_num = Snw_str.astype('float') / 100
 sim_dir = inputs['input output']["simulation directory"]
 
 # Run 2 phase sims #
 ####################
-for i in range(len(Sw_str)):
+for i in range(len(Snw_str)):
 
     # Create output folder
-    output_dir = f'{sim_dir}/tmp_{Sw_str[i]}'
+    output_dir = f'{sim_dir}/tmp_{Snw_str[i]}'
     output_dir_exists = os.path.isdir(output_dir)
     if output_dir_exists == False:
         os.makedirs(output_dir)
@@ -184,13 +184,15 @@ for i in range(len(Sw_str)):
     nx = inputs["domain"]["domain size"]["nx"]
     slices = inputs["domain"]["inlet and outlet layers"]
 
-    inputs["input output"]["output folder"] = f"tmp_{Sw_str[i]}/"
+    inputs["input output"]["output folder"] = f"tmp_{Snw_str[i]}/"
     inputs["simulation"]["fluid 1 init"]["x1"] = 0
-    inputs["simulation"]["fluid 1 init"]["x2"] = int(nx * (Sw_num[i]))
-    inputs["simulation"]["fluid 2 init"]["x1"] = int(nx * (Sw_num[i])) + 1
+    inputs["simulation"]["fluid 1 init"]["x2"] = int(nx * (Snw_num[i]))
+    inputs["simulation"]["fluid 2 init"]["x1"] = int(nx * (Snw_num[i])) + 1
     inputs["simulation"]["fluid 2 init"]["x2"] = nx + slices*2
 
-    run_2_phase_sim(inputs)  # Run 2 phase sim
+    # run_2_phase_sim(inputs)  # Run 2 phase sim
+
+Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
 
 # Organize outputs #
 ####################
@@ -209,8 +211,8 @@ inputs["input output"]["output folder"] = "relperm/"  # Change output folder to 
 #   - natural sort the list
 #   - subprocess.run() copy config file to rel_perm_dir
 sim_dir = inputs['input output']['simulation directory']
-for i in range(len(Sw_str)):
-    output_dir = f"{sim_dir}/tmp_{Sw_str[i]}/"
+for i in range(len(Snw_str)):
+    output_dir = f"{sim_dir}/tmp_{Snw_str[i]}/"
     # Glob all .dat fluid files from simulation output folder
     rho_files_regex = fr'{output_dir}rho_f1*.dat'
     rho_files = glob.glob(rho_files_regex)

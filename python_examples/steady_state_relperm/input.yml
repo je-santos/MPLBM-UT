@@ -88,6 +88,6 @@ simulation:
   
 rel perm:  # Parameters for 1-phase sims for rel perms
   pressure: 0.0005
-  max iterations: 2500000
+  max iterations: 5000000
   convergence: 1e-6
   save vtks: True  # save velocity vtks
