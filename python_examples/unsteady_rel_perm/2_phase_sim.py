@@ -2,10 +2,8 @@ import os
 import subprocess
 import sys
 sys.path.append('../../python_utils/')  # It would be nice to make this a proper package...
-
 import numpy as np
 import matplotlib.pyplot as plt
-
 from create_geom_for_palabos import *
 from create_palabos_input_file import *
 from parse_input_file import *
@@ -117,13 +115,12 @@ def process_and_plot_results(inputs):
 
     plt.figure(figsize=[10,8])
     plot_rel_perm_data(Sw, krw, krnw)
+    # plt.yscale('log')
     plt.savefig(sim_dir + 'relperm_curve.png', dpi=300)
 
     plt.figure(figsize=[6, 10])
     plot_pc_and_rel_perm(Sw, Pc, krw, krnw)
     plt.savefig(sim_dir + 'pc_and_relperm_curve.png', dpi=300)
-
-    plt.show()
 
     return
 
@@ -139,3 +136,4 @@ run_2_phase_sim(inputs)  # Run 2 phase sim
 run_rel_perm_sim(inputs)  # Run rel perm
 process_and_plot_results(inputs)  # Plot results
 
+# plt.show()
