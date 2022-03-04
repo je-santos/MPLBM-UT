@@ -1,4 +1,6 @@
 # Two-Phase Simulation Python Workflow (a.k.a. laptop-pore)
+This is an example of an unsteady state relative permeability simulation. The main outputs will be capillary pressure and relative permeability curves. The number of points (number of pressure steps, under the ```num pressure steps``` key) on the curves and the highest pressure value (```minimum radius``` key) can be set in the input.yml file. On 30 cores, this example took about 45 minutes. This example can also be run on a laptop since the geometry is small. If you allocate 4 cores, it should take on the order of a few hours.
+
 There are currently two options to run this example:
 
 ### Option 1: Using python
