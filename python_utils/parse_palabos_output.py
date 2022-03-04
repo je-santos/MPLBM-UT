@@ -24,8 +24,8 @@ def create_pressure_data_file(inputs):
     # Parse pressure data
     pc_data_file = sim_dir + '/' + output_dir + 'output.dat'
     pc_data = find_line_in_file(pc_data_file, 'Pressure difference =', 3)
-    # pc_data[0] = 0
-
+    
+    pc_data = np.insert(pc_data, 0, 0)
     np.savetxt(sim_dir + '/' + output_dir + 'data_Pc.txt', pc_data)
 
     return
@@ -36,7 +36,7 @@ def create_relperm_data_file(inputs):
     sim_dir = inputs['input output']['simulation directory']
     output_dir = inputs['input output']['output folder']
     num_runs = inputs['rel perm']['num_geoms']
-    print((num_runs-1)/2)
+    # print((num_runs-1)/2)
 
     # Parse rel perm data
     kr_data_file = sim_dir + '/' + output_dir + r'4relperm/relPerm&vels.txt'
