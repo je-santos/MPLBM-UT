@@ -31,7 +31,7 @@ domain:
 
 simulation:
   
-  num procs: 2
+  num procs: 30
   
   restart sim: False  # Set to true if you would like to continue from a previous saved state
   
@@ -79,16 +79,16 @@ simulation:
   convergence iter: 100  # How often to check for convergence
   max iterations: 500000  # max iterations per Pc step
   save sim: True  # Save restart files
-  save iter: 5000  # How often to save restart files
+  save iter: 10000  # How often to save restart files
   gif iter: 5000  # How often to save gifs
   vtk iter: 5000  # How often to save vtk files
-  rho_f2_vtk: True  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
+  rho_f2_vtk: False  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
   print geom: True  # Create vtk of geometry at beginning
   print stl: False  # Create stl of geometry at beginning
   
 rel perm:  # Parameters for 1-phase sims for rel perms
   pressure: 0.0005
-  max iterations: 2000000
+  max iterations: 5000000
   convergence: 1e-6
   save vtks: True  # save velocity vtks
 
