@@ -24,53 +24,23 @@ def download_geometry(filename, url):
     return
 
 
-def create_micromodel(inputs, slice_index, x_offset, y_offset, rescale):
+def create_micromodel(geom, nx, ny, nz, slice_index, x_offset, y_offset):
 
-    sim_dir = inputs['input output']['simulation directory']
-    input_dir = inputs['input output']['input folder']
-    geom_file_name = inputs['geometry']['file name']
-    data_type = inputs['geometry']['data type']
-    geom_file = sim_dir + '/' + input_dir + geom_file_name
-    Nx = inputs['geometry']['geometry size']['Nx']
-    Ny = inputs['geometry']['geometry size']['Ny']
-    Nz = inputs['geometry']['geometry size']['Nz']
-    nx = inputs['domain']['domain size']['nx']
-    ny = inputs['domain']['domain size']['ny']
-    nz = inputs['domain']['domain size']['nz']
-
-    # read-in file
-    rock = np.fromfile(geom_file, dtype=data_type).reshape([Nx, Ny, Nz])
-    slice = rock[slice_index, y_offset:ny+y_offset, x_offset:nx+x_offset]
-    slice = skit.rescale(slice, rescale, anti_aliasing=False, order=0)  # order=0 means nearest neighbor interpolation (keeps image binary)
-    slice = slice.astype(data_type)
-    # plt.imshow(slice)
-    # plt.gca().invert_yaxis()
-    # plt.show()
+    # Get slice of interest
+    slice = geom[slice_index, y_offset:ny+y_offset, x_offset:nx+x_offset]
 
     num_slices = nz
-    micromodel = np.repeat(slice[:, :, np.newaxis], num_slices, axis=2)  # rock[slice_index:nz+slice_index, y_offset:ny+y_offset, x_offset:nx+x_offset]
-    micromodel = micromodel.transpose([2,0,1])  # Transpose to get aligned for Palabos properly
-    # import vedo as vd
-    # vp = vd.Plotter()
-    # vp += vd.Volume(micromodel)
-    # vp.show()
+    micromodel = np.repeat(slice[np.newaxis, :, :], num_slices, axis=0)
 
-    # Change inputs to match micromodel geometry
-    micromodel_name = inputs['domain']['geom name'] + '_micromodel.raw'
-    inputs['geometry']['file name'] = micromodel_name
-    inputs['domain']['geom name'] = inputs['domain']['geom name'] + '_micromodel'
-    inputs['geometry']['geometry size']['Nx'] = nz
-    inputs['geometry']['geometry size']['Ny'] = int(ny*rescale)
-    inputs['geometry']['geometry size']['Nz'] = int(nx*rescale)
-    inputs['domain']['domain size']['nx'] = int(nx*rescale)
-    inputs['domain']['domain size']['ny'] = int(ny*rescale)
-    inputs['domain']['domain size']['nz'] = nz
+    print(f"Micromodel size = {micromodel.shape}")
 
+    # Check micromodel
+    plt.figure()
+    plt.imshow(micromodel[0,:,:])
+    plt.gca().invert_yaxis()
+    plt.show()
 
-    geom_file = sim_dir + '/' + input_dir + micromodel_name
-    micromodel.tofile(geom_file)
-
-    return inputs
+    return micromodel
 
 
 def run_2_phase_sim(inputs):
@@ -177,15 +147,32 @@ def process_and_plot_results(inputs):
     return
 
 
+# Some inputs and download geometry
+input_folder = 'input/'
+micromodel_name = 'rg_theta30_phi30_micromodel.raw'
+data_type = 'uint8'
 drp_url = 'https://www.digitalrocksportal.org/projects/65/images/71075/download/'
-file_name = 'input/rg_theta30_phi30.raw'
+file_name = f'{input_folder}rg_theta30_phi30.raw'
 download_geometry(file_name, drp_url)
 
+# Rescale geometry
+print("Rescaling geometry...")
+geom = np.fromfile(file_name, dtype=data_type).reshape([501, 501, 501])
+scaled_geom = scale_geometry(geom, 0.599, data_type)
+print(f"New geometry size = {scaled_geom.shape}")
+
+# Create micromodel
+print("Creating micromodel...")
+micromodel = create_micromodel(scaled_geom, nx=200, ny=150, nz=5, slice_index=234, x_offset=0, y_offset=130)
+geom_file = input_folder + micromodel_name
+micromodel.flatten().tofile(geom_file)  # Note, use flatten() before writing! Otherwise, data not saved in correct order
+
+# Parse inputs
 input_file = 'input.yml'
 inputs = parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
-inputs = create_micromodel(inputs, slice_index=100, x_offset=0, y_offset=25, rescale=0.5)
+
 run_2_phase_sim(inputs)  # Run 2 phase sim
-# run_rel_perm_sim(inputs)  # Run rel perm
-# process_and_plot_results(inputs)  # Plot results
+run_rel_perm_sim(inputs)  # Run rel perm
+process_and_plot_results(inputs)  # Plot results
 

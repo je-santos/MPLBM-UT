@@ -25,22 +25,31 @@ def get_rho_files(inputs):
 
 def get_slice_of_medium(inputs, slice):
 
-    input_folder = inputs['input output']['input folder']
+    # input_folder = inputs['input output']['input folder']
+    # nx = inputs['domain']['domain size']['nx']
+    # ny = inputs['domain']['domain size']['ny']
+    # nz = inputs['domain']['domain size']['nz']
+    # n_slices = inputs['domain']['inlet and outlet layers']
+    #
+    # grains = np.fromfile(f"{input_folder}{inputs['geometry']['file name']}", dtype='uint8').reshape(nz, ny, nx)
+    # grains = np.transpose(grains, [0, 1, 2])
+    # grains = grains[slice, :, :]
+
+    output_folder = inputs['input output']['output folder']
     nx = inputs['domain']['domain size']['nx']
     ny = inputs['domain']['domain size']['ny']
     nz = inputs['domain']['domain size']['nz']
     n_slices = inputs['domain']['inlet and outlet layers']
+    print(n_slices)
+    print(nx)
 
-    grains = np.fromfile(f"{input_folder}{inputs['geometry']['file name']}", dtype='uint8').reshape(nz, ny, nx)
-    grains = np.transpose(grains, [0, 1, 2])
-    grains = grains[slice, :, :]
+    medium = pv.read(f"{output_folder}porousMedium.vti")
+    medium = medium.get_array('tag').reshape([nz, ny, nx+n_slices*2])
+    medium = medium[slice, :, n_slices:nx+n_slices]
 
-    # medium = pv.read(f"{input_folder}{inputs['geometry']['file name']}")
-    # grains = medium.get_array('tag').reshape([nz, ny, nx+n_slices*2])
-    # grains = grains[slice, :, n_slices:nx+n_slices]
+    print(medium.shape)
 
-
-    return grains
+    return medium
 
 
 def get_slice_of_fluid(inputs, rho_file, slice):
@@ -68,9 +77,9 @@ def plot_sim_contours(inputs, rho, medium):
     X, Y = np.meshgrid(x, y)
 
     # Plotting
-    plt.contourf(X, Y, medium, levels=[0.5, 1], alpha=1, colors='gray')
-    plt.contourf(X, Y, rho, levels=[1, 3], alpha=1, colors='red')
     plt.contourf(X, Y, rho, levels=[0, 1], alpha=1, colors='lightblue')
+    plt.contourf(X, Y, rho, levels=[1, 3], alpha=1, colors='orangered')
+    plt.contourf(X, Y, medium, levels=[0.5, 2], alpha=1, colors='gray')
 
     plt.axis('equal')
     plt.xlim([0,nx])
@@ -106,45 +115,22 @@ def create_animation(inputs, rho_files_list):
     return
 
 
-def update_micromodel_inputs(inputs, rescale):
-
-    nx = inputs['domain']['domain size']['nx']
-    ny = inputs['domain']['domain size']['ny']
-    nz = inputs['domain']['domain size']['nz']
-
-    # Change inputs to match micromodel geometry
-    micromodel_name = inputs['domain']['geom name'] + '_micromodel.raw'
-    inputs['geometry']['file name'] = micromodel_name
-    inputs['domain']['geom name'] = inputs['domain']['geom name'] + '_micromodel'
-    inputs['geometry']['geometry size']['Nx'] = nz
-    inputs['geometry']['geometry size']['Ny'] = int(ny * rescale)
-    inputs['geometry']['geometry size']['Nz'] = int(nx * rescale)
-    inputs['domain']['domain size']['nx'] = int(nx * rescale)
-    inputs['domain']['domain size']['ny'] = int(ny * rescale)
-    inputs['domain']['domain size']['nz'] = nz
-
-    return inputs
-
 # Get inputs
 input_file = 'input.yml'
 inputs = parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
-
-# Update inputs for micromodel
-scale = 0.5
-inputs = update_micromodel_inputs(inputs, scale)
 
 # Get density files
 rho_files_list = get_rho_files(inputs)
 
 create_animation(inputs, rho_files_list)
 
-# # Get slices for contour viz
-# rho = get_slice_of_fluid(inputs, rho_file=rho_files_list[-1], slice=3)
-# grains = get_slice_of_medium(inputs, slice=3)
-#
-# # Setup plotter
-# plt.figure()
-# plot_sim_contours(inputs, rho, grains)
-# plt.show()
+# Get slices for contour viz
+rho = get_slice_of_fluid(inputs, rho_file=rho_files_list[-1], slice=3)
+grains = get_slice_of_medium(inputs, slice=3)
+
+# Setup plotter
+plt.figure()
+plot_sim_contours(inputs, rho, grains)
+plt.show()
 
