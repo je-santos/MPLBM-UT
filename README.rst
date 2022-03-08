@@ -108,7 +108,7 @@ The input.yml files in each example contain all the input options for a simulati
 
 **2) Pre-processing**
 
-This is necessary to create an efficient geometry for simulating with Palabos (.dat file) from the initial geometry file. `create_geom_for_palabos.py <python_utils/create_geom_for_palabos.py>`__ uses the utilities found in `pore_utils.py <python_utils/pore_utils.py >`__ to create the .dat file.  
+This is necessary to create an efficient geometry for simulating with Palabos (.dat file) from the initial geometry file. `create_geom_for_palabos.py <python_utils/create_geom_for_palabos.py>`__ uses the utilities found in `pore_utils.py <python_utils/pore_utils.py>`__ to create the .dat file.  
 
 **3) Run a simulation**
 
