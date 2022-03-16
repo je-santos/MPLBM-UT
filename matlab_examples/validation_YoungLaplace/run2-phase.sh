@@ -1,1 +1,0 @@
-mpirun -np 2 ../../src/2-phase_LBM/ShanChen input_tubes.xml

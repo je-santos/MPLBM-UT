@@ -1,1 +1,0 @@
-mpirun -np 6 ../../src/2-phase_LBM/ShanChen input_spherepack.xml
