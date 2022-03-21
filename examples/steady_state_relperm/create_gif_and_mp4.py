@@ -2,12 +2,7 @@ import os
 import imageio
 import re
 import moviepy.editor as mp
-
-
-def natural_sort(l):
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-    return sorted(l, key=alphanum_key)
+import mplbm_utils as mplbm
 
 
 def create_gif(anim_dir, save_name):
@@ -15,7 +10,7 @@ def create_gif(anim_dir, save_name):
     print("Creating GIF...This may take a few minutes. Please be patient!")
     images = []
     filenames = os.listdir(anim_dir)
-    filenames = natural_sort(filenames)
+    filenames = mplbm.natural_sort(filenames)
 
     for filename in filenames:
         images.append(imageio.imread(anim_dir + filename))

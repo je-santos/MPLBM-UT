@@ -6,29 +6,6 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
 
 
-def replace_line_in_file(file_to_edit, line_to_find_and_replace, replacement_line):
-
-    search_and_replace_command = 'sed -i "/^' + line_to_find_and_replace + r"/c\\" + replacement_line + '" ' + file_to_edit
-    os.system(search_and_replace_command)
-
-    return
-
-
-def find_line_in_file(file_name, line_to_match, data_to_add_line_index):
-
-    file = open(file_name)
-    data = np.array([])
-
-    for line in file:
-        if line_to_match in line:
-            line_split = line.split()
-            data = np.append(data, float(line_split[data_to_add_line_index]))
-
-    file.close()
-
-    return data
-
-
 def create_capillary_tubes(inputs):
     nx = 175
     ny = 175
@@ -80,12 +57,12 @@ def create_capillary_tubes(inputs):
     inputs['domain']['domain size']['ny'] = ny
     inputs['domain']['domain size']['nz'] = nz
 
-    replace_line_in_file('input.yml', '    Nx', f'    Nx: {nx}')
-    replace_line_in_file('input.yml', '    Ny', f'    Ny: {ny}')
-    replace_line_in_file('input.yml', '    Nz', f'    Nz: {nz}')
-    replace_line_in_file('input.yml', '    nx', f'    nx: {nx}')
-    replace_line_in_file('input.yml', '    ny', f'    ny: {ny}')
-    replace_line_in_file('input.yml', '    nz', f'    nz: {nz}')
+    mplbm.replace_line_in_file('input.yml', '    Nx', f'    Nx: {nx}')
+    mplbm.replace_line_in_file('input.yml', '    Ny', f'    Ny: {ny}')
+    mplbm.replace_line_in_file('input.yml', '    Nz', f'    Nz: {nz}')
+    mplbm.replace_line_in_file('input.yml', '    nx', f'    nx: {nx}')
+    mplbm.replace_line_in_file('input.yml', '    ny', f'    ny: {ny}')
+    mplbm.replace_line_in_file('input.yml', '    nz', f'    nz: {nz}')
 
     return inputs
 

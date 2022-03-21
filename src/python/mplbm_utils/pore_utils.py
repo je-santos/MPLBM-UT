@@ -3,6 +3,7 @@ from skimage import measure
 import skimage.transform as skit
 from scipy.ndimage.morphology import distance_transform_edt as edist
 import re
+import os
 
 
 def create_geom_edist(rock, args):
@@ -104,3 +105,12 @@ def find_line_in_file(file_name, line_to_match, data_to_add_line_index):
     file.close()
 
     return data
+
+
+def replace_line_in_file(file_to_edit, line_to_find_and_replace, replacement_line):
+
+    search_and_replace_command = 'sed -i "/^' + line_to_find_and_replace + r"/c\\" + replacement_line + '" ' + file_to_edit
+    os.system(search_and_replace_command)
+
+    return
+
