@@ -87,15 +87,15 @@ In the parent directory of the repo, run the installation script with the follow
 ################################################################################
 Running a simulation
 ################################################################################
-The `examples <python_examples>`__ are a great place to see how the code can be used in different ways. In general, each example has a Python script, input file, an input folder, and an output folder(s):
+The `examples <examples>`__ are a great place to see how the code can be used in different ways. In general, each example has a Python script, input file, an input folder, and an output folder(s):
 
 - The Python script contains everything needed to run the example; this means that running a simulation is as easy as running ``python 2_phase_sim.py`` or ``python 1_phase_sim.py`` in the terminal. 
-- We use YAML format for our input files. Please refer to the `readme <python_examples/readme.md>`__ in the python_examples folder to see a description of all the inputs.
+- We use YAML format for our input files. Please refer to the `readme <examples/readme.md>`__ in the python_examples folder to see a description of all the inputs.
 - The input folder is where simulation geometries are stored. The output folder(s) are there to store simulation results.  
 
-Please refer to the `unsteady state example  <python_examples/unsteady_rel_perm>`__ for a complete end-to-end workflow.
+Please refer to the `unsteady state example  </examples/unsteady_rel_perm>`__ for a complete end-to-end workflow.
 
-An general overview of the main steps of a simulation is given below. These processes are automated by functions in the `python_utils <python_utils>`__ folder.
+An general overview of the main steps of a simulation is given below. These processes are automated by functions in the `mplbm_utils </src/python/mplbm_utils>`__ folder.
 
 ----------------------------------------------------------------------------
 
