@@ -72,6 +72,7 @@ Some familiarity with the terminal, unix operating systems, and bash will be ver
   It is a good idea to do some system performance testing (ie find the optimum number of cores for your domain size). Generally on CPUs, each processor will optimally handle a 20^3-50^3 section of a domain, but you will need to adjust accordingly to your system. Please see the `Young-Laplace validation example <python_examples/young_laplace_validation>`__ to get an idea of how tolerance affects run time. In that example, we used 40 cores on a 50x52x175 domain (~76^3) which gives each processor a ~22^3 section to process.
   
 - Having a dedicated `Python virtual environment <https://docs.python.org/3/library/venv.html>`__ or `Anaconda <https://www.anaconda.com/>`__ environment is recommended to avoid compatability issues.
+  - A note on running Python: Depending on your system configuration, you may need to use ``python3`` in order to run simulations instead of just ``python`` as shown in the examples. 
 - Seeing "nan" appear in simulation or terminal output indicates that something is not quite right. Please check that your simulation parameters are correct. If you still can not resolve the problem, please submit an issue and we can do our best to help or fix the bug!
 
 ################################################################################
@@ -100,26 +101,26 @@ An general overview of the main steps of a simulation is given below. These proc
 
 **1) Parsing inputs**
 
-The input.yml files in each example contain all the input options for a simulation. `parse_input_file.py <python_utils/parse_input_file.py>`__ parses the input file and stores the entries as a Python dicationary.
+The input.yml files in each example contain all the input options for a simulation. `parse_input_file.py </src/python/mplbm_utils/parse_input_file.py>`__ parses the input file and stores the entries as a Python dicationary.
 
 **2) Pre-processing**
 
-This is necessary to create an efficient geometry for simulating with Palabos (.dat file) from the initial geometry file. `create_geom_for_palabos.py <python_utils/create_geom_for_palabos.py>`__ uses the utilities found in `pore_utils.py <python_utils/pore_utils.py>`__ to create the .dat file.  
+This is necessary to create an efficient geometry for simulating with Palabos (.dat file) from the initial geometry file. `create_geom_for_palabos.py </src/python/mplbm_utils/create_geom_for_palabos.py>`__ uses the utilities found in `pore_utils.py </src/python/mplbm_utils/pore_utils.py>`__ to create the .dat file.  
 
 **3) Run a simulation**
 
-The examples provide either a python file (``2_phase_sim.py`` or ``1_phase_sim.py``) that provides the details of running a simualtion. Based on the user inputs, `create_palabos_input_file.py <python_utils/create_palabos_input_file.py>`__ creates an XML file compatible with palabos, and then a bash file is created that contains all the necessary information to run either `ShanChen <src/2-phase_LBM/>`__ for 2-phase or one of the `1-phase permeability options <src/1-phase_LBM>`_.
+The examples provide either a python file (``2_phase_sim.py`` or ``1_phase_sim.py``) that provides the details of running a simualtion. Based on the user inputs, `create_palabos_input_file.py </src/python/mplbm_utils/create_palabos_input_file.py>`__ creates an XML file compatible with palabos, and then a bash file is created that contains all the necessary information to run either `ShanChen <src/2-phase_LBM/>`__ for 2-phase or one of the `1-phase permeability options <src/1-phase_LBM>`_.
 
-A relative permeability simulation is also possible after a 2-phase simulation. `create_geom_for_rel_perm.py <python_utils/create_geom_for_rel_perm.py>`__ processes the resulting 2-phase geometries so realtive permeability can be calculated based on individual single phase simulations.
+A relative permeability simulation is also possible after a 2-phase simulation. `create_geom_for_rel_perm.py </src/python/mplbm_utils/create_geom_for_rel_perm.py>`__ processes the resulting 2-phase geometries so realtive permeability can be calculated based on individual single phase simulations.
 
 **4) Post-processing**
 
-`parse_palabos_output.py <python_utils/parse_palabos_output.py>`__ contains the functions necessary to parse and save palabos outputs as easy-to-use text files. 
-`create_geom_for_rel_perm.py <python_utils/create_geom_for_rel_perm.py>`__ also contains the methods to calculate fluid saturation after a 2-phase simulation. 
+`parse_palabos_output.py </src/python/mplbm_utils/parse_palabos_output.py>`__ contains the functions necessary to parse and save palabos outputs as easy-to-use text files. 
+`create_geom_for_rel_perm.py </src/python/mplbm_utils/create_geom_for_rel_perm.py>`__ also contains the methods to calculate fluid saturation after a 2-phase simulation. 
 
 **5) Plotting and visualization**
 
-Plotting and visualization can be done using the various utilities provided in the `python_examples <python_examples>`__ folder, `python_utils <python_utils>`__ folder, and the `animation_and_plotting <animation_and_plotting>`__ folder. The 3D visualization tools create iso-surfaces of the fluid density from the .vti files to visualize fluid interfaces. General plotting utilities are also available to create capillary pressure and realtive permeability curves. You can also view .vti files with `Paraview <https://www.paraview.org/>`_ and perform 2-3-4D visualization of fluid interfaces. 
+Plotting and visualization can be done using the various utilities provided in the `examples <examples>`__ folder, and the `animation_and_plotting </src/python/animation_and_plotting>`__ folder. The 3D visualization tools create iso-surfaces of the fluid density from the .vti files to visualize fluid interfaces. General plotting utilities are also available to create capillary pressure and realtive permeability curves. You can also view .vti files with `Paraview <https://www.paraview.org/>`_ and perform 2-3-4D visualization of fluid interfaces. 
 
 
 ################################################################################

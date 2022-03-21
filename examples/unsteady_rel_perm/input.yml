@@ -1,0 +1,96 @@
+simulation type: "2-phase"  # "1-phase" or "2-phase"
+
+input output:
+  # Full path to simulation directory 
+  simulation directory: ""
+  input folder: "input/"
+  output folder: "tmp/"
+
+geometry:
+  file name: "rg_theta60_phi10.raw" # Name of the input geometry file
+  data type: uint8
+  geometry size:
+    Nx: 501
+    Ny: 501
+    Nz: 501
+
+domain:
+  geom name: "rg_theta60_phi10"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
+  domain size:
+    nx: 60
+    ny: 75
+    nz: 75
+  periodic boundary:
+    x: False
+    y: False
+    z: False
+  inlet and outlet layers: 4  # 3-4 recommended for 2-phase sim
+  add mesh: False  # Add neutral mesh, by default False --> Not yet implemented
+  swap xz: True  # False by default
+  double geom resolution: False  # False by default
+
+simulation:
+  
+  num procs: 30
+  
+  restart sim: False  # Set to true if you would like to continue from a previous saved state
+  
+  # Fluid densities
+  rho_f1: 2
+  rho_f2: 2
+  
+  # For constant forces boundary condition
+  force_f1: 0
+  force_f2: 0
+  
+  # For pressure difference boundary conditions
+  pressure bc: True
+  minimum radius: 3  # Correlated to delta rho in docs. This acts as entry pressure, so set 1-3 voxels lower than inscribed sphere radius
+  num pressure steps: 10
+  
+  # Initial Conditions
+  fluid init: drainage  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
+  fluid 1 init:
+    x1: 1
+    x2: 2
+    y1: 1
+    y2: 100
+    z1: 1
+    z2: 100
+  fluid 2 init:
+    x1: 3
+    x2: 100
+    y1: 1
+    y2: 100
+    z1: 1
+    z2: 100
+    
+  fluid data:    
+    Gc: 0.9
+    omega_f1: 1
+    omega_f2: 1
+    # Wetting forces from Huang et al. 2007
+    G_ads_f1_s1: -0.4
+    G_ads_f1_s2: 0
+    G_ads_f1_s3: 0
+    G_ads_f1_s4: 0
+  
+  convergence: 1e-4  # Convergence threshold
+  convergence iter: 100  # How often to check for convergence
+  max iterations: 500000  # max iterations per Pc step
+  save sim: True  # Save restart files
+  save iter: 10000  # How often to save restart files
+  gif iter: 5000  # How often to save gifs
+  vtk iter: 5000  # How often to save vtk files
+  rho_f2_vtk: False  # When True, saves rho f1 and f2 vtks. If False, only saves rho f1 vtk
+  print geom: True  # Create vtk of geometry at beginning
+  print stl: False  # Create stl of geometry at beginning
+  
+rel perm:  # Parameters for 1-phase sims for rel perms
+  pressure: 0.0005
+  max iterations: 5000000
+  convergence: 1e-6
+  save vtks: True  # save velocity vtks
+
+visualization:  # coming soon
+
