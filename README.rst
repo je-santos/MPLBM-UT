@@ -69,7 +69,7 @@ Some familiarity with the terminal, unix operating systems, and bash will be ver
    - The more cores, the faster the simulation (till a point when too much communication between cores slows things down a bit); 
    - The larger to domain, the longer the simulation; 
    - The smaller the convergence tolerance, the longer the simulation. 
-  It is a good idea to do some system performance testing (ie find the optimum number of cores for your domain size). Generally on CPUs, each processor will optimally handle a 20^3-50^3 section of a domain, but you will need to adjust accordingly to your system. Please see the `Young-Laplace validation example <python_examples/young_laplace_validation>`__ to get an idea of how tolerance affects run time. In that example, we used 40 cores on a 50x52x175 domain (~76^3) which gives each processor a ~22^3 section to process.
+  It is a good idea to do some system performance testing (ie find the optimum number of cores for your domain size). Generally on CPUs, each processor will optimally handle a 20^3-50^3 section of a domain, but you will need to adjust accordingly to your system. Please see the `Young-Laplace validation example <examples/young_laplace_validation>`__ to get an idea of how tolerance affects run time. In that example, we used 40 cores on a 50x52x175 domain (~76^3) which gives each processor a ~22^3 section to process.
   
 - Having a dedicated `Python virtual environment <https://docs.python.org/3/library/venv.html>`__ or `Anaconda <https://www.anaconda.com/>`__ environment is recommended to avoid compatability issues.
   - A note on running Python: Depending on your system configuration, you may need to use ``python3`` in order to run simulations instead of just ``python`` as shown in the examples. 
@@ -90,7 +90,7 @@ Running a simulation
 The `examples <examples>`__ are a great place to see how the code can be used in different ways. In general, each example has a Python script, input file, an input folder, and an output folder(s):
 
 - The Python script contains everything needed to run the example; this means that running a simulation is as easy as running ``python 2_phase_sim.py`` or ``python 1_phase_sim.py`` in the terminal. 
-- We use YAML format for our input files. Please refer to the `readme <examples/readme.md>`__ in the python_examples folder to see a description of all the inputs.
+- We use YAML format for our input files. Please refer to the `readme <examples/readme.md>`__ in the examples folder to see a description of all the inputs.
 - The input folder is where simulation geometries are stored. The output folder(s) are there to store simulation results.  
 
 Please refer to the `unsteady state example  </examples/unsteady_rel_perm>`__ for a complete end-to-end workflow.
