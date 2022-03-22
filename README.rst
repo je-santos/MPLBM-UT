@@ -53,7 +53,7 @@ Requirements
 - Unix system (`Windows Linux Subsystem <https://docs.microsoft.com/en-us/windows/wsl/>`__ or the terminal in Mac also work)
    - We also use wget in the examples to download 3D images from Digital Rocks Portal. Please make sure it is installed on your system if you are running the examples.
 - Python 3.6+
-- The following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
+   - The following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
 - gcc 7.X (*Please read the note below!*)
 - OpenMPI 2.1.1, MPICH2
 Note: The Palabos documentation is not specific on what versions of gcc and MPI work to run and compile the code...They recommend any "modern" version of gcc and MPI. Above are some of the gcc and MPI versions that have worked for us. ***As of now, it seems that gcc 7.X works reliably***: click this link for instructions on `how to install and switch between different gcc and g++ versions <https://linuxconfig.org/how-to-switch-between-multiple-gcc-and-g-compiler-versions-on-ubuntu-20-04-lts-focal-fossa>`_. If you are on a cluster/supercomputer you may need to ask your system admins about installing a different version of gcc.
@@ -78,7 +78,7 @@ Some familiarity with the terminal, unix operating systems, and bash will be ver
 ################################################################################
 Installation
 ################################################################################
-In the parent directory of the repo, run the installation script with the following command:
+The installation script will install/compile `Palabos <src/>`_, `the one-phase simulation code <src/1-phase_LBM>`_, `the two-phase Shan-Chen code <src/2-phase_LBM>`_, and the `mplbm_utils python package </src/python/mplbm_utils>`__ . In the parent directory of the repo, run the installation script with the following command:
 
 .. code-block:: bash
 
