@@ -52,7 +52,7 @@ Requirements
 ################################################################################
 - Unix system (`Windows Linux Subsystem <https://docs.microsoft.com/en-us/windows/wsl/>`__ or the terminal in Mac also work)
    - We also use wget in the examples to download 3D images from Digital Rocks Portal. Please make sure it is installed on your system if you are running the examples.
-- Python 3.6+ (there is also Matlab/Octave code available but it is being phased out. We'll save it as legacy code though.)
+- Python 3.6+
 - The following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__
 - gcc 7.X (*Please read the note below!*)
 - OpenMPI 2.1.1, MPICH2
