@@ -414,7 +414,7 @@ int main(int argc, char * argv[]) {
   plint runnum = 0;
   if (pressure_bc == true){
     // If running using pressure BCs, use the number of pressure steps specified
-    runnum = num_pc_steps;
+    runnum = num_pc_steps + 1;
     
     // Old method
     // runnum = ((rho_f2_outlet_initial - rho_f2_outlet_final) / drho_f2) + 1;
@@ -512,7 +512,7 @@ int main(int argc, char * argv[]) {
 
   if (pressure_bc == true) {
     pcout << "The boundary conditions per run are:" << endl;
-    for (plint readnum = 0; readnum <= runnum; ++readnum) {
+    for (plint readnum = 0; readnum < runnum; ++readnum) {
       deltaP[readnum] = (rho_fluid1[readnum] - rho_fluid2[readnum]) / 3;
       pcout << "Run number = " << readnum << endl;
       pcout << "Rho_no_1 = " << rho_fluid1[readnum] << endl;
@@ -592,7 +592,7 @@ int main(int argc, char * argv[]) {
 
   use_plb_bc = true; // Use Palabos built-in BC
   // Loop simulations with varying saturation
-  for (plint runs = current_run_num; runs <= runnum; ++runs) {
+  for (plint runs = current_run_num; runs < runnum; ++runs) {
 
     // turn off stats for efficency
     lattice_fluid1.toggleInternalStatistics(false);
@@ -801,7 +801,7 @@ int main(int argc, char * argv[]) {
   ofile << "Inlet density = " << rho_f1_inlet << "\n" << endl;
   ofile << "Geometry flow length = " << nx << "\n" << endl;
 
-  for (plint runs = 0; runs <= runnum; ++runs) {
+  for (plint runs = 0; runs < runnum; ++runs) {
 
     pcout << "Run    = " << runs << std::endl;
     pcout << "Pressure difference =  " << deltaP[runs] << std::endl;
