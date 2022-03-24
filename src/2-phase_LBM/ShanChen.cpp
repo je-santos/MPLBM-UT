@@ -471,9 +471,9 @@ int main(int argc, char * argv[]) {
     }
 
   } else {
-    runnum = 0; // If not using pressure bc, set to 0 to fill in correct density values
-    rho_fluid1[runnum] = rho_f1_inlet;
-    rho_fluid2[runnum] = rho_f2_outlet_initial;
+    plint index = 0; // If not using pressure bc, set to 0 to fill in correct density values
+    rho_fluid1[index] = rho_f1_inlet;
+    rho_fluid2[index] = rho_f2_outlet_initial;
     
   }
 
