@@ -69,7 +69,7 @@ Some familiarity with the terminal, unix operating systems, and bash will be ver
 - In relation to the above and for those new to LBM, please note that LBM simulations can take quite some time to run. The main factors in simulaiton time are the number of cores used, domain size, and convergence tolerance. In general:
 
    - The more cores, the faster the simulation (till a point when too much communication between cores slows things down a bit); 
-   - The larger to domain, the longer the simulation; 
+   - The larger the domain, the longer the simulation; 
    - The smaller the convergence tolerance, the longer the simulation. 
   It is a good idea to do some system performance testing (ie find the optimum number of cores for your domain size). Generally on CPUs, each processor will optimally handle a 20^3-50^3 section of a domain, but you will need to adjust accordingly to your system. Please see the `Young-Laplace validation example <examples/young_laplace_validation>`__ to get an idea of how tolerance affects run time. In that example, we used 40 cores on a 50x52x175 domain (~76^3) which gives each processor a ~22^3 section to process.
   
