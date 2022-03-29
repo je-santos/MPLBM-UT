@@ -16,6 +16,26 @@ typedef double T; // Use double-precision arithmetics
 // Use a grid which additionally to the f's stores two variables for the external force term.
 #define DESCRIPTOR descriptors::ForcedShanChenD3Q19Descriptor
 
+template <typename T>
+class FluidNodes {
+public:
+    FluidNodes(MultiScalarField3D <int> geometry_, plint nx_, plint ny_, plint nz_) : geometry(geometry_), nx(nx_), ny(ny_), nz(nz_) { }
+    bool operator()(plint iX, plint iY, plint iZ) const
+    {
+      if (geometry.get(iX,iY,iZ) == 0) {
+        return true;
+      } else if (geometry.get(iX,iY,iZ) == 3){
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+private:
+    MultiScalarField3D <int> geometry;
+    plint nx, ny, nz;
+};
+
 //creates the gifs
 void writeGif_f1(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
   MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid2, string runs, plint iT) {
@@ -213,21 +233,21 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
   defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s1), 1);
   defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s1), 1);
 
-  // Second contact angle (labeled with 3)
-  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s2), 3);
-  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s2), 3);
+  // Second contact angle (labeled with 4)
+  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s2), 4);
+  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s2), 4);
 
-  // Mesh contact angle (labeled with 4). Neutral wet
-  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (0), 4);
-  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (0), 4);
+  // Mesh contact angle (labeled with 5). Neutral wet
+  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (0), 5);
+  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (0), 5);
 
-  // Third contact angle (labeled with 4)
-  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s3), 5);
-  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s3), 5);
+  // Third contact angle (labeled with 6)
+  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s3), 6);
+  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s3), 6);
 
-  // Fourth contact angle (labeled with 5)
-  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s4), 6);
-  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s4), 6);
+  // Fourth contact angle (labeled with 7)
+  defineDynamics(lattice_fluid1, geometry, new BounceBack < T, DESCRIPTOR > (Gads_f1_s4), 7);
+  defineDynamics(lattice_fluid2, geometry, new BounceBack < T, DESCRIPTOR > (-Gads_f1_s4), 7);
 
   //Array<T, 3> zeroVelocity(0., 0., 0.);
 
@@ -272,6 +292,7 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
 
   return;
 }
+
 
 int main(int argc, char * argv[]) {
   // 1. Declaring the variables
@@ -477,16 +498,53 @@ int main(int argc, char * argv[]) {
     
   }
 
-
   const T nu_f1 = ((T) 1 / omega_f1 - 0.5) / DESCRIPTOR < T > ::invCs2;
   const T nu_f2 = ((T) 1 / omega_f2 - 0.5) / DESCRIPTOR < T > ::invCs2;
 
+  pcout << "Reading the geometry file." << endl;
+  MultiScalarField3D < int > geometry(nx, ny, nz);
+  readGeometry(fNameIn, fNameOut, geometry);
+
+  Box3D inlet(1, 2, 1, ny - 2, 1, nz - 2);
+  Box3D outlet(nx - 2, nx - 1, 1, ny - 2, 1, nz - 2);
+
+  // For sparse grid:
+  pcout << "Setting up sparse geometry..." << endl;
+  // 1) Palabos sparse stuff
+  pcout << "flagMatrix" << endl;
+  MultiScalarField3D<int> flagMatrix(nx, ny, nz);
+  pcout << "Fluid nodes" << endl;
+  setToFunction(flagMatrix, flagMatrix.getBoundingBox(), FluidNodes<T>(geometry, nx, ny, nz));
+  plint blockSize = 25;
+  plint envelopeWidth = 1;
+  pcout << "sparse block manager" << endl;
+  MultiBlockManagement3D sparseBlockManagement = computeSparseManagement(
+      *plb::reparallelize(flagMatrix, blockSize,blockSize,blockSize), envelopeWidth);
+
+  // 2) Initialize lattices with sparse implementation
   // Use regularized BGK dynamics to improve numerical stability
   // (but note that BGK dynamics works well too).
-  MultiBlockLattice3D < T, DESCRIPTOR > lattice_fluid2(nx, ny, nz,
-    new ExternalMomentRegularizedBGKdynamics < T, DESCRIPTOR > (omega_f2));
-  MultiBlockLattice3D < T, DESCRIPTOR > lattice_fluid1(nx, ny, nz,
-    new ExternalMomentRegularizedBGKdynamics < T, DESCRIPTOR > (omega_f1));
+//  MultiBlockLattice3D < T, DESCRIPTOR > lattice_fluid2(nx, ny, nz,
+//    new ExternalMomentRegularizedBGKdynamics < T, DESCRIPTOR > (omega_f2));
+//  MultiBlockLattice3D < T, DESCRIPTOR > lattice_fluid1(nx, ny, nz,
+//    new ExternalMomentRegularizedBGKdynamics < T, DESCRIPTOR > (omega_f1));
+  pcout << "Initialize sparse lattices..." << endl;
+  MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid2(
+    sparseBlockManagement,
+    defaultMultiBlockPolicy3D().getBlockCommunicator(),
+    defaultMultiBlockPolicy3D().getCombinedStatistics(),
+    defaultMultiBlockPolicy3D().getMultiCellAccess<T, DESCRIPTOR>(),
+    new ExternalMomentRegularizedBGKdynamics <T, DESCRIPTOR> (omega_f2));
+
+  MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid1(
+    sparseBlockManagement,
+    defaultMultiBlockPolicy3D().getBlockCommunicator(),
+    defaultMultiBlockPolicy3D().getCombinedStatistics(),
+    defaultMultiBlockPolicy3D().getMultiCellAccess<T, DESCRIPTOR>(),
+    new ExternalMomentRegularizedBGKdynamics <T, DESCRIPTOR> (omega_f1));
+
+  pcout << getMultiBlockInfo(lattice_fluid1) << std::endl;
+  pcout << getMultiBlockInfo(lattice_fluid2) << std::endl;
 
   lattice_fluid2.periodicity().toggle(0, px_f2);
   lattice_fluid1.periodicity().toggle(0, px_f1);
@@ -519,13 +577,6 @@ int main(int argc, char * argv[]) {
       pcout << "Rho_no_2 = " << rho_fluid2[readnum] << endl;
     }
   }
-
-  pcout << "Reading the geometry file." << endl;
-  MultiScalarField3D < int > geometry(nx, ny, nz);
-  readGeometry(fNameIn, fNameOut, geometry);
-
-  Box3D inlet(1, 2, 1, ny - 2, 1, nz - 2);
-  Box3D outlet(nx - 2, nx - 1, 1, ny - 2, 1, nz - 2);
 
   // Setup or load fluid lattices
   plint current_run_num = 0;
