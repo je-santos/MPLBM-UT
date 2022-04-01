@@ -19,12 +19,13 @@ typedef double T; // Use double-precision arithmetics
 template <typename T>
 class FluidNodes {
 public:
-    FluidNodes(MultiScalarField3D <int> geometry_, plint nx_, plint ny_, plint nz_) : geometry(geometry_), nx(nx_), ny(ny_), nz(nz_) { }
+    FluidNodes(MultiScalarField3D <int> geometry_) : geometry(geometry_) { }
     bool operator()(plint iX, plint iY, plint iZ) const
     {
-      if (geometry.get(iX,iY,iZ) == 0) {
+      plint voxel_value = geometry.get(iX,iY,iZ);
+      if (voxel_value == 0) {
         return true;
-      } else if (geometry.get(iX,iY,iZ) == 3){
+      } else if (voxel_value == 3) {
         return true;
       } else {
         return false;
@@ -33,7 +34,6 @@ public:
 
 private:
     MultiScalarField3D <int> geometry;
-    plint nx, ny, nz;
 };
 
 //creates the gifs
@@ -502,8 +502,8 @@ int main(int argc, char * argv[]) {
   const T nu_f2 = ((T) 1 / omega_f2 - 0.5) / DESCRIPTOR < T > ::invCs2;
 
   pcout << "Reading the geometry file." << endl;
-  MultiScalarField3D < int > geometry(nx, ny, nz);
-  readGeometry(fNameIn, fNameOut, geometry);
+  MultiScalarField3D <int> raw_geometry(nx, ny, nz);
+  readGeometry(fNameIn, fNameOut, raw_geometry);
 
   Box3D inlet(1, 2, 1, ny - 2, 1, nz - 2);
   Box3D outlet(nx - 2, nx - 1, 1, ny - 2, 1, nz - 2);
@@ -514,12 +514,14 @@ int main(int argc, char * argv[]) {
   pcout << "flagMatrix" << endl;
   MultiScalarField3D<int> flagMatrix(nx, ny, nz);
   pcout << "Fluid nodes" << endl;
-  setToFunction(flagMatrix, flagMatrix.getBoundingBox(), FluidNodes<T>(geometry, nx, ny, nz));
-  plint blockSize = 25;
+  setToFunction(flagMatrix, flagMatrix.getBoundingBox(), FluidNodes<T>(raw_geometry));
+  plint blockSize = 10;
   plint envelopeWidth = 1;
   pcout << "sparse block manager" << endl;
   MultiBlockManagement3D sparseBlockManagement = computeSparseManagement(
-      *plb::reparallelize(flagMatrix, blockSize,blockSize,blockSize), envelopeWidth);
+      *plb::reparallelize(flagMatrix), envelopeWidth);
+//  MultiBlockManagement3D sparseBlockManagement = computeSparseManagement(flagMatrix, envelopeWidth);
+
 
   // 2) Initialize lattices with sparse implementation
   // Use regularized BGK dynamics to improve numerical stability
@@ -529,29 +531,44 @@ int main(int argc, char * argv[]) {
 //  MultiBlockLattice3D < T, DESCRIPTOR > lattice_fluid1(nx, ny, nz,
 //    new ExternalMomentRegularizedBGKdynamics < T, DESCRIPTOR > (omega_f1));
   pcout << "Initialize sparse lattices..." << endl;
-  MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid2(
-    sparseBlockManagement,
+
+  MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid2(sparseBlockManagement,
     defaultMultiBlockPolicy3D().getBlockCommunicator(),
     defaultMultiBlockPolicy3D().getCombinedStatistics(),
     defaultMultiBlockPolicy3D().getMultiCellAccess<T, DESCRIPTOR>(),
     new ExternalMomentRegularizedBGKdynamics <T, DESCRIPTOR> (omega_f2));
 
-  MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid1(
-    sparseBlockManagement,
+  MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid1(sparseBlockManagement,
     defaultMultiBlockPolicy3D().getBlockCommunicator(),
     defaultMultiBlockPolicy3D().getCombinedStatistics(),
     defaultMultiBlockPolicy3D().getMultiCellAccess<T, DESCRIPTOR>(),
     new ExternalMomentRegularizedBGKdynamics <T, DESCRIPTOR> (omega_f1));
 
+//  MultiScalarField3D <int> geometry(sparseBlockManagement,
+//    defaultMultiBlockPolicy3D().getBlockCommunicator(),
+//    defaultMultiBlockPolicy3D().getCombinedStatistics(),
+//    defaultMultiBlockPolicy3D().getMultiCellAccess<T, DESCRIPTOR>());
+//  MultiScalarField3D<int> geometry(sparseBlockManagement);
+//  geometry = *plb::reparallelize(raw_geometry);
+  // std::unique_ptr
+
+  pcout << getMultiBlockInfo(geometry) << std::endl;
   pcout << getMultiBlockInfo(lattice_fluid1) << std::endl;
   pcout << getMultiBlockInfo(lattice_fluid2) << std::endl;
 
+  pcout << "spot 0" << endl;
   lattice_fluid2.periodicity().toggle(0, px_f2);
   lattice_fluid1.periodicity().toggle(0, px_f1);
   lattice_fluid2.periodicity().toggle(1, py_f2);
   lattice_fluid1.periodicity().toggle(1, py_f1);
   lattice_fluid2.periodicity().toggle(2, pz_f2);
   lattice_fluid1.periodicity().toggle(2, pz_f1);
+//  lattice_fluid2.periodicitySwitch(0, px_f2);
+//  lattice_fluid1.periodicitySwitch(0, px_f1);
+//  lattice_fluid2.periodicitySwitch(1, py_f2);
+//  lattice_fluid1.periodicitySwitch(1, py_f1);
+//  lattice_fluid2.periodicitySwitch(2, pz_f2);
+//  lattice_fluid1.periodicitySwitch(2, pz_f1);
 
   vector < MultiBlockLattice3D < T, DESCRIPTOR > * > blockLattices;
   blockLattices.push_back( & lattice_fluid2);
