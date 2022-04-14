@@ -90,8 +90,8 @@ def create_geom_for_rel_perm(inputs):
         rho_1 = inputs['simulation']['rho_f1']
         tol = rho_1 - 1  # In order to account for interface and new boundaries that will be created
         rho1_mask = rho_1 - tol
-        rho1_data = np.where(data >= rho1_mask, data, 3)
-        rho1_data = np.where(data <= rho1_mask, rho1_data, 0)
+        rho1_data = np.where(data >= rho1_mask, data, 2)  # Set to grain index
+        rho1_data = np.where(data <= rho1_mask, rho1_data, 0)  # Set to pore index
 
         geom_name = 'f1_for_kr'
         geom = Namespace()
@@ -110,8 +110,8 @@ def create_geom_for_rel_perm(inputs):
         # 4) Separate fluid 2 #
         #######################
         # Segmentation
-        rho2_data = np.where((data > 0) & (data <= rho1_mask), data, 3)
-        rho2_data = np.where(rho2_data >= rho1_mask, rho2_data, 0)
+        rho2_data = np.where((data > 0) & (data <= rho1_mask), data, 2)  # Set to grain index
+        rho2_data = np.where(rho2_data >= rho1_mask, rho2_data, 0)  # Set to pore index
 
         # Calculate saturation of fluid 2 (Sw)
         f2_vol = len(np.where(rho2_data == 0)[0])
