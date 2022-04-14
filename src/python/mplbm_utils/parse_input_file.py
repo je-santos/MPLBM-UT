@@ -232,6 +232,10 @@ def parse_input_file(input_file):
 
                 elif inputs['simulation']['fluid init'] == 'custom':
                     print("Initial fluid configuration setup with custom settings.")
+
+                elif inputs['simulation']['fluid init'] == 'geom':
+                    print("Initial fluid configuration from geometry.")
+
                 else:
                     raise KeyError("Please set 'fluid init' in 'simulation' entry to 'drainage' or 'custom'.")
             else:

@@ -1,6 +1,6 @@
 from argparse import Namespace
 import numpy as np
-from .pore_utils import erase_regions, create_geom_edist
+from .pore_utils import erase_regions, create_geom_edist, create_nw_fluid_mask
 
 
 def create_geom_for_palabos(inputs):
@@ -19,8 +19,7 @@ def create_geom_for_palabos(inputs):
     geom_name = inputs['domain']['geom name']
 
     # read-in file
-    rock = np.fromfile(geom_file, dtype=data_type).reshape([Nx, Ny, Nz])/3
-
+    rock = np.fromfile(geom_file, dtype=data_type).reshape([Nx, Ny, Nz])
     # select a subset for simulation
     rock = rock[0:nz, 0:ny, 0:nx]
 
@@ -35,10 +34,21 @@ def create_geom_for_palabos(inputs):
     geom.scale_2    = inputs['domain']['double geom resolution']  # Double the grain (pore) size if needed to prevent single pixel throats
                             # for tight/ low porosity geometries
 
-    rock     = erase_regions(rock)
-    rock4sim, geom_name = create_geom_edist(rock, geom)  # provides an efficient geometry for simulation
+    print(f'rock orig: {np.unique(rock)}')
+    rock, nw_fluid_mask = create_nw_fluid_mask(rock, geom)
+
+    print(f'rock after save nw ind: {np.unique(rock)}')
+    rock = rock/3  # For proper erase regions and edist
+
+    rock = erase_regions(rock)
+    print('erase_regions', np.unique(rock))
+
+    rock4sim, geom_name = create_geom_edist(rock, geom, nw_fluid_mask)  # provides an efficient geometry for simulation
+    print(f'rock4sim: {np.unique(rock4sim)}')
+
     inputs['domain']['geom name'] = geom_name  # Update the geom name for later
     rock4sim.flatten().tofile(sim_dir + '/' + input_dir + f'{geom_name}.dat')  # Save geometry
+    # np.savetxt(sim_dir + '/' + input_dir + f'{geom_name}.dat', rock4sim.flatten('C'))
 
     return
 

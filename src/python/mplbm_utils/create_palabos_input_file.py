@@ -120,6 +120,12 @@ def create_two_phase_input_file(inputs, input_file_name):
         minimum_radius = 1
         num_pc_steps = 0
 
+    load_fluid_type = inputs["simulation"]["fluid init"]
+    if load_fluid_type == 'geom':
+        load_fluid_from_geom = True
+    else:
+        load_fluid_from_geom = False
+
     fluid1_x1 = inputs['simulation']['fluid 1 init']['x1']
     fluid1_x2 = inputs['simulation']['fluid 1 init']['x2']
     fluid1_y1 = inputs['simulation']['fluid 1 init']['y1']
@@ -186,6 +192,7 @@ def create_two_phase_input_file(inputs, input_file_name):
 
     # Write initial position of fluids
     file.write(f'<init>\n')
+    file.write(f'\t<fluid_from_geom> {load_fluid_from_geom} </fluid_from_geom>\n')
     file.write(f'\t<fluid1>\n')
     file.write(f'\t\t <x1> {fluid1_x1} </x1> <y1> {fluid1_y1} </y1> <z1> {fluid1_z1} </z1>\n')
     file.write(f'\t\t <x2> {fluid1_x2} </x2> <y2> {fluid1_y2} </y2> <z2> {fluid1_z2} </z2>\n')

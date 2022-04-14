@@ -6,7 +6,7 @@ import re
 import os
 
 
-def create_geom_edist(rock, args):
+def create_geom_edist(rock, args, nw_fluid_mask):
 
     if args.swapXZ:
         rock = rock.transpose([2, 1, 0])
@@ -45,13 +45,34 @@ def create_geom_edist(rock, args):
     else:
         geom_name = args.name
 
-    # I don't understand why this works, but it does
+    # Save
     erock = erock.astype(np.int16)
-    erock[erock==0] = 2608  # pore space
+    erock[erock == 0] = 2608  # pore space / w fluid
     erock[erock == 1] = 2609  # boundary
-    erock[erock==2] = 2610  # grains
+    erock[erock == 2] = 2610  # grains
+    erock[nw_fluid_mask == 3] = 2611  # add nw fluid back in if needed
+    erock = erock.astype(np.int16)
 
     return erock, geom_name
+
+
+def create_nw_fluid_mask(rock, args):
+
+    # Save indices for NW phase; can't do Euclidean distance properly with them.
+    # Also need to take into account: (1) transpose and (2) number of slices added
+    print('Original unique values: ', np.unique(rock))
+    nw_indices = np.where(rock == 3)[0]
+
+    rock_tmp = np.copy(rock)
+    if args.swapXZ:
+        rock_tmp = rock_tmp.transpose([2, 1, 0])
+    if args.num_slices:
+        rock_tmp = np.pad(rock_tmp, [(args.num_slices, args.num_slices), (0, 0), (0, 0)])
+
+    fluid_mask = np.where(rock_tmp == 3, rock_tmp, 0)  # Save NW whole block to preserve orientation
+    rock[nw_indices] = 0  # Finally, remove Nw phase from original image for rest of processing
+
+    return rock, fluid_mask
 
 
 def erase_regions(rock):

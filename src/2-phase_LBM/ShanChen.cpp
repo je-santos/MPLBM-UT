@@ -16,50 +16,6 @@ typedef double T; // Use double-precision arithmetics
 // Use a grid which additionally to the f's stores two variables for the external force term.
 #define DESCRIPTOR descriptors::ForcedShanChenD3Q19Descriptor
 
-template <typename T>
-class InitFluidNodes {
-public:
-  InitFluidNodes(MultiScalarField3D <int> geometry_,
-                 MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid1_,
-                 MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid2_,
-                 T rho_f1_, T rho_f2_,
-                 Array <T,3> zeroVelocity_) :
-                 geometry(geometry_),
-                 lattice_fluid1(lattice_fluid1_),
-                 lattice_fluid2(lattice_fluid2_),
-                 rho_f1(rho_f1_), rho_f2(rho_f2_),
-                 zeroVelocity(zeroVelocity_) { }
-
-  int operator()(plint iX, plint iY, plint iZ)
-  {
-    if (geometry.get(iX,iY,iZ) == 0) {
-      initializeAtEquilibrium(lattice_fluid2,
-          Box3D(iX,iX,
-                iY,iY,
-                iZ,iZ),
-          rho_f2,
-          zeroVelocity);
-      return 0;
-
-    } else if (geometry.get(iX,iY,iZ) == 3) {
-      initializeAtEquilibrium(lattice_fluid1,
-          Box3D(iX,iX,
-                iY,iY,
-                iZ,iZ),
-          rho_f1,
-          zeroVelocity);
-      return 0;
-    }
-
-    return 0;
-  }
-  private:
-    MultiScalarField3D <int> geometry;
-    MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid1, lattice_fluid2;
-    T rho_f1, rho_f2;
-    Array <T,3> zeroVelocity;
-};
-
 //creates the gifs
 void writeGif_f1(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
   MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid2, string runs, plint iT) {
@@ -217,19 +173,21 @@ void setboundaryvalue(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
 }
 
 // This isn't the "right" way of doing this but at least a start...
-void InitializeFluidsFromImage (MultiScalarField3D <int> geometry,
-                                MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid1,
-                                MultiBlockLattice3D <T, DESCRIPTOR> lattice_fluid2,
-                                T rho_f1, T rho_f2,
-                                Array <T,3> zeroVelocity) {
+// The "proper" way of doing this involves C++ functionals... C++/Palabos has very convoluted ways to deal with arrays...
+// They are described in Palabos docs (ch 16), and they also call functionals "data processors".
+void InitializeFluidsFromImage (MultiScalarField3D <int> & geometry,
+                                MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid1,
+                                MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid2,
+                                T & rho_f1, T & rho_f2, T & rhoNoFluid,
+                                Array <T,3> & zeroVelocity) {
 
   const plint nx = geometry.getNx();
   const plint ny = geometry.getNy();
   const plint nz = geometry.getNz();
 
-  for (plint iX=0; iX<nx-1; ++iX) {
-    for (plint iY=0; iY<ny-1; ++iY) {
-      for (plint iZ=0; iZ<nz-1; ++iZ) {
+  for (plint iX=0; iX<nx; iX++) {
+    for (plint iY=0; iY<ny; iY++) {
+      for (plint iZ=0; iZ<nz; iZ++) {
 
         plint geom_value = geometry.get(iX,iY,iZ);
 
@@ -241,12 +199,26 @@ void InitializeFluidsFromImage (MultiScalarField3D <int> geometry,
             rho_f2,
             zeroVelocity);
 
+          initializeAtEquilibrium(lattice_fluid1,
+            Box3D(iX,iX,
+                  iY,iY,
+                  iZ,iZ),
+            rhoNoFluid,
+            zeroVelocity);
+
         } else if (geom_value == 3) {
           initializeAtEquilibrium(lattice_fluid1,
             Box3D(iX,iX,
                   iY,iY,
                   iZ,iZ),
             rho_f1,
+            zeroVelocity);
+
+          initializeAtEquilibrium(lattice_fluid2,
+            Box3D(iX,iX,
+                  iY,iY,
+                  iZ,iZ),
+            rhoNoFluid,
             zeroVelocity);
         }
       }
@@ -263,7 +235,7 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
   T Gads_f1_s1, T Gads_f1_s2, T Gads_f1_s3, T Gads_f1_s4, T force_f1, T force_f2,
   T nx1_f1, T nx2_f1, T ny1_f1, T ny2_f1, T nz1_f1, T nz2_f1, T nx1_f2,
   T nx2_f2, T ny1_f2, T ny2_f2, T nz1_f2, T nz2_f2, T runs,
-  bool load_state, bool print_geom, bool pressure_bc) {
+  bool load_state, bool print_geom, bool pressure_bc, bool load_fluids_from_geom) {
 
   pcout << "Definition of the geometry." << endl;
 
@@ -287,7 +259,7 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
 
   // Assign masks to label geometry
 
-  // NoDynamics (computational efficency, labeled with 2)
+  // NoDynamics (computational efficiency, label grains with 2)
   defineDynamics(lattice_fluid1, geometry, new NoDynamics < T, DESCRIPTOR > (), 2);
   defineDynamics(lattice_fluid2, geometry, new NoDynamics < T, DESCRIPTOR > (), 2);
 
@@ -313,11 +285,11 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
 
   //Array<T, 3> zeroVelocity(0., 0., 0.);
 
-  bool load_fluids_from_image = true;
+  //bool load_fluids_from_image = true; // For testing
   if (load_state == false) {
     pcout << "Initializing Fluids" << endl;
 
-    if (load_fluids_from_image == false) {
+    if (load_fluids_from_geom == false) {
 
          initializeAtEquilibrium(lattice_fluid2, Box3D(nx1_f2 - 1, nx2_f2 - 1,
             ny1_f2 - 1, ny2_f2 - 1,
@@ -340,14 +312,8 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
           rhoNoFluid, zeroVelocity);
 
     } else {
-        // Initialize fluids based on geometry labels
-        plint nx = geometry.getNx();
-        plint ny = geometry.getNy();
-        plint nz = geometry.getNz();
-        MultiScalarField3D<int> flagMatrix(nx, ny, nz);
         pcout << "Initialize Fluid nodes" << endl;
-        InitializeFluidsFromImage(geometry, lattice_fluid1, lattice_fluid2, rho_f1, rho_f2, zeroVelocity);
-        //setToFunction(flagMatrix, flagMatrix.getBoundingBox(), InitFluidNodes<T>(geometry, lattice_fluid1, lattice_fluid2, rho_f1, rho_f2, zeroVelocity));
+        InitializeFluidsFromImage(geometry, lattice_fluid1, lattice_fluid2, rho_f1, rho_f2, rhoNoFluid, zeroVelocity);
     }
 
     setExternalVector(lattice_fluid1, lattice_fluid1.getBoundingBox(),
@@ -383,6 +349,7 @@ int main(int argc, char * argv[]) {
   bool use_plb_bc; //
   bool px_f1, py_f1, pz_f1, px_f2, py_f2, pz_f2; //periodicity
   bool pressure_bc;
+  bool load_fluids_from_geom;
   plint nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1; //fluid1 configuration
   plint nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2; //fluid2 configuration
 
@@ -446,6 +413,7 @@ int main(int argc, char * argv[]) {
     document["geometry"]["per"]["fluid2"]["y"].read(py_f2);
     document["geometry"]["per"]["fluid2"]["z"].read(pz_f2);
 
+    document["init"]["fluid_from_geom"].read(load_fluids_from_geom);
     document["init"]["fluid1"]["x1"].read(nx1_f1);
     document["init"]["fluid1"]["x2"].read(nx2_f1);
     document["init"]["fluid1"]["y1"].read(ny1_f1);
@@ -662,7 +630,7 @@ int main(int argc, char * argv[]) {
       Gads_f1_s1, Gads_f1_s2, Gads_f1_s3, Gads_f1_s4, force_f1, force_f2,
       nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
       nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, current_run_num,
-      load_state, print_geom, pressure_bc);
+      load_state, print_geom, pressure_bc, load_fluids_from_geom);
 
     pcout << "Done!" << endl;
 
@@ -681,7 +649,7 @@ int main(int argc, char * argv[]) {
       Gads_f1_s1, Gads_f1_s2, Gads_f1_s3, Gads_f1_s4, force_f1, force_f2,
       nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
       nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, current_run_num,
-      load_state, print_geom, pressure_bc);
+      load_state, print_geom, pressure_bc, load_fluids_from_geom);
 
     pcout << "Done!" << endl;
   }
