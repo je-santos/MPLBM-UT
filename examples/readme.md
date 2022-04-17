@@ -16,6 +16,10 @@ Figure 1- Geometry setup for 2-phase flow simulations
 
 - `geometry:` (no user inputs here, just a key to organize geometry information)
   - `file name:` String specifying the name of the name of the input geometry file
+    - Currently 3 voxel labels are supported in .raw geometry files, but more labels can be easily added to take into account multiple surface wetting conditions:
+      - 0 = Pore space or Fluid 2 (wetting fluid)
+      - 1 = Solid matrix or grains
+      - 3 = Fluid 1 (non-wettting fluid). We skip label 2 becuase it is reserved for pre-processing grains (label 1) into interior and surface, labeled 2 and 1 respectively.
   - `data type:` Datatype of the input geometry file (eg int8)
   - `geometry size:` Please provide the x, y, and z dimensions (`Nx`, `Ny`, and `Nz` subkeys in the examples) of the input geometry as integers
 - `domain:` (no user inputs here, just a key to organize domain information)
@@ -25,7 +29,6 @@ Figure 1- Geometry setup for 2-phase flow simulations
   - `inlet and outlet layers:` Integer number of layers added to the ends of the simulation domain (in x direction). For 1-phase simulations, a minimum of 2 or more layers should work well. For 2-phase simulations, 4 should work well and at least 3 are highly recommended.
   - `add mesh:` NOT YET IMPLEMENTED, True or False, Add A neutral mesh
   - `swap xz:` True or False, swap x and z axes, False by default
-  - `double geom resolution:` NOT YET IMPLEMENTED, True or False, this will double the domain resolution
 
 ### 1-Phase Simulation Inputs (1-phase inputs for `simulation` key)
 - `simulation`:
@@ -50,10 +53,11 @@ Figure 1- Geometry setup for 2-phase flow simulations
   - `minimum radius:` This number is correlated to delta rho in the docs (see below). This acts as entry capillary pressure, so set 1-3 voxels lower than inscribed sphere radius to reach residual saturations. You can think of this as the smallest throat that you would like to percolate.
   - `num pressure steps:` Integer number of pressure values the simulation should use. Set to 1 if you only want a constant pressure difference across the sample. Setting this larger than 1 will create an array of pressure differences to simulate; this is how to obtain a capillary pressure curve via drainage. The pressure difference will start at zero, and the pressure found from `minimum radius` will be the largest pressure difference across the sample. The code will create an array of pressure values from 0 to the maximum pressure with `num pressure steps` steps in between. Essentially this is the is how many pressure increments (points on your Pc curve) you want to include.
   - `fluid init:` "geom", "drainage", or "custom". 
-    - If "geom", this will initialize fluid in the simulation based on the raw geometry voxel values: voxels labeled 0 will initialize as Fluid 1 and voxels labeled 3 will initialize as Fluid 2.
+    - If "geom", this will initialize fluid in the simulation based on the raw geometry voxel values: voxels labeled 0 will initialize as Fluid 2 and voxels labeled 3 will initialize as Fluid 1.
     - If "drainage", a traditional drainage setup will be used (all pore space wetting fluid and non wetting fluid phase will invade). 
     - If "custom", use the x, y, z entries under `fluid 1 init:` and `fluid 2 init:` as shown in the example input files to initialize fluid where you would like. 
-  - `fluid data:` within this key, the following parameters are set: `Gc`, `omega_f1`, `omega_f2`, `G_ads_f1_s1`, `G_ads_f1_s2`, `G_ads_f1_s3`, and `G_ads_f1_s4`. For specific details of these parameters, see the full explaination of the model below.    
+  - `fluid data:` within this key, the following parameters are set: `Gc`, `omega_f1`, `omega_f2`, `G_ads_f1_s1`, `G_ads_f1_s2`, `G_ads_f1_s3`, and `G_ads_f1_s4`. For specific details of these parameters, see the full explaination of the model below.
+    - Currently, `G_ads_f1_s1` is assigned to the surface of grains/matrix to obtain a specific contact angle 
   - `convergence:` number indicating the convergence threshold. This is the tolerance for the difference in average energy from the previous convergence check, or in other words, the average relative energy difference per iteration. From testing, a value of 1e-4 gives consistent results while maintaing reasonable run times.
   - `convergence iter:` Integer number of how often convergence should be checked. This should be approximately the same as `nx` (ie For `nx`=100, `convergence iter = 100`). You may have to tweak this depending on your geometry. 
   - `max iterations:` Integer number of the maxiumum number of iterations for the simulation. If using pressure steps, this is the maximum number of iterations for every pressure step simulated.
@@ -106,7 +110,7 @@ Figure 1- Geometry setup for 2-phase flow simulations
 **force_f1 and force_f2** If this term is different than zero, a driving force will be added to each fluid (i.e. gravitational) in the x-direction. The pressure boundary conditions are suggested to be turned off and periodicity should be enabled (to reach a steady-state).
 
 **Wetting forces:**
-(G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4): These terms refer to the interaction force between the fluids and the solid walls. This code has the option to add 4 different wetting conditions ( 4 different solid surfaces ), but more could be added with ease. In the 3D image, the voxels labeled with 1, 3, 5, 6 are assigned G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4, respectively (2 is reserved for inside solids, 4 for the neutral-wet mesh and 0 for the fluids). The contact angle is calculated as: cos(theta) = 4*G_ads_f1_si/( Gc*( rho_f1-rho_d ) )
+(G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4): These terms refer to the interaction force between the fluids and the solid walls. This code has the option to add 4 different wetting conditions ( 4 different solid surfaces ), but more could be added with ease. In the 3D image, the voxels labeled with 1, 4, 6, 7 are assigned G_ads_f1_s1, G_ads_f1_s2, G_ads_f1_s3, G_ads_f1_s4, respectively (2 is reserved for inside solids, 5 for the neutral-wet mesh, and 0 and 3 for the fluids). The contact angle is calculated as:
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;cos(\theta)=\frac{4G_{ads_{f1,si}}}{G_c(rho_{f1}-rho_d)}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
