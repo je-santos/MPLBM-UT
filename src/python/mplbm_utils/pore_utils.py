@@ -4,6 +4,8 @@ import skimage.transform as skit
 from scipy.ndimage.morphology import distance_transform_edt as edist
 import re
 import os
+from edt import edt
+import porespy as ps
 
 
 def create_geom_edist(rock, args, nw_fluid_mask):
@@ -53,6 +55,11 @@ def create_geom_edist(rock, args, nw_fluid_mask):
     erock[nw_fluid_mask == 3] = 2611  # add nw fluid back in if needed
     erock = erock.astype(np.int16)
 
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=[3,3])
+    plt.imshow(erock[:,:,40])
+    plt.show()
+
     return erock, geom_name
 
 
@@ -61,7 +68,13 @@ def create_nw_fluid_mask(rock, args):
     # Save indices for NW phase; can't do Euclidean distance properly with them.
     # Also need to take into account: (1) transpose and (2) number of slices added
     print('Original unique values: ', np.unique(rock))
-    nw_indices = np.where(rock == 3)[0]
+    # nw_indices = np.where(rock == 3)[0]
+    # print(len(nw_indices))
+
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=[3, 3])
+    plt.title("before mask")
+    plt.imshow(rock[:, :, 40])
 
     rock_tmp = np.copy(rock)
     if args.swapXZ:
@@ -70,7 +83,12 @@ def create_nw_fluid_mask(rock, args):
         rock_tmp = np.pad(rock_tmp, [(args.num_slices, args.num_slices), (0, 0), (0, 0)])
 
     fluid_mask = np.where(rock_tmp == 3, rock_tmp, 0)  # Save NW whole block to preserve orientation
-    rock[nw_indices] = 0  # Finally, remove Nw phase from original image for rest of processing
+    rock = np.where(rock == 3, 0, rock)  # Finally, remove Nw phase from original image for rest of processing
+
+    plt.figure(figsize=[3,3])
+    plt.title("After mask")
+    plt.imshow(rock[:,:,40])
+    plt.show()
 
     return rock, fluid_mask
 
@@ -86,6 +104,64 @@ def erase_regions(rock):
     rock[blobs_labels>1] = 0
     
     return rock
+
+
+def run_porespy_drainage(inputs, wetting_angle, voxel_size):
+    # This function is just running PoreSpy drainage simulation on the image.
+    # Much of this is from the drainage simulation example in the PoreSpy docs,
+    # but there are a few modifications to make it compatible with MPLBM.
+
+    sim_dir = inputs['input output']['simulation directory']
+    input_dir = inputs['input output']['input folder']
+    geom_file_name = inputs['geometry']['file name']
+    data_type = inputs['geometry']['data type']
+    geom_file = sim_dir + '/' + input_dir + geom_file_name
+    Nx = inputs['geometry']['geometry size']['Nx']
+    Ny = inputs['geometry']['geometry size']['Ny']
+    Nz = inputs['geometry']['geometry size']['Nz']
+    nx = inputs['domain']['domain size']['nx']
+    ny = inputs['domain']['domain size']['ny']
+    nz = inputs['domain']['domain size']['nz']
+    swap_xz = inputs['domain']['swap xz']
+    geom_name = inputs['domain']['geom name']
+
+    image = np.fromfile(geom_file, dtype=data_type).reshape([Nx, Ny, Nz])
+    image = image[0:nz, 0:ny, 0:nx]
+
+    # Take into account user specified orientation
+    if swap_xz == True:
+        image = image.transpose([2, 1, 0])
+
+    image = ~np.array(image, dtype=bool)  # Convert to bool and invert pores and grains for PoreSpy format
+    inlets = np.zeros_like(image)  # Add inlets
+    inlets[:,:,0] = True  # Make sure this is in XZ plane for correct orientation with Palabos
+    sigma = 0.15  # This is the value of sigma found from MPLBM experiments (See Young-Laplace example)
+    dt = edt(image)  # Get distance transform
+    pc = -2 * sigma * np.cos(np.deg2rad(wetting_angle)) / (dt * voxel_size)  # Use Washburn equation for Pc values
+    drn = ps.simulations.drainage(pc=pc, im=image, inlets=inlets, voxel_size=voxel_size, g=0)
+
+    np.save(f'{sim_dir}/{input_dir}{geom_name}_pc_image.npy', drn.im_pc)
+    np.save(f'{sim_dir}/{input_dir}{geom_name}_satn_image.npy', drn.im_satn)
+    np.save(f'{sim_dir}/{input_dir}{geom_name}_pc_data.npy', drn.pc)
+    np.save(f'{sim_dir}/{input_dir}{geom_name}_snwp_data.npy', drn.snwp)
+
+    return drn.im_pc, drn.im_satn, drn.pc, drn.snwp
+
+
+def convert_porespy_drainage_to_mplbm(image_satn, Snw):
+    # Segment and convert from porespy to mplbm notation
+    # 1) porespy all -1 --> mplbm 0 (pores not invaded)
+    # 2) porespy all 0 --> mplbm 1 (grain)
+    # 3) porespy saturation of interest and below --> mplbm 3 (nw phase, invaded)
+    # 4) porespy above satn of interest --> mplbm 0 (w phase, not invaded)
+
+    mplbm_geom = np.zeros_like(image_satn)
+    mplbm_geom[image_satn == -1] = 0
+    mplbm_geom[image_satn == 0] = 1
+    mplbm_geom[(image_satn <= Snw) & (image_satn > 0)] = 3
+    mplbm_geom[image_satn > Snw] = 0
+
+    return mplbm_geom
 
 
 def scale_geometry(geom, rescale_factor, data_type):

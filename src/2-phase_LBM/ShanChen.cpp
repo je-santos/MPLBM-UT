@@ -98,11 +98,11 @@ void writeVTK_vel(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid,
 
 T computeVelocity_f1(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1, T nu_f1) {
   plint xComponent = 0;
-  // const plint nx = lattice_fluid1.getNx();
+  const plint nx = lattice_fluid1.getNx();
   const plint ny = lattice_fluid1.getNy();
   const plint nz = lattice_fluid1.getNz();
 
-  Box3D domain(3, 4, 0, ny - 1, 0, nz - 1);
+  Box3D domain(3, nx - 4, 0, ny - 1, 0, nz - 1);
   T meanU1 = computeAverage( * computeVelocityComponent(lattice_fluid1, domain, xComponent));
   pcout << "Average velocity for fluid1 in x direction    = " << meanU1 << std::endl;
 
@@ -120,6 +120,30 @@ T computeVelocity_f2(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid2, T n
   pcout << "Average velocity for fluid2 in x direction    = " << meanU2 << std::endl;
 
   return meanU2;
+}
+
+T computeCapillaryNumber_f1(MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid1, T nu_f1) {
+
+  T meanU1 = computeVelocity_f1(lattice_fluid1, nu_f1);
+
+  // Ca = viscosity * velocity / surface tension... surface tension = 0.15 in the model (See Young-Laplace example)
+  T Ca_fluid1 = nu_f1*meanU1 / 0.15;
+  pcout << "Ca fluid 1    = " << Ca_fluid1 << std::endl;
+//  pcout << "viscosity fluid 1    = " << nu_f1 << std::endl;
+
+  return Ca_fluid1;
+}
+
+T computeCapillaryNumber_f2(MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid2, T nu_f2) {
+
+  T meanU2 = computeVelocity_f2(lattice_fluid2, nu_f2);
+
+  // Ca = viscosity * velocity / surface tension... surface tension = 0.15 in the model (See Young-Laplace example)
+  T Ca_fluid2 = nu_f2*meanU2 / 0.15;
+  pcout << "Ca fluid 2    = " << Ca_fluid2 << std::endl;
+//  pcout << "viscosity fluid 2    = " << nu_f2 << std::endl;
+
+  return Ca_fluid2;
 }
 
 void readGeometry(std::string fNameIn, std::string fNameOut,
@@ -775,6 +799,12 @@ int main(int argc, char * argv[]) {
           relE_f2 << " %" << std::endl;
         pcout << "Has fluid 1 converged?: " << ((relE_f1 < convergence) ? "TRUE" : "FALSE") << std::endl;
         pcout << "Has fluid 2 converged?: " << ((relE_f2 < convergence) ? "TRUE" : "FALSE") << std::endl;
+//        pcout << "-----------------" << std::endl;
+
+        // calculate capillary number
+        T Ca_1, Ca_2;
+        Ca_1 = computeCapillaryNumber_f1(lattice_fluid1, nu_f1);
+        Ca_2 = computeCapillaryNumber_f2(lattice_fluid2, nu_f2);
         pcout << "-----------------" << std::endl;
 
         // store new properties
