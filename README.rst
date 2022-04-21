@@ -53,7 +53,7 @@ Requirements
 - Unix system (`Windows Linux Subsystem <https://docs.microsoft.com/en-us/windows/wsl/>`__ or the terminal in Mac also work)
    - We also use wget in the examples to download 3D images from Digital Rocks Portal. Please make sure it is installed on your system if you are running the examples.
 - Python 3.6+
-   - The following external modules are required: `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__. These modules will automatically be installed when running the install script, as they are dependencies for the `mplbm_utils package </src/python/mplbm_utils>`__ included in the repo.
+   - The following external modules are required: `PoreSpy <https://porespy.org/>`__, `Numpy <https://numpy.org/>`__, `PyYAML <https://pypi.org/project/PyYAML/>`__, `Vedo <https://vedo.embl.es/>`__, `PyVista <https://docs.pyvista.org/>`__, `Matplotlib <https://matplotlib.org/>`__, and `Scikit-Image <https://scikit-image.org/>`__. These modules will automatically be installed when running the install script, as they are dependencies for the `mplbm_utils package </src/python/mplbm_utils>`__ included in the repo.
 - Modern C++ compiler
    - gcc 7.X, gcc 9.4.0
 - MPI
@@ -95,7 +95,7 @@ The `examples <examples>`__ are a great place to see how the code can be used in
 - We use YAML format for our input files. Please refer to the `readme <examples/readme.md>`__ in the examples folder to see a description of all the inputs.
 - The input folder is where simulation geometries are stored. The output folder(s) are there to store simulation results.  
 
-Please refer to the `unsteady state example  </examples/unsteady_rel_perm>`__ for a complete end-to-end workflow.
+Please refer to the `unsteady state example  </examples/unsteady_rel_perm>`__ and the `steady state example  </examples/steady_state_relperm>`__ for complete end-to-end workflows.
 
 An general overview of the main steps of a simulation is given below. These processes are automated by functions in the `mplbm_utils </src/python/mplbm_utils>`__ folder.
 
