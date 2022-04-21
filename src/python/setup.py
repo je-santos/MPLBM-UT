@@ -12,7 +12,7 @@ setup(
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=['numpy', 'pyyaml', 'vedo', 'pyvista', 'matplotlib', 'scikit-image'],
+    install_requires=['porespy', 'numpy', 'pyyaml', 'vedo', 'pyvista', 'matplotlib', 'scikit-image'],
     python_requires='>=3.6',
     keywords=['python', 'lattice boltzmann method', 'lattice boltzmann', 'digital rocks'],
     classifiers=[
