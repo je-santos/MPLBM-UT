@@ -4,8 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 import mplbm_utils as mplbm
-import porespy as ps
-from edt import edt
 
 
 def download_geometry(filename, url):
@@ -127,10 +125,11 @@ def process_and_save_porespy_geometries(inputs, image_satn):
 
     # Process saturation values
     Snw = np.unique(image_satn)
-    remove_ind = np.where(Snw <= 0)[0]
-    Snw = np.delete(Snw, remove_ind)  # skip grains and uninvaded markers
-    satn_threshold = 0.02  # Remove values closers than 2% to remove redundant points
+    remove_ind = np.where(Snw <= 0.01)[0]
+    Snw = np.delete(Snw, remove_ind)  # skip grains, uninvaded marker, and Snw values less than 1%
+    satn_threshold = 0.01  # Remove values closer than 1% together to remove redundant points
     Snw = np.delete(Snw, np.argwhere(np.ediff1d(Snw) <= satn_threshold) + 1)
+    print(f"Snw values for sims: {Snw}")
 
     # Convert to MPLBM conventions and save geometries
     sim_counter = np.arange(1, len(Snw) + 1, 1)
@@ -142,12 +141,14 @@ def process_and_save_porespy_geometries(inputs, image_satn):
         mplbm_geom.flatten().tofile(f"{input_folder}{geom_name}_{sim_counter[i]}.raw")
 
     # Change geometry inputs since now reading the drainage geometry
+    # Swap nx and nz because C++ saving (np.tofile()) flipped from Python reading
     inputs['geometry']['geometry size']['Nx'] = inputs['domain']['domain size']['nz']
     inputs['geometry']['geometry size']['Ny'] = inputs['domain']['domain size']['ny']
     inputs['geometry']['geometry size']['Nz'] = inputs['domain']['domain size']['nx']
-    inputs['domain']['swap xz'] = ~inputs['domain']['swap xz']  # Opposite of original input
+    # 'swap xz' needs to be opposite of original input since geom altered for sim already
+    inputs['domain']['swap xz'] = ~inputs['domain']['swap xz']
 
-    return inputs, sim_counter
+    return inputs, Snw, sim_counter
 
 
 def organize_2_phase_outputs_for_relperm(inputs, sim_counter):
@@ -155,6 +156,7 @@ def organize_2_phase_outputs_for_relperm(inputs, sim_counter):
     ####################################
     # Gather final steady state 2 phase configs for rel perm
     # Create output folder
+    sim_dir = inputs['input output']['simulation directory']
     rel_perm_dir = f'{sim_dir}/relperm'
     rel_perm_dir_exists = os.path.isdir(rel_perm_dir)
     if rel_perm_dir_exists == False:
@@ -179,7 +181,6 @@ def organize_2_phase_outputs_for_relperm(inputs, sim_counter):
 
     return inputs
 
-
 # Some notes
 # If you want to run these individually/multiple at a time (ie multiple jobs on a supercomputer),
 # then you'll want to use this for setup but don't run anything (comment out any subprocess.run()).
@@ -196,7 +197,7 @@ download_geometry(file_name, drp_url)
 ####################
 print("Rescaling geometry...")
 geom = np.fromfile(file_name, dtype='uint8').reshape([500, 500, 500])
-scaled_geom = mplbm.scale_geometry(geom, 0.5, 'uint8')
+scaled_geom = mplbm.scale_geometry(geom, 0.75, 'uint8')
 scaled_geom.tofile('input/finney_pack_half_scale.raw')
 
 # Parse Inputs #
@@ -212,12 +213,13 @@ voxel_size = 1e-6  # m/voxel side
 wetting_angle = 180  # in degrees
 print('Running PoreSpy drainage sim...')
 image_pc, image_satn, pc, snwp = mplbm.run_porespy_drainage(inputs, wetting_angle, voxel_size)
-inputs, sim_counter = process_and_save_porespy_geometries(inputs, image_satn)
+inputs, Snw, sim_counter = process_and_save_porespy_geometries(inputs, image_satn)
 
 # Run 2 phase sims #
 ####################
 geom_name = inputs['domain']['geom name']
 for i in range(len(sim_counter)):
+
     # Create output folder
     output_dir = f'{sim_dir}/tmp_{sim_counter[i]}'
     output_dir_exists = os.path.isdir(output_dir)
@@ -229,11 +231,13 @@ for i in range(len(sim_counter)):
     inputs["geometry"]["file name"] = f"{geom_name}_{sim_counter[i]}.raw"
     inputs["domain"]["geom name"] = f"{geom_name}_{sim_counter[i]}"
 
+    print("\n\n--------------------------------------------")
+    print(f"Running sim {i+1} of {len(sim_counter)}")
+    print(f"PoreSpy Snw = {Snw[i]}\n")
     run_2_phase_sim(inputs)  # Run 2 phase sim
-
-inputs = organize_2_phase_outputs_for_relperm(inputs, sim_counter)
 
 # Run rel perm and process results #
 ####################################
+inputs = organize_2_phase_outputs_for_relperm(inputs, sim_counter)
 inputs = run_rel_perm_sim(inputs)  # Run rel perm
 process_and_plot_results(inputs)  # Plot results

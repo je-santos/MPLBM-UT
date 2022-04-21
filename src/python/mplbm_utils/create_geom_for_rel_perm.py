@@ -39,6 +39,7 @@ def create_geom_for_rel_perm(inputs):
     geom.num_slices = 2
     geom.swapXZ = inputs['domain']['swap xz']  # THIS NEEDS TO BE SAME AS ORIGINAL USER INPUT FOUND IN INPUT.YML
     geom.scale_2 = False
+    geom.set_inlet_outlet_fluids = False  # For rel perms we don't want to add different inlet/outlet fluids
 
     rock, nw_fluid_mask = create_nw_fluid_mask(rock, geom)
     rock = rock/3
@@ -104,6 +105,7 @@ def create_geom_for_rel_perm(inputs):
         geom.num_slices = 2
         geom.swapXZ = False  # THIS NEEDS TO BE FALSE so user specified orientation remains the same
         geom.scale_2 = False
+        geom.set_inlet_outlet_fluids = False  # For rel perms we don't want to add different inlet/outlet fluids
 
         rock = rho1_data
         # nw_fluid_mask=[] because we don't want to add nw fluid to the current config
@@ -131,6 +133,7 @@ def create_geom_for_rel_perm(inputs):
         geom.num_slices = 2
         geom.swapXZ = False  # THIS NEEDS TO BE FALSE so user specified orientation remains the same
         geom.scale_2 = False
+        geom.set_inlet_outlet_fluids = False  # For rel perms we don't want to add different inlet/outlet fluids
 
         rock = rho2_data
         # nw_fluid_mask=[] because we don't want to add nw fluid to the current config

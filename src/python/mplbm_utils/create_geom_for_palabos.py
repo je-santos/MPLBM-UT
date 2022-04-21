@@ -34,18 +34,17 @@ def create_geom_for_palabos(inputs):
     geom.scale_2    = inputs['domain']['double geom resolution']  # Double the grain (pore) size if needed to prevent single pixel throats
                             # for tight/ low porosity geometries
 
-    print(f'rock orig: {np.unique(rock)}')
+    if inputs['simulation']['fluid init'] == 'geom':
+        geom.set_inlet_outlet_fluids = True
+        geom.inlet_fluid = inputs['simulation']['inlet fluid']
+        geom.outlet_fluid = inputs['simulation']['outlet fluid']
+    else:
+        geom.set_inlet_outlet_fluids = False
+
     rock, nw_fluid_mask = create_nw_fluid_mask(rock, geom)
-
-    print(f'rock after save nw ind: {np.unique(rock)}')
     rock = rock/3  # For proper erase regions and edist
-
     rock = erase_regions(rock)
-    print('erase_regions', np.unique(rock))
-
     rock4sim, geom_name = create_geom_edist(rock, geom, nw_fluid_mask)  # provides an efficient geometry for simulation
-    print(f'rock4sim: {np.unique(rock4sim)}')
-
     inputs['domain']['geom name'] = geom_name  # Update the geom name for later
     rock4sim.flatten().tofile(sim_dir + '/' + input_dir + f'{geom_name}.dat')  # Save geometry
     # np.savetxt(sim_dir + '/' + input_dir + f'{geom_name}.dat', rock4sim.flatten('C'))

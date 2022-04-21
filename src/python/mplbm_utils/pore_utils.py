@@ -55,11 +55,6 @@ def create_geom_edist(rock, args, nw_fluid_mask):
     erock[nw_fluid_mask == 3] = 2611  # add nw fluid back in if needed
     erock = erock.astype(np.int16)
 
-    import matplotlib.pyplot as plt
-    plt.figure(figsize=[3,3])
-    plt.imshow(erock[:,:,40])
-    plt.show()
-
     return erock, geom_name
 
 
@@ -67,28 +62,44 @@ def create_nw_fluid_mask(rock, args):
 
     # Save indices for NW phase; can't do Euclidean distance properly with them.
     # Also need to take into account: (1) transpose and (2) number of slices added
-    print('Original unique values: ', np.unique(rock))
-    # nw_indices = np.where(rock == 3)[0]
-    # print(len(nw_indices))
-
-    import matplotlib.pyplot as plt
-    plt.figure(figsize=[3, 3])
-    plt.title("before mask")
-    plt.imshow(rock[:, :, 40])
 
     rock_tmp = np.copy(rock)
     if args.swapXZ:
         rock_tmp = rock_tmp.transpose([2, 1, 0])
     if args.num_slices:
-        rock_tmp = np.pad(rock_tmp, [(args.num_slices, args.num_slices), (0, 0), (0, 0)])
+        if args.set_inlet_outlet_fluids == True:
+            if args.inlet_fluid == 'fluid 1':
+                inlet_fluid = 3  # Set to fluid 1, NW phase
+            elif args.inlet_fluid == 'fluid 2':
+                inlet_fluid = 0  # Set to fluid 2, W phase
+            else:
+                raise ValueError('Please make sure inlet fluid set to "fluid 1" or "fluid 2"')
+            if args.outlet_fluid == 'fluid 1':
+                outlet_fluid = 3  # Set to fluid 1, NW phase
+            elif args.outlet_fluid == 'fluid 2':
+                outlet_fluid = 0  # Set to fluid 2, W phase
+            else:
+                raise ValueError('Please make sure outlet fluid set to "fluid 1" or "fluid 2"')
+        else:
+            inlet_fluid = 0
+            outlet_fluid = 0
+        rock_tmp = np.pad(rock_tmp, [(args.num_slices, args.num_slices),(0, 0),(0, 0)],
+                          'constant', constant_values=(inlet_fluid, outlet_fluid))
+
+        # There's currently an instability when NW fluid is right up against the geom...
+        # The best solution will likely be to add a mesh up against the inlet and outlet?
+        # n = args.num_slices  # inlet index
+        # rock_tmp[n-2:n-1,:,:] = 0  # Layer of W fluid at start of geom for stability
+        # rock_tmp[-n:-n+1, :, :] = 0  # Layer of W fluid at end of geom for stability
+
+        # import matplotlib.pyplot as plt
+        # plt.figure(figsize=[3,3])
+        # plt.imshow(rock_tmp[:,:,40])
+        # plt.colorbar()
+        # plt.show()
 
     fluid_mask = np.where(rock_tmp == 3, rock_tmp, 0)  # Save NW whole block to preserve orientation
     rock = np.where(rock == 3, 0, rock)  # Finally, remove Nw phase from original image for rest of processing
-
-    plt.figure(figsize=[3,3])
-    plt.title("After mask")
-    plt.imshow(rock[:,:,40])
-    plt.show()
 
     return rock, fluid_mask
 
@@ -166,9 +177,13 @@ def convert_porespy_drainage_to_mplbm(image_satn, Snw):
 
 def scale_geometry(geom, rescale_factor, data_type):
 
+    geom_shape = np.array(geom.shape)
+    scaled_geom_shape = np.array(geom.shape)*rescale_factor
+    print(f'Scaling geometry from {geom_shape} to {scaled_geom_shape.astype(int)}')
+
     # Rescale geometry
     geom = skit.rescale(geom, rescale_factor, anti_aliasing=False,
-                         order=0)  # order=0 means nearest neighbor interpolation (keeps image binary)
+                        order=0)  # order=0 means nearest neighbor interpolation (keeps image binary)
 
     # Ensure image has 0 as pore space and 1 as grains
     geom = edist(geom)

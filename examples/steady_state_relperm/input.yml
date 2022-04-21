@@ -10,16 +10,16 @@ geometry:
   file name: "finney_pack_half_scale.raw" # Name of the input geometry file
   data type: uint8
   geometry size:
-    Nx: 250
-    Ny: 250
-    Nz: 250
+    Nx: 375
+    Ny: 375
+    Nz: 375
 
 domain:
   geom name: "finney_pack"  # Name of .dat file, rename from original if you'd like. Do not include the file extension.
   domain size:
-    nx: 100
-    ny: 75
-    nz: 75
+    nx: 150
+    ny: 100
+    nz: 100
   periodic boundary:
     x: True
     y: False
@@ -31,7 +31,7 @@ domain:
 
 simulation:
   
-  num procs: 50
+  num procs: 60
   
   restart sim: False  # Set to true if you would like to continue from a previous saved state
   
@@ -50,6 +50,8 @@ simulation:
   
   # Initial Conditions
   fluid init: geom  # If drainage, traditional drainage setup used. If custom, use fluid 1/2 init to do custom fluid setup
+  inlet fluid: 'fluid 2'  # W fluid in the inlet
+  outlet fluid: 'fluid 2'  # W fluid in the outlet
   fluid 1 init:
     x1: 1
     x2: 2
@@ -76,7 +78,7 @@ simulation:
     G_ads_f1_s4: 0
   
   convergence: 1e-4  # Convergence threshold
-  convergence iter: 1000 # 1000  # How often to check for convergence
+  convergence iter: 1000  # How often to check for convergence
   max iterations: 500000  # max iterations per Pc step
   save sim: True  # Save restart files
   save iter: 20000  # How often to save restart files

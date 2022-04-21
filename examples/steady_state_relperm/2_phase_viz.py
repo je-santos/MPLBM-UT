@@ -54,7 +54,7 @@ def visualize_fluid(inputs, rho_file):
     return f1, f2
 
 
-def create_animation(inputs, rho_files_list, resolution_scale, restart):
+def create_animation(inputs, rho_files_list, cam, resolution_scale, restart):
 
     print('Creating animation...')
 
@@ -81,21 +81,20 @@ def create_animation(inputs, rho_files_list, resolution_scale, restart):
 
         # visualize medium
         grains = visualize_medium(inputs)
-        vp += grains.smooth().lighting('glossy').c('seashell').opacity(0.1)
+        # vp += grains.smooth().lighting('glossy').c('seashell').opacity(0.1)
 
         # visualize fluids
         f1, f2 = visualize_fluid(inputs, rho_file=rho_files_list[i])
-        vp += f1.c([191, 84, 0]).opacity(0.8).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
-        vp += f2.c('lightblue').opacity(0.05).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
-
-        cam = dict(pos=(245.1, -145.1, 139.7),
-                   focalPoint=(58.32, 30.99, 36.04),
-                   viewup=(-0.2395, 0.2914, 0.9262),
-                   distance=276.9,
-                   clippingRange=(146.4, 466.1))
+        vp += f1.c([191, 84, 0]).opacity(0.9).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
+        vp += f2.c('lightblue').opacity(0.2).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
 
         vp.show(camera=cam, interactive=False).screenshot(f'{anim_dir}/image_{i}.png', scale=resolution_scale)
         vp.close()
+
+    anim_dir = inputs['input output']['output folder'] + 'animation/'
+    save_name = inputs['domain']['geom name']
+    create_gif(anim_dir, save_name)
+    create_mp4(anim_dir, save_name, speed_factor=0.5)  # speed_factor = 1 means no slow down or speed up
 
     return
 
@@ -107,38 +106,52 @@ inputs['input output']['simulation directory'] = os.getcwd()  # Store current wo
 
 # update output directory
 which_sim = 1
-Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
+Snw_str = np.array([1,2,3,4,5,6,7,8])
 inputs['input output']['output folder'] = f"tmp_{Snw_str[which_sim]}/"
 
 # Get density files
 rho_files_list = get_rho_files(inputs)
 
-# create_animation(inputs, rho_files_list, resolution_scale=1, restart=True)
-anim_dir = inputs['input output']['output folder'] + 'animation/'
-save_name = inputs['domain']['geom name']
-create_gif(anim_dir, save_name)
-create_mp4(anim_dir, save_name, speed_factor=0.5)  # speed_factor = 1 means no slow down or speed up
+# set camera
+cam = dict(pos=(328.4, -216.7, 190.2),
+           focalPoint=(74.81, 58.93, 34.88),
+           viewup=(-0.2424, 0.2973, 0.9235),
+           distance=405.4,
+           clippingRange=(195.6, 646.7))
 
-exit()
+# For animation
+# create_animation(inputs, rho_files_list, cam, resolution_scale=1, restart=True)
 
+# For single frame
+vp = vd.Plotter(axes=9, bg='w', bg2='w', size=(1200, 900), offscreen=False)
 index = -1  # Choose last simulation output
+grains = visualize_medium(inputs)  # visualize medium
+f1, f2 = visualize_fluid(inputs, rho_file=rho_files_list[index])  # Viz for fluid
+grains = grains.c('seashell').opacity(0.1).smooth()
+f1 = f1.c([191, 84, 0]).opacity(0.95).smooth()
+f2 = f2.c('lightblue').opacity(0.2).smooth()
+# vp += grains
+vp += f1
+vp += f2
+vp.show(camera=cam, interactive=True)  # .screenshot(f'{anim_dir}/image_{i}.png', scale=resolution_scale)
 
-# Setup plotter
-vp = vd.Plotter(axes=9, bg='w', bg2='w', size=(1200,900), offscreen=False)
 
-# visualize medium
-grains = visualize_medium(inputs)
-vp += grains.smooth().lighting('glossy').c('seashell').opacity(0.1)
+# Visualize PoreSpy Drainage (visualize the initial conditions)
+porespy_satn_geom = np.load(f'input/finney_pack_satn_image.npy')
 
-# visualize fluids
-f1, f2 = visualize_fluid(inputs, rho_file=rho_files_list[index])
-vp += f1.c([191, 84, 0]).opacity(0.8).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
-vp += f2.c('lightblue').opacity(0.05).smooth()  # .lighting('plastic')  # subdivide(3).smooth().lighting('glossy').phong()
+Snw = np.load(f'input/finney_pack_snwp_data.npy')
+remove_ind = np.where(Snw <= 0.01)[0]
+Snw = np.delete(Snw, remove_ind)  # skip grains, uninvaded marker, and Snw values less than 1%
+satn_threshold = 0.01  # Remove values closer than 1% together to remove redundant points
+Snw = np.delete(Snw, np.argwhere(np.ediff1d(Snw) <= satn_threshold) + 1)
 
-cam = dict(pos=(245.1, -145.1, 139.7),
-           focalPoint=(58.32, 30.99, 36.04),
-           viewup=(-0.2395, 0.2914, 0.9262),
-           distance=276.9,
-           clippingRange=(146.4, 466.1))
+porespy_to_mplbm = mplbm.convert_porespy_drainage_to_mplbm(porespy_satn_geom, Snw[which_sim])
 
+vp = vd.Plotter(axes=1, bg='w', bg2='w', size=(1200, 900), offscreen=False)
+mplbm_geom = vd.Volume(porespy_to_mplbm)
+nw = mplbm_geom.isosurface(threshold=[0, 3])
+grain = mplbm_geom.isosurface(threshold=[0, 1])
+vp += nw.c('red').opacity(1)
+vp += grain.c('shell').opacity(0.1)
 vp.show(camera=cam)
+

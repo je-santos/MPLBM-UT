@@ -102,7 +102,7 @@ T computeVelocity_f1(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1, T n
   const plint ny = lattice_fluid1.getNy();
   const plint nz = lattice_fluid1.getNz();
 
-  Box3D domain(3, nx - 4, 0, ny - 1, 0, nz - 1);
+  Box3D domain(0, nx - 1, 0, ny - 1, 0, nz - 1);
   T meanU1 = computeAverage( * computeVelocityComponent(lattice_fluid1, domain, xComponent));
   pcout << "Average velocity for fluid1 in x direction    = " << meanU1 << std::endl;
 
@@ -115,7 +115,7 @@ T computeVelocity_f2(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid2, T n
   const plint ny = lattice_fluid2.getNy();
   const plint nz = lattice_fluid2.getNz();
 
-  Box3D domain(3, nx - 4, 0, ny - 1, 0, nz - 1);
+  Box3D domain(0, nx - 1, 0, ny - 1, 0, nz - 1);
   T meanU2 = computeAverage( * computeVelocityComponent(lattice_fluid2, domain, xComponent));
   pcout << "Average velocity for fluid2 in x direction    = " << meanU2 << std::endl;
 
@@ -128,7 +128,7 @@ T computeCapillaryNumber_f1(MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid1
 
   // Ca = viscosity * velocity / surface tension... surface tension = 0.15 in the model (See Young-Laplace example)
   T Ca_fluid1 = nu_f1*meanU1 / 0.15;
-  pcout << "Ca fluid 1    = " << Ca_fluid1 << std::endl;
+  // pcout << "Ca fluid 1    = " << Ca_fluid1 << std::endl;
 //  pcout << "viscosity fluid 1    = " << nu_f1 << std::endl;
 
   return Ca_fluid1;
@@ -140,7 +140,7 @@ T computeCapillaryNumber_f2(MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid2
 
   // Ca = viscosity * velocity / surface tension... surface tension = 0.15 in the model (See Young-Laplace example)
   T Ca_fluid2 = nu_f2*meanU2 / 0.15;
-  pcout << "Ca fluid 2    = " << Ca_fluid2 << std::endl;
+  // pcout << "Ca fluid 2    = " << Ca_fluid2 << std::endl;
 //  pcout << "viscosity fluid 2    = " << nu_f2 << std::endl;
 
   return Ca_fluid2;
@@ -163,6 +163,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut,
     geometryFile >> * slice;
     copy( * slice, slice -> getBoundingBox(), geometry, Box3D(iX, iX, 0, ny - 1, 0, nz - 1));
   }
+  geometryFile.close();
 
   VtkImageOutput3D < T > vtkOut("porousMedium", 1.0);
   vtkOut.writeData < float > ( * copyConvert < int, T > (geometry, geometry.getBoundingBox()), "tag", 1.0);
@@ -198,7 +199,7 @@ void setboundaryvalue(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
 
 // This isn't the "right" way of doing this but at least a start...
 // The "proper" way of doing this involves C++ functionals... C++/Palabos has very convoluted ways to deal with arrays...
-// They are described in Palabos docs (ch 16), and they also call functionals "data processors".
+// They are described in Palabos docs (ch 16), and they also call functionals "data processors". But they confuse me a lot!
 void InitializeFluidsFromImage (MultiScalarField3D <int> & geometry,
                                 MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid1,
                                 MultiBlockLattice3D <T, DESCRIPTOR> & lattice_fluid2,
@@ -216,6 +217,7 @@ void InitializeFluidsFromImage (MultiScalarField3D <int> & geometry,
         plint geom_value = geometry.get(iX,iY,iZ);
 
         if (geom_value == 0) {
+          // If 0, set as fluid 2
           initializeAtEquilibrium(lattice_fluid2,
             Box3D(iX,iX,
                   iY,iY,
@@ -231,6 +233,7 @@ void InitializeFluidsFromImage (MultiScalarField3D <int> & geometry,
             zeroVelocity);
 
         } else if (geom_value == 3) {
+        // If 3, set as fluid 1
           initializeAtEquilibrium(lattice_fluid1,
             Box3D(iX,iX,
                   iY,iY,
@@ -244,10 +247,12 @@ void InitializeFluidsFromImage (MultiScalarField3D <int> & geometry,
                   iZ,iZ),
             rhoNoFluid,
             zeroVelocity);
+
         }
       }
     }
   }
+  return;
 }
 
 void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
@@ -336,8 +341,9 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
           rhoNoFluid, zeroVelocity);
 
     } else {
-        pcout << "Initialize Fluid nodes" << endl;
+        pcout << "Initialize fluid nodes from geom...";
         InitializeFluidsFromImage(geometry, lattice_fluid1, lattice_fluid2, rho_f1, rho_f2, rhoNoFluid, zeroVelocity);
+        pcout << "Done!" << endl;
     }
 
     setExternalVector(lattice_fluid1, lattice_fluid1.getBoundingBox(),
@@ -358,6 +364,24 @@ void PorousMediaSetup(MultiBlockLattice3D < T, DESCRIPTOR > & lattice_fluid1,
 
   return;
 }
+
+// A function for future development of a scheme to adjust Ca to be between a certain threshold
+//T AdjustForceForCapillaryNumber(T Ca_high, T Ca_low, ) {
+//
+//  T NewForce;
+//
+//  T Ca_f1 = computeCapillaryNumber_f1(lattice_fluid1, nu_f1);
+//  T Ca_f2 = computeCapillaryNumber_f2(lattice_fluid2, nu_f2);
+//
+//  // NewForce = some relationship to keep Ca within a certain range [Ca_high, Ca_low]...
+//
+//  setExternalVector(lattice_fluid1, lattice_fluid1.getBoundingBox(),
+//    DESCRIPTOR < T > ::ExternalField::forceBeginsAt, Array < T, 3 > (NewForce, 0., 0.));
+//  setExternalVector(lattice_fluid2, lattice_fluid2.getBoundingBox(),
+//    DESCRIPTOR < T > ::ExternalField::forceBeginsAt, Array < T, 3 > (NewForce, 0., 0.));
+//
+//  return NewForce
+//}
 
 int main(int argc, char * argv[]) {
   // 1. Declaring the variables
@@ -618,7 +642,7 @@ int main(int argc, char * argv[]) {
   // Setup or load fluid lattices
   plint current_run_num = 0;
   if (load_state == true) {
-
+    // First check if run_num.dat is there and if so load it
     pcout << "Check run_num.dat for restart info" << endl;
     // Check run_num.dat
     string runnum_file = outDir + "/run_num.dat";
@@ -633,13 +657,13 @@ int main(int argc, char * argv[]) {
       pcout << "No run_num.dat file found. Starting simulation from beginning." << endl;
       load_state = false;
     }
+    ifile.close();
   }
 
-  if (current_run_num > 1) {
-    pcout << "Loading restart files...";
-    T rho_f1_inlet = rho_fluid1[current_run_num];
-    T rho_f2_outlet = rho_fluid2[current_run_num];
+  // If load_state still true, check restart files and load if they're there
+  if (load_state == true) {
 
+    pcout << "Loading restart files..." << endl;
     try {
       loadBinaryBlock(lattice_fluid1, Lattice1); // "lattice_fluid1.dat"
       loadBinaryBlock(lattice_fluid2, Lattice2); // "lattice_fluid2.dat"
@@ -647,35 +671,38 @@ int main(int argc, char * argv[]) {
       throw std::runtime_error("Restart files not found.");
     }
 
+    T rho_f1_inlet_new = rho_fluid1[current_run_num];
+    T rho_f2_outlet_new = rho_fluid2[current_run_num];
+
     PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry,
       createLocalBoundaryCondition3D < T, DESCRIPTOR > (),
       inlet, outlet,
-      rhoNoFluid, rho_f1, rho_f2, rho_f1_inlet, rho_f2_outlet,
+      rhoNoFluid, rho_f1, rho_f2, rho_f1_inlet_new, rho_f2_outlet_new,
       Gads_f1_s1, Gads_f1_s2, Gads_f1_s3, Gads_f1_s4, force_f1, force_f2,
       nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
       nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, current_run_num,
       load_state, print_geom, pressure_bc, load_fluids_from_geom);
 
-    pcout << "Done!" << endl;
-
+    pcout << "Starting the sim!" << endl;
   }
 
-  if (load_state == false) { // set-up a new simulation domain
+  // Otherwise, set-up a new simulation domain
+  if (load_state == false) {
 
     pcout << "Setting up a new simulation domain..." << endl;
-    T rho_f1_inlet = rho_fluid1[current_run_num];
-    T rho_f2_outlet = rho_fluid2[current_run_num];
+    T rho_f1_inlet_new = rho_fluid1[current_run_num];
+    T rho_f2_outlet_new = rho_fluid2[current_run_num];
 
     PorousMediaSetup(lattice_fluid1, lattice_fluid2, geometry,
       createLocalBoundaryCondition3D < T, DESCRIPTOR > (),
       inlet, outlet,
-      rhoNoFluid, rho_f1, rho_f2, rho_f1_inlet, rho_f2_outlet,
+      rhoNoFluid, rho_f1, rho_f2, rho_f1_inlet_new, rho_f2_outlet_new,
       Gads_f1_s1, Gads_f1_s2, Gads_f1_s3, Gads_f1_s4, force_f1, force_f2,
       nx1_f1, nx2_f1, ny1_f1, ny2_f1, nz1_f1, nz2_f1,
       nx1_f2, nx2_f2, ny1_f2, ny2_f2, nz1_f2, nz2_f2, current_run_num,
       load_state, print_geom, pressure_bc, load_fluids_from_geom);
 
-    pcout << "Done!" << endl;
+    pcout << "Starting the sim!" << endl;
   }
 
   use_plb_bc = true; // Use Palabos built-in BC
@@ -723,6 +750,7 @@ int main(int argc, char * argv[]) {
         ifile >> iT;
         global::mpi().bCast( & iT, 1); // Broadcast so all the processors don't get confused!
         pcout << "Current iteration number: " << iT << endl;
+        ifile.close();
       }
     } else {
       iT = 0;
@@ -763,10 +791,12 @@ int main(int argc, char * argv[]) {
         string run_name = outDir + "/run_num.dat";
         plb_ofstream ofile1(run_name.c_str());
         ofile1 << runs << endl;
+        ofile1.close();
 
         string iter_name = outDir + "/iter_num.dat";
         plb_ofstream ofile_iter(iter_name.c_str());
         ofile_iter << iT << endl;
+        ofile_iter.close();
       }
 
       if (iT % it_conv == 0) {
@@ -805,6 +835,8 @@ int main(int argc, char * argv[]) {
         T Ca_1, Ca_2;
         Ca_1 = computeCapillaryNumber_f1(lattice_fluid1, nu_f1);
         Ca_2 = computeCapillaryNumber_f2(lattice_fluid2, nu_f2);
+        pcout << "Ca fluid 1 = " << Ca_1 << std::endl;
+        pcout << "Ca fluid 2 = " << Ca_2 << std::endl;
         pcout << "-----------------" << std::endl;
 
         // store new properties
@@ -843,18 +875,21 @@ int main(int argc, char * argv[]) {
         run_name = outDir + "/run_num.dat";
         plb_ofstream ofile1(run_name.c_str());
         ofile1 << runs + 1 << endl;
+        ofile1.close();
 
         // saves a .dat file (lightweight) with the density
         string rho_name;
         rho_name = outDir + "/rho_f1_" + runs_str + ".dat";
         plb_ofstream ofile2(rho_name.c_str());
         ofile2 << setprecision(2) << * computeDensity(lattice_fluid1) << endl;
+        ofile2.close();
 
         // saves a .dat file (lightweight) with the velocity
         string vel_name;
         vel_name = outDir + "/vel_f1_" + runs_str + ".dat";
         plb_ofstream ofile3(vel_name.c_str());
         ofile3 << setprecision(1) << * computeVelocity(lattice_fluid1) << endl;
+        ofile3.close();
 
         // saves a binary file (heavy) with the sim state
         if (save_sim == true && iT > 0) {
@@ -865,6 +900,7 @@ int main(int argc, char * argv[]) {
           string run_name = outDir + "/iter_num.dat";
           plb_ofstream ofile1(run_name.c_str());
           ofile1 << 0 << endl;
+          ofile1.close();
 
           // Need to save iteration number, save_it, in a file called current_iteration.dat
           // This way we can load stuff in the middle of a pressure step or during steady state.
@@ -904,6 +940,7 @@ int main(int argc, char * argv[]) {
     ofile << "Pressure difference = " << deltaP[runs] << "\n" << endl;
 
   }
+  ofile.close();
 
   return 0;
 }
