@@ -1,4 +1,4 @@
-# Sinlge-Phase Simulation Python Workflow
+# Single-Phase Simulation Python Workflow
 
 <img src=/illustrations/velocity_viz.png width="600"> 
 
