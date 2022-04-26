@@ -121,6 +121,66 @@ def process_and_plot_results(inputs):
     return
 
 
+def process_and_save_porespy_geometries(inputs, image_satn):
+
+    # Process saturation values
+    Snw = np.unique(image_satn)
+    remove_ind = np.where(Snw <= 0.01)[0]
+    Snw = np.delete(Snw, remove_ind)  # skip grains, uninvaded marker, and Snw values less than 1%
+    satn_threshold = 0.01  # Remove values closer than 1% together to remove redundant points
+    Snw = np.delete(Snw, np.argwhere(np.ediff1d(Snw) <= satn_threshold) + 1)
+    print(f"Snw values for sims: {Snw}")
+
+    # Convert to MPLBM conventions and save geometries
+    sim_counter = np.arange(1, len(Snw) + 1, 1)
+    input_folder = inputs["input output"]["input folder"]
+    geom_name = inputs['domain']['geom name']
+    for i in range(len(Snw)):
+        mplbm_geom = mplbm.convert_porespy_drainage_to_mplbm(image_satn, Snw[i])
+        mplbm_geom = mplbm_geom.astype(inputs["geometry"]["data type"])
+        mplbm_geom.flatten().tofile(f"{input_folder}{geom_name}_{sim_counter[i]}.raw")
+
+    # Change geometry inputs since now reading the drainage geometry
+    # Swap nx and nz because C++ saving (np.tofile()) flipped from Python reading
+    inputs['geometry']['geometry size']['Nx'] = inputs['domain']['domain size']['nz']
+    inputs['geometry']['geometry size']['Ny'] = inputs['domain']['domain size']['ny']
+    inputs['geometry']['geometry size']['Nz'] = inputs['domain']['domain size']['nx']
+    # 'swap xz' needs to be opposite of original input since geom altered for sim already
+    inputs['domain']['swap xz'] = ~inputs['domain']['swap xz']
+
+    return inputs, Snw, sim_counter
+
+
+def organize_2_phase_outputs_for_relperm(inputs, sim_counter):
+    # Organize outputs 2 phase outputs #
+    ####################################
+    # Gather final steady state 2 phase configs for rel perm
+    # Create output folder
+    sim_dir = inputs['input output']['simulation directory']
+    rel_perm_dir = f'{sim_dir}/relperm'
+    rel_perm_dir_exists = os.path.isdir(rel_perm_dir)
+    if rel_perm_dir_exists == False:
+        os.makedirs(rel_perm_dir)
+
+    inputs["input output"]["output folder"] = "relperm/"  # Change output folder to match
+
+    # Copy last configs to a new output folder for a smooth rel perm run
+    # for each saturation folder
+    #   - glob all rho_f1*.dat into a list
+    #   - natural sort the list
+    #   - subprocess.run() copy config file to rel_perm_dir
+    for i in range(len(sim_counter)):
+        output_dir = f"{sim_dir}/tmp_{sim_counter[i]}/"
+        # Glob all .dat fluid files from simulation output folder
+        rho_files_regex = fr'{output_dir}rho_f1*.dat'
+        rho_files = glob.glob(rho_files_regex)
+        rho_files = mplbm.natural_sort(rho_files)
+        last_rho_config = rho_files[-1]
+        cp_command = f'cp {last_rho_config} {rel_perm_dir}/rho_f1_{i + 1}.dat'
+        subprocess.run(cp_command.split(' '))
+
+    return inputs
+
 # Some notes
 # If you want to run these individually/multiple at a time (ie multiple jobs on a supercomputer),
 # then you'll want to use this for setup but don't run anything (comment out any subprocess.run()).
@@ -137,7 +197,7 @@ download_geometry(file_name, drp_url)
 ####################
 print("Rescaling geometry...")
 geom = np.fromfile(file_name, dtype='uint8').reshape([500, 500, 500])
-scaled_geom = mplbm.scale_geometry(geom, 0.5, 'uint8')
+scaled_geom = mplbm.scale_geometry(geom, 0.75, 'uint8')
 scaled_geom.tofile('input/finney_pack_half_scale.raw')
 
 # Parse Inputs #
@@ -145,69 +205,39 @@ scaled_geom.tofile('input/finney_pack_half_scale.raw')
 input_file = 'input.yml'
 inputs = mplbm.parse_input_file(input_file)  # Parse inputs
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
+sim_dir = inputs['input output']['simulation directory']
 
-
-# Saturation folders #
-######################
-# Note: this is just going off of domain size since we do not have a morphological drainage algorithm in place.
-# Another option that we may implement is using a morphological drainage from PoreSpy to get initial conditions.
-Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
-Snw_num = Snw_str.astype('float') / 100
-sim_dir = inputs['input output']["simulation directory"]
+# Initial conditions from PoreSpy #
+###################################
+voxel_size = 1e-6  # m/voxel side
+wetting_angle = 180  # in degrees
+print('Running PoreSpy drainage sim...')
+image_pc, image_satn, pc, snwp = mplbm.run_porespy_drainage(inputs, wetting_angle, voxel_size)
+inputs, Snw, sim_counter = process_and_save_porespy_geometries(inputs, image_satn)
 
 # Run 2 phase sims #
 ####################
-for i in range(len(Snw_str)):
+geom_name = inputs['domain']['geom name']
+for i in range(len(sim_counter)):
 
     # Create output folder
-    output_dir = f'{sim_dir}/tmp_{Snw_str[i]}'
+    output_dir = f'{sim_dir}/tmp_{sim_counter[i]}'
     output_dir_exists = os.path.isdir(output_dir)
     if output_dir_exists == False:
         os.makedirs(output_dir)
 
-    # Change inputs
-    nx = inputs["domain"]["domain size"]["nx"]
-    slices = inputs["domain"]["inlet and outlet layers"]
+    # Update to correct inputs
+    inputs["input output"]["output folder"] = f"tmp_{sim_counter[i]}/"
+    inputs["geometry"]["file name"] = f"{geom_name}_{sim_counter[i]}.raw"
+    inputs["domain"]["geom name"] = f"{geom_name}_{sim_counter[i]}"
 
-    inputs["input output"]["output folder"] = f"tmp_{Snw_str[i]}/"
-    inputs["simulation"]["fluid 1 init"]["x1"] = 0
-    inputs["simulation"]["fluid 1 init"]["x2"] = int(nx * (Snw_num[i]))
-    inputs["simulation"]["fluid 2 init"]["x1"] = int(nx * (Snw_num[i])) + 1
-    inputs["simulation"]["fluid 2 init"]["x2"] = nx + slices*2
-
+    print("\n\n--------------------------------------------")
+    print(f"Running sim {i+1} of {len(sim_counter)}")
+    print(f"PoreSpy Snw = {Snw[i]}\n")
     run_2_phase_sim(inputs)  # Run 2 phase sim
 
-Snw_str = np.array(['10', '30', '50', '70', '90', '95'])
-
-# Organize outputs #
-####################
-# Gather final steady state 2 phase configs for rel perm
-# Create output folder
-rel_perm_dir = f'{sim_dir}/relperm'
-rel_perm_dir_exists = os.path.isdir(rel_perm_dir)
-if rel_perm_dir_exists == False:
-    os.makedirs(rel_perm_dir)
-
-inputs["input output"]["output folder"] = "relperm/"  # Change output folder to match
-
-# Copy last configs to a new output folder for a smooth rel perm run
-# for each saturation folder
-#   - glob all rho_f1*.dat into a list
-#   - natural sort the list
-#   - subprocess.run() copy config file to rel_perm_dir
-sim_dir = inputs['input output']['simulation directory']
-for i in range(len(Snw_str)):
-    output_dir = f"{sim_dir}/tmp_{Snw_str[i]}/"
-    # Glob all .dat fluid files from simulation output folder
-    rho_files_regex = fr'{output_dir}rho_f1*.dat'
-    rho_files = glob.glob(rho_files_regex)
-    rho_files = mplbm.natural_sort(rho_files)
-    last_rho_config = rho_files[-1]  # Add index so we're not overwriting
-    cp_command = f'cp {last_rho_config} {rel_perm_dir}/rho_f1_{i+1}.dat'
-    subprocess.run(cp_command.split(' '))
-
-# Run relperm and process results #
-###################################
+# Run rel perm and process results #
+####################################
+inputs = organize_2_phase_outputs_for_relperm(inputs, sim_counter)
 inputs = run_rel_perm_sim(inputs)  # Run rel perm
 process_and_plot_results(inputs)  # Plot results
-
