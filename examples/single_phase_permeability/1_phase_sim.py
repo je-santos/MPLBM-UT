@@ -48,6 +48,7 @@ download_geometry(file_name, drp_url)
 
 input_file = 'input.yml'
 inputs = mplbm.parse_input_file(input_file)  # Parse inputs
+inputs['simulation']['fluid init'] = None 
 inputs['input output']['simulation directory'] = os.getcwd()  # Store current working directory
 run_1_phase_sim(inputs)  # Run 1 phase sim
 
