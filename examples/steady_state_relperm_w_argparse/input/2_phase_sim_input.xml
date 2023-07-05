@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+
+<load_savedstated> False </load_savedstated>
+
+<geometry>
+	<file_geom> input/finney_pack_micromodel.dat </file_geom>
+	<size> <x> 128 </x> <y> 10 </y> <z> 128 </z> </size>
+	<per>
+		<fluid1> <x> True </x> <y> True </y> <z> True </z> </fluid1>
+		<fluid2> <x> True </x> <y> True </y> <z> True </z> </fluid2>
+	</per>
+</geometry>
+
+<init>
+	<fluid_from_geom> True </fluid_from_geom>
+	<fluid1>
+		 <x1> 1 </x1> <y1> 2 </y1> <z1> 1 </z1>
+		 <x2> 75 </x2> <y2> 1 </y2> <z2> 75 </z2>
+	</fluid1>
+	<fluid2>
+		 <x1> 3 </x1> <y1> 150 </y1> <z1> 1 </z1>
+		 <x2> 75 </x2> <y2> 1 </y2> <z2> 75 </z2>
+	</fluid2>
+</init>
+
+<fluids>
+	<Gc> 0.9 </Gc>
+	<omega_f1> 1 </omega_f1>
+	<omega_f2> 1 </omega_f2>
+	<force_f1> 0.0001 </force_f1>
+	<force_f2> 0.0001 </force_f2>
+	<G_ads_f1_s1> -0.4 </G_ads_f1_s1>
+	<G_ads_f1_s2> 0 </G_ads_f1_s2>
+	<G_ads_f1_s3> 0 </G_ads_f1_s3>
+	<G_ads_f1_s4> 0 </G_ads_f1_s4>
+	<rho_f1> 2 </rho_f1>
+	<rho_f2> 2 </rho_f2>
+	<pressure_bc> False </pressure_bc>
+	<rho_f1_i> 2 </rho_f1_i>
+	<rho_f2_i> 2 </rho_f2_i>
+	<num_pc_steps> 0 </num_pc_steps>
+	<min_radius> 1 </min_radius>
+	<rho_d> 0.06 </rho_d>
+</fluids>
+
+<output>
+	<out_folder> tmp/ </out_folder>
+	<save_it> 20000 </save_it>
+	<save_sim> True </save_sim>
+	<convergence> 0.0001 </convergence>
+	<it_max> 500000 </it_max>
+	<it_conv> 1000 </it_conv>
+	<it_gif> 2000 </it_gif>
+	<rho_vtk> False </rho_vtk>
+	<it_vtk> 2000 </it_vtk>
+	<print_geom> True </print_geom>
+	<print_stl> False </print_stl>
+</output>
