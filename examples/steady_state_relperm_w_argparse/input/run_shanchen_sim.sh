@@ -1,0 +1,1 @@
+mpirun -np 6 ../../src/2-phase_LBM/ShanChen input/2_phase_sim_input.xml

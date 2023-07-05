@@ -24,3 +24,12 @@ from .pore_utils import scale_geometry
 from .pore_utils import natural_sort
 from .pore_utils import find_line_in_file
 from .pore_utils import replace_line_in_file
+
+from .command_utils import load_geometry
+from .command_utils import stack_geometry
+from .command_utils import process_geometry
+from .command_utils import remove_isolated_pores
+from .command_utils import initialize_simulation_matrix
+from .command_utils import plot_simulation_matrix
+from .command_utils import create_two_phase_input_file_2
+

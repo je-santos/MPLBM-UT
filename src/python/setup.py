@@ -5,14 +5,14 @@ DESCRIPTION = 'Utilities for the MPLBM-UT lattice-Boltzmann simulator.'
 LONG_DESCRIPTION = 'The mplbm_utils package contains all the pre- and post-processing utilities to run MPLBM-UT.'
 
 setup(
-    name="mplbm_utils",
+      name="mplbm_utils",
     version=VERSION,
     author="Alex Gigliotti and Javier Santos",
     author_email="alex.gigliotti@utexas.edu",
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=['porespy', 'numpy', 'pyyaml', 'vedo', 'pyvista', 'matplotlib', 'scikit-image'],
+    install_requires=['porespy', 'numpy', 'pyyaml', 'vedo', 'pyvista', 'matplotlib', 'scikit-image', 'pandas'],
     python_requires='>=3.6',
     keywords=['python', 'lattice boltzmann method', 'lattice boltzmann', 'digital rocks'],
     classifiers=[
