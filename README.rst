@@ -25,6 +25,19 @@ Illustrations
 
 ----------------------------------------------------------------------------
 
+
+.. figure:: /illustrations/youtube.png
+    :align: right
+    :alt: alternate text
+    :figclass: align-right
+    :target: https://www.youtube.com/watch?v=cEBHl5T3dtU
+   
+
+    MPLBM Youtube tutorial by `TuxRiders <https://www.youtube.com/@TuxRiders>`_.
+
+
+----------------------------------------------------------------------------
+
 .. figure:: /illustrations/Tropical_simulation.gif
     :align: right
     :alt: alternate text
