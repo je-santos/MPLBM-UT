@@ -28,7 +28,7 @@ def run_1_phase_sim(inputs):
     print('Creating input file...')
     mplbm.create_palabos_input_file(inputs)
 
-    # 4) Run 1-phase simulation
+    # 4) Run 1-phase simulationsss   
     print('Running 1-phase simulation...')
     num_procs = inputs['simulation']['num procs']
     input_dir = inputs['input output']['input folder']
